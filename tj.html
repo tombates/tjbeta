@@ -4,11 +4,24 @@
 <meta charset="utf-8">
 <title>ThoughtJot</title>
 <link href="css/tj.css" rel="stylesheet" type="text/css" />
+<script src="http://nimbusbase.com/static/nimbus.min.js"></script>
 <script src="./js/tjdb.js"></script>
 </head>
 
 <!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
 <body>
+<a onclick="Nimbus.Auth.authorize('DropBox')">authorize me</a>
+<script>
+    var sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
+    Nimbus.Auth.setup(sync_string);
+	
+	Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done"]);
+	Tasks.create({"descrip":"New task", "done":false });
+	instance = Task.findByAttribute("done", false);
+	instance.done = false;
+    instance.save();
+	instance.destroy();
+</script>
 <div id="container">
 <h1 class="thetitle">ThoughtJot, from Clear Sky Coding</h1>
 <h2 class="subtitle">A no-cloud Notebook app using IndexedDB</h2>
