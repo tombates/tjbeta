@@ -1,0 +1,90 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+  color: #222;
+  font: 14px Arial;
+}
+
+body a {
+  color: #3D5C9D;
+  text-decoration: none;
+}
+
+a.edit {  /* this isn't good enough because length of timestamp span is variable */
+  margin-left:500px;
+}
+a.delete {  /* this isn't good enough because length of timestamp span is variable */
+  margin-left:50px;
+}
+
+h1.thetitle {
+  padding-top:35px;
+  padding-bottom:10px;
+  color:#000;
+  text-align:center;
+  font: 16px Verdana, Geneva, sans-serif
+}
+h2.subtitle {
+  padding-top:0px;
+  padding-bottom:35px;
+  color:#000;
+  text-align:center;
+  font: 12px Verdana, Geneva, sans-serif
+}
+
+#container {
+	width:900px;
+	margin-left:auto;
+	margin-right:auto;
+	border: 1px dotted #000;
+}
+
+.jottextarea {
+	padding:10px;
+}
+.jotaddbtn {
+	margin-bottom:10px;
+}
+
+#jotcontrols {
+	height:75px;
+	padding:10px;
+}
+
+form {
+	border:solid 2px #bb0;
+}
+
+textarea.jot {
+	width:400px;
+	height:200px;
+	min-height:100px;
+	max-height:400px;
+	max-width:600px;
+	padding:20px 10px 5px 10px;
+	border:solid 1px #000;
+	border-radius:5px;
+}
+
+.jotdiv {
+	background-color:#FFF;
+	border: solid 1px #999;
+	border-radius:10px;
+	margin:5px;
+}
+.timestamp {
+	background-color:#FFF;
+	color:#360;
+	font-size:12px;
+	margin-left:5px;
+
+}
+p.jottext {
+	background-color:#fff;
+	font-size:12px;
+	margin:10px 20px 10px 20px;
+}
+
+.bover {  /* temp  & silly - moves the add this jot button over */
+	margin-left:180px;
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ThoughtJot</title>
+<link href="css/tj.css" rel="stylesheet" type="text/css" />
+<script src="./js/tjdb.js"></script>
+</head>
+
+<!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
+<body>
+<div id="container">
+<h1 class="thetitle">ThoughtJot, from Clear Sky Coding</h1>
+<h2 class="subtitle">A no-cloud Notebook app using IndexedDB</h2>
+<!--img src="images/me-photo-cropped.png" width="100px" height="100px"-->
+
+<form type="post" onSubmit="addTodo(); return false;">
+  <!--input type"text" id="todo" placeholder="What'cha got to do?" style="width:200px;" /-->
+  <div class="jottextarea"><textarea class="jot" id="todo" placeholder="Type a New Jot"></textarea></div>
+  <div class="jotaddbtn"><input type="submit" value="Add this jot" class="bover"/></div>
+</form>
+
+<div id="jotcontrols">
+  <input type="submit" id="toggleOrder" onClick="toggleOrdering(); return false;" value="Showing newest first" title="Press to show oldest jots first."/>
+  <input type="submit" value="Select date range" title="You can show jots within a specified date range."/>
+  <input type="submit" value="Select by tags" title="You can show just the jots with certain tags."/>
+  <input type="submit" value="New Jot Jar" title="Your jots can be organized by Jars, as well as tags."/>
+  <input type="submit" value="Save current jots" title="You can name and save the current jot set to its own jar." />
+  <!--input type="submit" value="Delete all jots" title="You can delete all jots in the current jar." /-->
+</div>
+
+<!--ul id="todoItems">
+</ul-->
+<div id="todoItems">
+  <!-- Each jot gets its own div inside the todoItems div. -->
+</div>
+
+
+</div>  <!-- end container div -->
+</body>
+</html>
