@@ -10,7 +10,7 @@
 
 <!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
 <body>
-<a onclick="Nimbus.Auth.authorize('Dropbox');">authorize me</a>
+<a onclick="Nimbus.Auth.authorize('Dropbox');">Connect to Dropbox</a>
 <script>
     var auth = false;
     var sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
@@ -24,13 +24,16 @@
     Nimbus.Auth.setup(sync_object);
     //Nimbus.Auth.setup(sync_string);
 	auth = Nimbus.Auth.authorized();
-	alert(auth);
-	Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done"]);
-	Tasks.create({"descrip":"New task", "done":false });
-	instance = Tasks.findByAttribute("done", false);
-	instance.done = false;
-    instance.save();
-	instance.destroy();
+
+    Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
+	ja = Tasks.create({"descrip":"New task", "done":false, "id":1, "jot":"I have a thought.", "time":"now" });
+	jb = Tasks.create({"descrip":"A Query", "done":false, "id":2, "jot":"I have a question.", "time":"now" });
+	//instance = Tasks.findAllByAttribute("done", false);
+	//instance.done = false;
+    //instance.save();
+	a.save();
+	b.save();
+	Tasks.destroyAll();
 </script>
 <div id="container">
 <h1 class="thetitle">ThoughtJot, from Clear Sky Coding</h1>
