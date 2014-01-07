@@ -17,7 +17,7 @@
 	
 	Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done"]);
 	Tasks.create({"descrip":"New task", "done":false });
-	instance = Task.findByAttribute("done", false);
+	instance = Tasks.findByAttribute("done", false);
 	instance.done = false;
     instance.save();
 	instance.destroy();
