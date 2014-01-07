@@ -26,13 +26,13 @@
 	auth = Nimbus.Auth.authorized();
 
     Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
-	ja = Tasks.create({"descrip":"New task", "done":false, "id":1, "jot":"I have a thought.", "time":"now" });
-	jb = Tasks.create({"descrip":"A Query", "done":false, "id":2, "jot":"I have a question.", "time":"now" });
+	ja = Tasks.create({"descrip":"New task", "done":false, "jot":"I have a thought.", "time":"now" });
+	jb = Tasks.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
 	//instance = Tasks.findAllByAttribute("done", false);
 	//instance.done = false;
     //instance.save();
-	a.save();
-	b.save();
+	ja.save();
+	jb.save();
 	Tasks.destroyAll();
 </script>
 <div id="container">
