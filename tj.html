@@ -5,13 +5,14 @@
 <title>ThoughtJot</title>
 <link href="css/tj.css" rel="stylesheet" type="text/css" />
 <script src="http://nimbusbase.com/static/nimbus.min.js"></script>
+<script src="./js/nb.js"></script>
 <script src="./js/tjdb.js"></script>
 </head>
 
 <!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
 <body>
 <a id="connectDropbox" onClick="Nimbus.Auth.authorize('Dropbox');">Connect to Dropbox13</a>
-<script>
+<!--script>
     var linkDropbox;
 	var Tasks;  // a model (table)
 	var ja, jb;
@@ -29,9 +30,9 @@
 	auth = Nimbus.Auth.authorized();
     linkDropbox = document.getElementById("connectDropbox");
 	if(auth) { // change link text to connected
-		linkDropbox.innerHTML = "Connected to Dropbox -set";
+		linkDropbox.innerHTML = "Connected to Dropbox";
 	} else {
-		linkDropbox.innerHTML = "Connect to Dropbox -set";
+		linkDropbox.innerHTML = "Connect to Dropbox";
 	}
 
     Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
@@ -55,7 +56,7 @@
 	//jb.save();
 	//Tasks.save();
 	Tasks.destroyAll();
-</script>
+</script-->
 <div id="container">
 <h1 class="thetitle">ThoughtJot, from Clear Sky Coding</h1>
 <h2 class="subtitle">A no-cloud Notebook app using IndexedDB</h2>
