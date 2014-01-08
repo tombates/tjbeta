@@ -16,7 +16,7 @@ nbx.sync_object = {
 	  "app_name": "tjbeta" 
 	} 
 };
-
+    alert("I am getting called.");
     Nimbus.Auth.setup(nbx.sync_object);
     //Nimbus.Auth.setup(sync_string);
 	nbx.auth = Nimbus.Auth.authorized();
