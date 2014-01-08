@@ -13,6 +13,8 @@
 <a id="connectDropbox" onClick="Nimbus.Auth.authorize('Dropbox');">Connect to Dropbox13</a>
 <script>
     var linkDropbox;
+	var Tasks;  // a model (table)
+	var ja, jb;
     var auth = false;
     var sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
 	var sync_object = { 
@@ -27,9 +29,9 @@
 	auth = Nimbus.Auth.authorized();
     linkDropbox = document.getElementById("connectDropbox");
 	if(auth) { // change link text to connected
-		linkDropbox.innerHTML = "Connected to Dropbox";
+		linkDropbox.innerHTML = "Connected to Dropbox -set";
 	} else {
-		linkDropbox.innerHTML = "Connect to Dropbox";
+		linkDropbox.innerHTML = "Connect to Dropbox -set";
 	}
 
     Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
