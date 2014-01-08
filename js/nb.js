@@ -28,8 +28,8 @@ nb.sync_object = {
 	}
 
     nb.Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
-	nb.ja = Tasks.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
-	nb.jb = Tasks.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
+	nb.ja = nb.Tasks.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
+	nb.jb = nb.Tasks.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
 	//instance = Tasks.findAllByAttribute("done", false);
 	//instance.done = false;
     //instance.save();
