@@ -1,15 +1,15 @@
 // Our NimbusBase using code
 
 // Let's encapsulate this stuff in another namespace
-var nb = {};
+var nbx = {};
 
-nb.linkDropbox;
-nb.Tasks;  // a model (table)
-nb.ja;
-nb.jb;
-nb.auth = false;
-nb.sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
-nb.sync_object = { 
+nbx.linkDropbox;
+nbx.Tasks;  // a model (table)
+nbx.ja;
+nbx.jb;
+nbx.auth = false;
+nbx.sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
+nbx.sync_object = { 
 	"Dropbox": { 
 	  "key": "nlszj5xrhlb1k5p", 
 	  "secret": "fo8a244sgdftjbf", 
@@ -17,19 +17,19 @@ nb.sync_object = {
 	} 
 };
 
-    Nimbus.Auth.setup(nb.sync_object);
+    Nimbus.Auth.setup(nbx.sync_object);
     //Nimbus.Auth.setup(sync_string);
-	nb.auth = Nimbus.Auth.authorized();
-    nb.linkDropbox = document.getElementById("connectDropbox");
-	if(nb.auth) { // change link text to connected
-		nb.linkDropbox.innerHTML = "Connected to Dropbox";
+	nbx.auth = Nimbus.Auth.authorized();
+    nbx.linkDropbox = document.getElementById("connectDropbox");
+	if(nbx.auth) { // change link text to connected
+		nbx.linkDropbox.innerHTML = "Connected to Dropbox";
 	} else {
-		nb.linkDropbox.innerHTML = "Connect to Dropbox";
+		nbx.linkDropbox.innerHTML = "Connect to Dropbox";
 	}
 
-    nb.Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
-	nb.ja = nb.Tasks.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
-	nb.jb = nb.Tasks.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
+    nbx.Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
+	nbx.ja = nbx.Tasks.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
+	nbx.jb = nbx.Tasks.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
 	//instance = Tasks.findAllByAttribute("done", false);
 	//instance.done = false;
     //instance.save();
@@ -47,4 +47,4 @@ nb.sync_object = {
 	//ja.save();
 	//jb.save();
 	//Tasks.save();
-	nb.Tasks.destroyAll();
+	nbx.Tasks.destroyAll();
