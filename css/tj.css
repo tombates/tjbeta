@@ -10,6 +10,8 @@ body a {
   text-decoration: none;
 }
 
+a#connectDropbox {color:#0C6;}
+
 a.edit {  /* this isn't good enough because length of timestamp span is variable */
   margin-left:500px;
 }
