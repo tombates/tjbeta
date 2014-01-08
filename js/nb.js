@@ -3,7 +3,7 @@
 // Let's encapsulate this stuff in another namespace
 var nb = {};
 
-nv.linkDropbox;
+nb.linkDropbox;
 nb.Tasks;  // a model (table)
 nb.ja;
 nb.jb;
