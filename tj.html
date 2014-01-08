@@ -10,8 +10,9 @@
 
 <!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
 <body>
-<a onclick="Nimbus.Auth.authorize('Dropbox');">Connect to Dropbox3</a>
+<a id="connectDropbox" onClick="Nimbus.Auth.authorize('Dropbox');">Connect to Dropbox13</a>
 <script>
+    var linkDropbox;
     var auth = false;
     var sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
 	var sync_object = { 
@@ -24,13 +25,29 @@
     Nimbus.Auth.setup(sync_object);
     //Nimbus.Auth.setup(sync_string);
 	auth = Nimbus.Auth.authorized();
+    linkDropbox = document.getElementById("connectDropbox");
+	if(auth) { // change link text to connected
+		linkDropbox.innerHTML = "Connected to Dropbox";
+	} else {
+		linkDropbox.innerHTML = "Connect to Dropbox";
+	}
 
     Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
-	ja = Tasks.create({"descrip":"New task", "done":false, "jot":"I have a thought.", "time":"now" });
+	ja = Tasks.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
 	jb = Tasks.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
 	//instance = Tasks.findAllByAttribute("done", false);
 	//instance.done = false;
     //instance.save();
+	
+	// i don't understand: merely creating the tasks instances writes them over to dropbox, the saves are not needed, also meaning
+	// i can't test if i can save a whole model (table?) at once instead of just one instance (row) at a time. if not isn't that crazy
+	// inefficient. i want a way to send the whole table over as a text file in one go - a save whole model
+	// and how to get a timestamp,
+	// some keys seem special, like "id" but is there a list of these in the docs? can't find
+	// once authorized always authorized? seems weird. when i reload i'm still authorized apparently, i would
+	// think when the connection ends you'd need some reauth but maybe this is user convencience but is it a good/secure idea?
+	
+	
 	
 	//ja.save();
 	//jb.save();
