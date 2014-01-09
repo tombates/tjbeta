@@ -1,3 +1,4 @@
+//REMOVE just a test change to see wtf is with git saying nothing to commit
 // Beginning stab at something that could become Thought Jot
 
 // Let's encapsulate our stuff in a namespace
