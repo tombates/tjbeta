@@ -1,5 +1,4 @@
-// Our NimbusBase using code
-
+// why is the code not what is being served i'm going crazy here...Our NimbusBase experimental code
 // Let's encapsulate this stuff in another namespace
 var nbx = {};
 
@@ -16,7 +15,9 @@ nbx.sync_object = {
 	  "app_name": "tjbeta" 
 	} 
 };
-    alert("I am getting called.");
+
+nbx.open = function() {
+    alert("new on DOMContentLoaded way and I am getting called.");
     Nimbus.Auth.setup(nbx.sync_object);
     //Nimbus.Auth.setup(sync_string);
 	nbx.auth = Nimbus.Auth.authorized();
@@ -48,3 +49,10 @@ nbx.sync_object = {
 	//jb.save();
 	//Tasks.save();
 	nbx.Tasks.destroyAll();
+}
+
+function nimbus_init() {
+	nbx.open();  // connects to user storage using NimbusBase
+}
+
+window.addEventListener("DOMContentLoaded", nimbus_init, false);
