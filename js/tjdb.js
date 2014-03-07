@@ -207,7 +207,10 @@ function renderTodo(row) {
 	// wire up Delete link handler
 	dellink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteTodo(row.text);
-		tj.indexedDB.deleteTodo(row.timeStamp);
+		var yesno = confirm("Are you sure you want to delete this jot?\nThis is not undoable.");
+		if(yesno) {
+		    tj.indexedDB.deleteTodo(row.timeStamp);
+        }
 	});
 	
 	editlink.addEventListener("click", function(e) {
