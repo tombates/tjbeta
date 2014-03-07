@@ -187,6 +187,7 @@ function renderTodo(row) {
 	// a paragraph for the jot - simple for now: just one basic paragraph is all we handle
 	var pjot = document.createElement("p");
 	pjot.className = "jottext";
+	pjot.contenteditable = "true";
 	
 	var dellink = document.createElement("a");
 	dellink.className = "delete";
@@ -209,6 +210,11 @@ function renderTodo(row) {
 		tj.indexedDB.deleteTodo(row.timeStamp);
 	});
 	
+	editlink.addEventListener("click", function(e) {
+		//tj.indexedDB.deleteTodo(row.text);
+		tj.indexedDB.editTodo(row.timeStamp);
+	});
+	
 	//jdiv.appendChild(t);
 	jdiv.appendChild(pts);
 	jdiv.appendChild(editlink);
@@ -216,6 +222,20 @@ function renderTodo(row) {
 	jdiv.appendChild(pjot);
 	todos.appendChild(jdiv);
 }
+
+/*
+* Places a previously made jot back into the edit area for changing. Also grays the
+* div containing the original. OR could we edit it in place - putting a textarea into
+* the jots div temporarily??? - would be nicer UX-wise
+*
+* What if every jot where a textarea instead of a div with paras - no this can't work
+* textarea does not support html
+*
+* OH WAIT div with contenteditable = true might be the ticket!
+*/
+tj.indexedDB.editTodo = function(id) {
+
+};
 
 tj.indexedDB.deleteTodo = function(id) {
 	var db = tj.indexedDB.db;
