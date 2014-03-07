@@ -25,7 +25,7 @@ nbx.open = function() {
 	if(nbx.auth) { // change link text to connected
 		nbx.linkDropbox.innerHTML = "Connected to Dropbox!";
 	} else {
-		nbx.linkDropbox.innerHTML = "Connect to Dropbox";
+		nbx.linkDropbox.innerHTML = "Connect to Dropbox_";
 	}
 
     nbx.Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
