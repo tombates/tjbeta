@@ -23,7 +23,7 @@ nbx.open = function() {
 	nbx.auth = Nimbus.Auth.authorized();
     nbx.linkDropbox = document.getElementById("connectDropbox");
 	if(nbx.auth) { // change link text to connected
-		nbx.linkDropbox.innerHTML = "Connected to Dropbox";
+		nbx.linkDropbox.innerHTML = "Connected to Dropbox!";
 	} else {
 		nbx.linkDropbox.innerHTML = "Connect to Dropbox";
 	}
