@@ -17,7 +17,8 @@ nbx.sync_object = {
 };
 
 nbx.open = function() {
-    alert("new on DOMContentLoaded way and I am getting called.");
+    //alert("new on DOMContentLoaded way and I am getting called.");
+    console.log("in nbx.open, calling Nimbus.Auth.setup(nbx.sync_object");
     Nimbus.Auth.setup(nbx.sync_object);
     //Nimbus.Auth.setup(sync_string);
 	nbx.auth = Nimbus.Auth.authorized();
