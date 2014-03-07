@@ -187,8 +187,8 @@ function renderTodo(row) {
 	// a paragraph for the jot - simple for now: just one basic paragraph is all we handle
 	var pjot = document.createElement("p");
 	pjot.className = "jottext";
-	pjot.contenteditable = "true";
-	
+	pjot.setAttribute("contenteditable", true);
+
 	var dellink = document.createElement("a");
 	dellink.className = "delete";
 	dellink.textContent = " [Delete]";
