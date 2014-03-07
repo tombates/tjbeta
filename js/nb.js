@@ -13,7 +13,8 @@ nbx.sync_object = {
 	  "key": "nlszj5xrhlb1k5p", 
 	  "secret": "fo8a244sgdftjbf", 
 	  "app_name": "tjbeta" 
-	} 
+	},
+	"synchronous": true
 };
 
 nbx.open = function() {
