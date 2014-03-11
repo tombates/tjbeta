@@ -35,7 +35,8 @@ nbx.open = function() {
 		nbx.linkDropbox.innerHTML = "Connect to Dropbox_";
 	}
 
-    nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "timestamp"]);
+    ///nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "timestamp"]);
+    nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
 	nbx.jot1 = nbx.Jots.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
 	nbx.jot2 = nbx.Jots.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
 	//instance = Jots.findAllByAttribute("done", false);
@@ -55,6 +56,8 @@ nbx.open = function() {
 	//jot1.save();
 	//jot1.save();
 	//Jots.save();
+
+	// destroyAll does not seem to affect the dropbox stored jots...???
 	console.log("calling destroyAll()");
 	nbx.Jots.destroyAll();
 	console.log("back from destroyAll()");

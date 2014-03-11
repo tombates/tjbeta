@@ -1,9 +1,40 @@
-//REMOVE just a test change to see wtf is with git saying nothing to commit
+/*
+* This file contains code for persisting information, conceptually rows of a table where each
+* row represents a "jot" of text. These are displayed with a time stamp and edit and delete controls in the html.
+*
+* The data can be persisted locally across broswer sessions (but limited to the same browser brand) on the local
+* machine via the IndexedDB mechanism in HTML5.
+*
+* The data can also be persisted on either or both Dropbox and Google Drive.
+*
+* The application can be run either from a localhost or over the web.
+*
+* The fact that IndexedDB creates a database for a web application locally is very useful but there are some
+* serious limitations that might argue against going solely that route. One is that the database is tied to
+* the browser type so that recording jots in one browser only using IndexedDB means those jots will only be
+* viewable in that browser. Jots created in Firefox and Chrome do not mix, etc. While there might be the odd
+* occasion to exploit walling off one set of jots from another, most often you'd also like to have a way to
+* have the same jots available across devices and browsers and apps and having them sync to a common store in
+* the cloud.
+*
+* We use NimbusBase to allow persistence remotely on either Dropbox or Google Drive.
+*
+*
+*/
+
 // Beginning stab at something that could become Thought Jot
+
+//TODO: option for storing stuff only or not at all on local machine using IndexedDB
+//TODO: option for storing stuff only or not at all on either\both GDrive and Dropbox
 
 // Let's encapsulate our stuff in a namespace
 var tj = {};
 tj.indexedDB = {};
+tj.STORE_IDB = 1;
+tj.STORE_DROPBOX = 2;
+tj.STORE_GDRIVE = 4;
+tj.STORE_BITTORRENT_SYNC = 8;
+tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // TODO make user controlled
 
 //
 // NimbusBase sync string for persisting to DropBox
@@ -47,35 +78,44 @@ tj.indexedDB.open = function() {
 };
 
 tj.indexedDB.addTodo = function(todoText) {
-	var db = tj.indexedDB.db;
-	var trans = db.transaction(["todo"], "readwrite");
-	var store = trans.objectStore("todo");
-	var htmlizedText = htmlizeText(todoText);
-	var request = store.put({
-							"text": htmlizedText,
-							"timeStamp": new Date().getTime()
-							});
-	
-	request.onsuccess = function(e) {
-		tj.indexedDB.getAllTodoItems();
-	};
-	
-	request.onerror = function(e) {
-		console.log(e.value);
-	};
+	// add the jot to indexedDB store
+	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
+    	var db = tj.indexedDB.db;
+    	var trans = db.transaction(["todo"], "readwrite");
+    	var store = trans.objectStore("todo");
+    	var htmlizedText = htmlizeText(todoText);
+    	var request = store.put({
+    							"text": htmlizedText,
+    							"timeStamp": new Date().getTime()
+    							});
+    	
+    	request.onsuccess = function(e) {
+    		tj.indexedDB.getAllTodoItems();
+    	};
+    	
+    	request.onerror = function(e) {
+    		console.log(e.value);
+    	};
+    }
+
+	// also add to cloud storage location(s)
+	if(tj.STORE_MASK & tj.STORE_DROPBOX) {
+        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
+        nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText});
+    }
 };
 
-//
-// Worker bee function that lets user's carriage returns shine through.
-//   Very simple for now: we just replace n returns with with n <br />
-//   elements. We do not (yet?) try to create actual separate html
-//   paragraphs.
-//
-//   Also, we attempt to recognize urls and wrap them in <a></a> to make
-//   them into real links within the jot.
-//
-//   That's all for the moment.
-//
+/*
+* Worker bee function that lets user's carriage returns shine through.
+*   Very simple for now: we just replace n returns with with n <br />
+*   elements. We do not yet try to create actual separate html
+*   paragraphs.
+*
+*   Also, we attempt to recognize urls and wrap them in <a></a> to make
+*   them into real links within the jot.
+*
+*   That's all for the moment.
+*/
 function htmlizeText(text) {
 	// converts url strings in a jot to actual links - currently assuming no already existing <a> stuff in the jot text
 	
@@ -124,7 +164,8 @@ function htmlizeText(text) {
 	}*/
 		
 	// now replace the "links" we found in the jot - and possibly http-ized - with the real links we just made
-	//TODO: this replace can cause problems if the same url string is in the jot text more than once - whether or not one has a scheme prefix and the other doesn't ...
+	//TODO: this replace can cause problems if the same url string is in the jot text more than once - whether
+	// or not one has a scheme prefix and the other doesn't ...
 	for(var i = 0; i < allurls.length; i++) {
 	    var zeta = text.replace(allurls[i], newlinks[i]);
 		text = zeta;
@@ -174,6 +215,9 @@ tj.indexedDB.getAllTodoItems = function() {
 	cursorRequest.onerror = tj.indexedDB.onerror;
 };
 
+/*
+* Creates all the HTML elements for a single jot and sets them into the todoItems div
+*/
 function renderTodo(row) {
 	// grab the containing div for jots
 	var todos = document.getElementById("todoItems");
@@ -207,7 +251,7 @@ function renderTodo(row) {
 	// wire up Delete link handler
 	dellink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteTodo(row.text);
-		var yesno = confirm("Are you sure you want to delete this jot?\nThis is not undoable.");
+		var yesno = confirm("Are you sure you want to delete this jot?\n\nThis is not undoable.");
 		if(yesno) {
 		    tj.indexedDB.deleteTodo(row.timeStamp);
         }
