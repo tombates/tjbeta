@@ -101,6 +101,7 @@ tj.indexedDB.addTodo = function(todoText) {
 	// also add to cloud storage location(s)
 	if(tj.STORE_MASK & tj.STORE_DROPBOX) {
         //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
+        console.log("attempting store of real jot on DB");
         nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText});
     }
 };
