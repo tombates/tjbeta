@@ -6,6 +6,7 @@ nbx.linkDropbox;
 nbx.Jots;  // a model (table)
 nbx.jot1;
 nbx.jot2;
+nbx.jotreal;
 nbx.auth = false;
 nbx.sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
 nbx.sync_object = { 
@@ -59,7 +60,7 @@ nbx.open = function() {
 
 	// destroyAll does not seem to affect the dropbox stored jots...???
 	console.log("calling destroyAll()");
-	nbx.Jots.destroyAll();
+	//nbx.Jots.destroyAll();
 	console.log("back from destroyAll()");
 }
 
