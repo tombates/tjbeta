@@ -14,7 +14,7 @@ nbx.sync_object = {
 	  "secret": "fo8a244sgdftjbf", 
 	  "app_name": "tjbeta" 
 	},
-	"synchronous": true
+	//"synchronous": true
 };
 
 nbx.open = function() {
