@@ -3,9 +3,9 @@
 var nbx = {};
 
 nbx.linkDropbox;
-nbx.Tasks;  // a model (table)
-nbx.ja;
-nbx.jb;
+nbx.Jots;  // a model (table)
+nbx.jot1;
+nbx.jot2;
 nbx.auth = false;
 nbx.sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
 nbx.sync_object = { 
@@ -30,14 +30,14 @@ nbx.open = function() {
 		nbx.linkDropbox.innerHTML = "Connect to Dropbox_";
 	}
 
-    nbx.Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
-	nbx.ja = nbx.Tasks.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
-	nbx.jb = nbx.Tasks.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
-	//instance = Tasks.findAllByAttribute("done", false);
+    nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "timestamp"]);
+	nbx.jot1 = nbx.Jots.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
+	nbx.jot2 = nbx.Jots.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
+	//instance = Jots.findAllByAttribute("done", false);
 	//instance.done = false;
     //instance.save();
 	
-	// i don't understand: merely creating the tasks instances writes them over to dropbox, the saves are not needed, also meaning
+	// i don't understand: merely creating the jots instances writes them over to dropbox, the saves are not needed, also meaning
 	// i can't test if i can save a whole model (table?) at once instead of just one instance (row) at a time. if not isn't that crazy
 	// inefficient. i want a way to send the whole table over as a text file in one go - a save whole model
 	// and how to get a timestamp,
@@ -47,10 +47,10 @@ nbx.open = function() {
 	
 	
 	
-	//ja.save();
-	//jb.save();
-	//Tasks.save();
-	nbx.Tasks.destroyAll();
+	//jot1.save();
+	//jot1.save();
+	//Jots.save();
+	nbx.Jots.destroyAll();
 }
 
 function nimbus_init() {
