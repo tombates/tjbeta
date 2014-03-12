@@ -58,7 +58,7 @@ tj.indexedDB.open = function() {
 	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
     request.onupgradeneeded = function(e) {
 		var db = e.target.result;
-		console.log("    in OPEN request.onupgradeneeded");
+		console.log("tj.indexedDB.open: in request.onupgradeneeded() callback");
 		// A versionchange transaction is started automatically.
 		e.target.transaction.onerror = tj.indexedDB.onerror;
 		if(db.objectStoreNames.contains("todo")) {
@@ -68,7 +68,7 @@ tj.indexedDB.open = function() {
 	};
 	
 	request.onsuccess = function(e) {
-		console.log("    in OPEN request.onsuccess");
+		console.log("tj.indexedDB.open: in request.onsuccess() callback");
 		tj.indexedDB.db = e.target.result;
 		// Do things here
 		tj.indexedDB.getAllTodoItems();
@@ -102,7 +102,7 @@ tj.indexedDB.addTodo = function(todoText) {
 	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
         //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
         console.log("attempting store of real jot on DB");
-        nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText});
+        nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":"now"});
     }
 };
 
