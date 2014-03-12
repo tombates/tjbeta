@@ -73,7 +73,7 @@ nbx.open = function() {
 	//console.log("calling destroyAll()");
 	//nbx.Jots.destroyAll();
 	//console.log("back from destroyAll()");
-}
+};
 
 function nimbus_init() {
 	nbx.open();  // connects to user storage using NimbusBase
