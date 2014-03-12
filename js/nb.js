@@ -28,9 +28,10 @@ nbx.open = function() {
     // but i still don't understand why why get the test jots written to DB even when authorized is failing - unless it never
     // is really failing but we don't know that because we aren't using a callback - it's all making more sense now. It's better
     // feeling less sick
-    Nimbus.Auth.authorized_callback = function() {console.log("in authentication callback")
-
+    Nimbus.Auth.authorized_callback = function() {
+    	console.log("in authentication callback");
 	    nbx.linkDropbox = document.getElementById("connectDropbox");
+	    nbx.auth = Nimbus.Auth.authorized();
 		if(nbx.auth) { // change link text to connected
 			nbx.linkDropbox.innerHTML = "Connected to Dropbox!";
 		} else {
@@ -38,7 +39,6 @@ nbx.open = function() {
 		}
     };
 
-	//nbx.auth = Nimbus.Auth.authorized();
 	Nimbus.Auth.authorize();
 
 
