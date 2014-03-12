@@ -14,7 +14,7 @@ nbx.sync_object = {
 	  "key": "nlszj5xrhlb1k5p", 
 	  "secret": "fo8a244sgdftjbf", 
 	  "app_name": "tjbeta" 
-	},
+	}
 	//"synchronous": true
 };
 
@@ -24,7 +24,7 @@ nbx.open = function() {
     console.log("in nbx.open, calling Nimbus.Auth.setup(nbx.sync_object");
     Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
-	if(nbx.auth) { // change link text to connected
+	if(nbx.auth == true) { // change link text to connected
 		nbx.linkDropbox.innerHTML = "nbx.open: Connected to Dropbox already!";
 	}
 	    //Nimbus.Auth.setup(sync_string);
