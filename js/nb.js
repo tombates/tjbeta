@@ -39,7 +39,7 @@ nbx.open = function() {
 		}
     };
 
-	Nimbus.Auth.authorize();
+	Nimbus.Auth.authorize("Dropbox");
 
 
     ///nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "timestamp"]);
