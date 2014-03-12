@@ -20,9 +20,13 @@ nbx.sync_object = {
 
 nbx.open = function() {
     //alert("new on DOMContentLoaded way and I am getting called.");
+
     console.log("in nbx.open, calling Nimbus.Auth.setup(nbx.sync_object");
     Nimbus.Auth.setup(nbx.sync_object);
-    //Nimbus.Auth.setup(sync_string);
+    nbx.auth = Nimbus.Auth.authorized();
+	if(nbx.auth) { // change link text to connected
+			nbx.linkDropbox.innerHTML = "nbx.open: Connected to Dropbox already!";
+	    //Nimbus.Auth.setup(sync_string);
     //DUDE you need to be calling authorize() first, but before that set a callback funtion authorized_callback = function...
     //then have the callback set the link text based on result of authorized there - that's the way you do it, silly
     // but i still don't understand why why get the test jots written to DB even when authorized is failing - unless it never
@@ -33,9 +37,9 @@ nbx.open = function() {
 	    nbx.linkDropbox = document.getElementById("connectDropbox");
 	    nbx.auth = Nimbus.Auth.authorized();
 		if(nbx.auth) { // change link text to connected
-			nbx.linkDropbox.innerHTML = "Connected to Dropbox!";
+			nbx.linkDropbox.innerHTML = "set by callback: Connected to Dropbox!";
 		} else {
-			nbx.linkDropbox.innerHTML = "Connect to Dropbox_";
+			nbx.linkDropbox.innerHTML = "set by callback: not connected to Dropbox";
 		}
     };
 
