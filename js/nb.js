@@ -39,7 +39,7 @@ nbx.open = function() {
 		}
     };
 
-	Nimbus.Auth.authorize();
+	//Nimbus.Auth.authorize();
 
 
     ///nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "timestamp"]);
@@ -65,9 +65,9 @@ nbx.open = function() {
 	//Jots.save();
 
 	// destroyAll does not seem to affect the dropbox stored jots...???
-	console.log("calling destroyAll()");
+	//console.log("calling destroyAll()");
 	//nbx.Jots.destroyAll();
-	console.log("back from destroyAll()");
+	//console.log("back from destroyAll()");
 }
 
 function nimbus_init() {
