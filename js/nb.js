@@ -18,6 +18,15 @@ nbx.sync_object = {
 	//"synchronous": true
 };
 
+nbx.userConnectRequest(serviceName) = function() {
+    if(Nimbus.Auth.authorized()) {
+    	alert("Nothing to do: you're already connected.")
+    }
+    else {
+    	Nimbus.Auth.authorize(serviceNAme);
+    }
+};
+
 nbx.open = function() {
     //alert("new on DOMContentLoaded way and I am getting called.");
 
@@ -47,7 +56,8 @@ nbx.open = function() {
 		}
     };
 
-	//git Nimbus.Auth.authorize();
+	//git Nimbus.Auth.authorize("Dropbox");  we can't do this here because doing so takes us away from this page to Dropbox
+	//                                       which means we come back again to nbx.open and now we have an infinite loop
 
 
     ///nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "timestamp"]);

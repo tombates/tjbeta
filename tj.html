@@ -11,7 +11,8 @@
 
 <!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
 <body>
-<a id="connectDropbox" onClick="Nimbus.Auth.authorize('Dropbox');">Connect to Dropbox - link initial state</a>
+<!--a id="connectDropbox" onClick="Nimbus.Auth.authorize('Dropbox');">Connect to Dropbox - link initial state</a-->
+<a id="connectDropbox" onClick="nbx.userConnectRequest('Dropbox');">Connect to Dropbox - link initial state</a>
 <!--script>
     var linkDropbox;
 	var Tasks;  // a model (table)
