@@ -39,7 +39,7 @@ nbx.open = function() {
 		}
     };
 
-	//Nimbus.Auth.authorize();
+	//git Nimbus.Auth.authorize();
 
 
     ///nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "timestamp"]);
