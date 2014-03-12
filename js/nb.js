@@ -28,18 +28,24 @@ nbx.open = function() {
     // but i still don't understand why why get the test jots written to DB even when authorized is failing - unless it never
     // is really failing but we don't know that because we aren't using a callback - it's all making more sense now. It's better
     // feeling less sick
-	nbx.auth = Nimbus.Auth.authorized();
-    nbx.linkDropbox = document.getElementById("connectDropbox");
-	if(nbx.auth) { // change link text to connected
-		nbx.linkDropbox.innerHTML = "Connected to Dropbox!";
-	} else {
-		nbx.linkDropbox.innerHTML = "Connect to Dropbox_";
-	}
+    Nimbus.Auth.authorized_callback = function() {console.log("in authentication callback")
+
+	    nbx.linkDropbox = document.getElementById("connectDropbox");
+		if(nbx.auth) { // change link text to connected
+			nbx.linkDropbox.innerHTML = "Connected to Dropbox!";
+		} else {
+			nbx.linkDropbox.innerHTML = "Connect to Dropbox_";
+		}
+    };
+
+	//nbx.auth = Nimbus.Auth.authorized();
+	Nimbus.Auth.authorize();
+
 
     ///nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "timestamp"]);
     nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
-	nbx.jot1 = nbx.Jots.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
-	nbx.jot2 = nbx.Jots.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
+	//just a test nbx.jot1 = nbx.Jots.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
+	//just a test nbx.jot2 = nbx.Jots.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
 	//instance = Jots.findAllByAttribute("done", false);
 	//instance.done = false;
     //instance.save();
