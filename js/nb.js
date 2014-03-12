@@ -22,6 +22,9 @@ nbx.open = function() {
     //alert("new on DOMContentLoaded way and I am getting called.");
 
     console.log("in nbx.open, calling Nimbus.Auth.setup(nbx.sync_object");
+
+    nbx.linkDropbox = document.getElementById("connectDropbox");
+
     Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
 	if(nbx.auth == true) { // change link text to connected
@@ -35,7 +38,7 @@ nbx.open = function() {
     // feeling less sick
     Nimbus.Auth.authorized_callback = function() {
     	console.log("in authentication callback");
-	    nbx.linkDropbox = document.getElementById("connectDropbox");
+	    //nbx.linkDropbox = document.getElementById("connectDropbox");
 	    nbx.auth = Nimbus.Auth.authorized();
 		if(nbx.auth) { // change link text to connected
 			nbx.linkDropbox.innerHTML = "set by callback: Connected to Dropbox!";
