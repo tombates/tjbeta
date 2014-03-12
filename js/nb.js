@@ -18,15 +18,26 @@ nbx.sync_object = {
 	//"synchronous": true
 };
 
-nbx.userConnectRequest(serviceName) = function() {
+nbx.userConnectRequest = function(serviceName) {
     if(Nimbus.Auth.authorized()) {
     	alert("Nothing to do: you're already connected.")
     }
     else {
-    	Nimbus.Auth.authorize(serviceNAme);
+    	Nimbus.Auth.authorize(serviceName);
     }
 };
 
+/*
+* Called on DomContentLoaded event to see if we are connected and to set an authorize callback function.
+*
+* Note this function cannot itself call authorize("Dropbox") for example since that will take us away
+* to the DropBox site, meaning when we return we will end up here again and so generate an infinite
+* loop, which is not conducive to productive jotting. Thus the check and actual authorize call in
+* userConnectRequest().
+*
+* TODO I'm still not happy with this approach. Need a completely programmatic way to handle this issue but
+* the asynchronicity creates a problem.
+*/
 nbx.open = function() {
     //alert("new on DOMContentLoaded way and I am getting called.");
 
