@@ -102,10 +102,11 @@ tj.indexedDB.addTodo = function(todoText) {
 	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
         //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
         console.log("attempting store of real jot on DB");
-        nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":"now"});
+        var now = Date().toString();
+        nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":now});
         //nbx.jotreal.jot = "does save do something to the time field?";
         //nbx.jotreal.save();
-        nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
+        //nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
     }
 };
 
