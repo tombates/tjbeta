@@ -105,6 +105,7 @@ tj.indexedDB.addTodo = function(todoText) {
         nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":"now"});
         nbx.jotreal.jot = "does save do something to the time field?";
         nbx.jotreal.save();
+        nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
     }
 };
 
