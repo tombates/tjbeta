@@ -280,21 +280,20 @@ function renderTodo(row) {
 }
 
 /*
-* Places a previously made jot back into the edit area for changing. Also grays the
-* div containing the original. OR could we edit it in place - putting a textarea into
-* the jots div temporarily??? - would be nicer UX-wise
-*
-* What if every jot where a textarea instead of a div with paras - no this can't work
-* textarea does not support html
-*
-* OH WAIT div with contenteditable = true might be the ticket!
+* Makes the jot contenteditable if no jot currently is: only one jot can be editable at a time.
+* If the jot is currently editable then it is set not editable. Changes the link image appropriately.
 */
-tj.indexedDB.editTodo = function(id) {
-    console.log("tj.indexedDB.editTodo()");
-    //var editlink = document.getElementById(id);
-    id.title = "Save the edit"
-    var editimg = id.childNodes[0];
-    editimg.src = ".\/images\/tick32.png"
+tj.indexedDB.editTodo = function(element) {
+    //console.log("tj.indexedDB.editTodo()");
+    var editimg = element.childNodes[0];
+    if(element.title == "Edit this jot") {
+        element.title = "Save the edit";
+        editimg.src = ".\/images\/tick32.png";
+    }
+    else {
+        element.title = "Edit this jot";
+        editimg.src = ".\/images\/pen32.png";    	
+    }
 };
 
 tj.indexedDB.deleteTodo = function(id) {
