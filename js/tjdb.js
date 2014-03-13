@@ -245,7 +245,7 @@ function renderTodo(row) {
 	editlink.className = "edit";
 	//editlink.textContent = " [Edit]";
 	editimage = document.createElement("img");
-	editimage.src = ".\/images\/pen.png"
+	editimage.src = ".\/images\/pen32.png"
 	//var ts = toString(row.timeStamp);
 	var dt = new Date(row.timeStamp);   // get a Data obj back so we can call some presentation methods
 	
