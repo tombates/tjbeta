@@ -243,6 +243,7 @@ function renderTodo(row) {
 	dellink.textContent = " [Delete]";
 	var editlink = document.createElement("a");
 	editlink.className = "edit";
+	editlink.title = "Edit this jot"
 	//editlink.textContent = " [Edit]";
 	editimage = document.createElement("img");
 	editimage.src = ".\/images\/pen32.png"
@@ -291,6 +292,7 @@ function renderTodo(row) {
 tj.indexedDB.editTodo = function(id) {
     console.log("tj.indexedDB.editTodo()");
     //var editlink = document.getElementById(id);
+    id.title = "Save the edit"
     var editimg = id.childNodes[0];
     editimg.src = ".\/images\/tick32.png"
 };
