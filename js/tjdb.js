@@ -29,6 +29,7 @@
 
 // Let's encapsulate our stuff in a namespace
 var tj = {};
+tj.editing = null;
 tj.indexedDB = {};
 tj.STORE_IDB = 1;
 tj.STORE_DROPBOX = 2;
@@ -286,13 +287,21 @@ function renderTodo(row) {
 tj.indexedDB.editTodo = function(element) {
     //console.log("tj.indexedDB.editTodo()");
     var editimg = element.childNodes[0];
+    if(tj.editing != null && element != tj.editing) {
+    	alert("Only one jot can be edited at a time.");
+    	return;
+    }
+
+
     if(element.title == "Edit this jot") {
         element.title = "Save the edit";
         editimg.src = ".\/images\/tick32.png";
+        tj.editing = element;
     }
     else {
         element.title = "Edit this jot";
-        editimg.src = ".\/images\/pen32.png";    	
+        editimg.src = ".\/images\/pen32.png";
+        tj.editing = null;   	
     }
 };
 
