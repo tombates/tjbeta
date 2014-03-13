@@ -290,8 +290,8 @@ function renderTodo(row) {
 */
 tj.indexedDB.editTodo = function(id) {
     console.log("tj.indexedDB.editTodo()");
-    var editlink = document.getElementById(id);
-    var editimg = editlink.childNodes[0];
+    //var editlink = document.getElementById(id);
+    var editimg = id.childNodes[0];
     editimg.src = ".\/images\/tick32.png"
 };
 
