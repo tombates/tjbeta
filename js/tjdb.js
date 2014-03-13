@@ -244,6 +244,8 @@ function renderTodo(row) {
 	var editlink = document.createElement("a");
 	editlink.className = "edit";
 	editlink.textContent = " [Edit]";
+	editimage = document.createElement("img");
+	editimage.src = "..\\images\\pen.png"
 	//var ts = toString(row.timeStamp);
 	var dt = new Date(row.timeStamp);   // get a Data obj back so we can call some presentation methods
 	
@@ -269,6 +271,7 @@ function renderTodo(row) {
 	
 	//jdiv.appendChild(t);
 	jdiv.appendChild(pts);
+	editlink.appendChild(editimage);
 	jdiv.appendChild(editlink);
 	jdiv.appendChild(dellink);
 	jdiv.appendChild(pjot);
