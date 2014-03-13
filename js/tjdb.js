@@ -266,7 +266,7 @@ function renderTodo(row) {
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteTodo(row.text);
-		tj.indexedDB.editTodo(row.timeStamp);
+		tj.indexedDB.editTodo(this);
 	});
 	
 	//jdiv.appendChild(t);
