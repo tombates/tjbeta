@@ -289,7 +289,7 @@ function renderTodo(row) {
 * OH WAIT div with contenteditable = true might be the ticket!
 */
 tj.indexedDB.editTodo = function(id) {
-
+    console.log("tj.indexedDB.editTodo()");
 };
 
 tj.indexedDB.deleteTodo = function(id) {
