@@ -324,7 +324,7 @@ tj.indexedDB.editTodo = function(editLink, jotElement) {
 	    jotElement.setAttribute("contenteditable", true);
         tj.editing = editLink;
     }
-    else {
+    else {    // time to save the edits
         editLink.title = "Edit this jot";
         editimg.src = ".\/images\/pen32.png";
 	    jotElement.setAttribute("contenteditable", false);
@@ -332,21 +332,25 @@ tj.indexedDB.editTodo = function(editLink, jotElement) {
     }
 };
 
-tj.indexedDB.deleteTodo = function(iDBkey) {
+tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readwrite");
 	var store = trans.objectStore("todo");
 	
-	//var request = store.delete(id);
-	var request = store['delete'](iDBkey);    // ugly but solves warning error due to delete being a keyword, just like continue issue
+	// deletel the indexedDB entry for this jot
+	var request = store['delete'](iDBkey);    // can't do store.delete(id) due to delete being a keyword, just like continue issue
 	
 	request.onsuccess = function(e) {
+		// delete the view of the jot by removing it's jotDiv - no more recreating all the jot view's html!
+	    var todos = document.getElementById("todoItems");
+        todos.removeChild(jotDiv);
 		tj.indexedDB.getAllTodoItems();   // rerender with deleted item gone
 	};
 	
 	request.onerror = function(e) {
 		console.log(e);
 	};
+
 };
 
 tj.indexedDB.emptyDB = function() {
