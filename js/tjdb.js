@@ -116,6 +116,8 @@ tj.indexedDB.addTodo = function(todoText) {
         console.log("attempting store of real jot on DB");
         var now = Date().toString();
         nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":now});
+        console.log(nbx.jotreal.id);
+        console.log(nbx.jotreal.time);
         //nbx.jotreal.jot = "does save do something to the time field?";
         //nbx.jotreal.save();
         //nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
@@ -269,7 +271,8 @@ function renderTodo(row) {
     // do we need that last one? Let's see we get the keyPath from the delete link and that gives us the indDB record but
     // that alone doesn't give us the jotdiv --- so like the edit link we need a more direct assoc to in this case the jotdiv
     // and the delete link --- WAIT why not put what we are going to need into the del and edit event listeners then the issue
-    // is solved without any arrays or assoc objects -- WOW is that right?
+    // is solved without any arrays or assoc objects -- WOW is that right? Actually, that worked great! No need for lists
+    // of associations and all that entails mgmt-wise. 
 
 	var dt = new Date(row.timeStamp);   // get a Date obj back so we can call some presentation methods
 	
@@ -279,7 +282,7 @@ function renderTodo(row) {
 	pjot.innerHTML = row.text;
 	//t.data = row.text;
 	//console.log("in renderTodo");
-	// wire up Delete link handler
+	// wire up Delete link handler and pass the inner deleteTodo the keyPath and jotdiv it will need
 	dellink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteTodo(row.text);
 		var yesno = confirm("Are you sure you want to delete this jot?\n\nThis is not undoable.");
