@@ -26,10 +26,12 @@
 
 //TODO: option for storing stuff only or not at all on local machine using IndexedDB
 //TODO: option for storing stuff only or not at all on either\both GDrive and Dropbox
+//TODO: change all "todo" stuff to jot stuff
 
 // Let's encapsulate our stuff in a namespace
 var tj = {};
 tj.editing = null;
+tj.jots = [];
 tj.indexedDB = {};
 tj.STORE_IDB = 1;
 tj.STORE_DROPBOX = 2;
@@ -79,6 +81,9 @@ tj.indexedDB.open = function() {
 };
 
 tj.indexedDB.addTodo = function(todoText) {
+	//TODO since we are saving to multiple places we need to check for errors back from each store location
+	//     recover/report
+
 	// add the jot to indexedDB store
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
@@ -91,7 +96,13 @@ tj.indexedDB.addTodo = function(todoText) {
     							});
     	
     	request.onsuccess = function(e) {
-    		tj.indexedDB.getAllTodoItems();
+    		//TODO OPTIMIZE to just slip a new div in if possible at either top or bottom
+    		//hmmm best way to maintain array of layout so that we can do on the fly toggling
+    		//of the contenteditability of a jot. This means at a minimum we need to be able
+    		//to easily get the text container (p or div) that corresponds to a clicked
+    		//edit/save link. Ahhh but that's what we do in render
+    		
+    		tj.indexedDB.getAllTodoItems();    // cause all jots to render
     	};
     	
     	request.onerror = function(e) {
@@ -99,7 +110,7 @@ tj.indexedDB.addTodo = function(todoText) {
     	};
     }
 
-	// also add to cloud storage location(s)
+	// add the jot to cloud storage location(s)
 	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
         //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
         console.log("attempting store of real jot on DB");
@@ -199,7 +210,7 @@ function htmlizeText(text) {
 tj.indexedDB.getAllTodoItems = function() {
 	console.log("in getAllTodoItems");
 	var todos = document.getElementById("todoItems");
-	todos.innerHTML = "";
+	todos.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 	
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readwrite");
@@ -224,9 +235,8 @@ tj.indexedDB.getAllTodoItems = function() {
 /*
 * Creates all the HTML elements for a single jot and sets them into the todoItems div
 */
-function renderTodo(row) {
-	// grab the containing div for jots
-	var todos = document.getElementById("todoItems");
+function renderTodo(row) {	
+	var todos = document.getElementById("todoItems");   // grab the containing div for all displayed jots
 	
 	// a div for each jot
 	var jdiv = document.createElement("div");
@@ -237,7 +247,6 @@ function renderTodo(row) {
 	// a paragraph for the jot - simple for now: just one basic paragraph is all we handle
 	var pjot = document.createElement("p");
 	pjot.className = "jottext";
-	pjot.setAttribute("contenteditable", true);
 
 	var dellink = document.createElement("a");
 	dellink.className = "delete";
@@ -249,7 +258,20 @@ function renderTodo(row) {
 	editimage = document.createElement("img");
 	editimage.src = ".\/images\/pen32.png"
 	//var ts = toString(row.timeStamp);
-	var dt = new Date(row.timeStamp);   // get a Data obj back so we can call some presentation methods
+
+    // THIS is the place to save the edit/save link <-> jot text containing element relationship for toggling editability
+    // the thing is array or object. array would be nice because it lets us know the order of things as displayed but do
+    // we need that really? an object allows us to have an associative list like a hash where the edit link can be the key
+    // and the value is the text containing p (or div if we go that way). Also, when we move to not rerendering all the jots
+    // upon deletion or addition we will need to know which jotdiv node to remove (this does not arise in the rerender all
+    // way because we just remove from the indexedDB and then rerender all that are left in order) so we need an
+    // delete link <-> jotdiv association AND we also need a connection between the indexedDB record and the jotdiv - or
+    // do we need that last one? Let's see we get the keyPath from the delete link and that gives us the indDB record but
+    // that alone doesn't give us the jotdiv --- so like the edit link we need a more direct assoc to in this case the jotdiv
+    // and the delete link --- WAIT why not put what we are going to need into the del and edit event listeners then the issue
+    // is solved without any arrays or assoc objects -- WOW is that right?
+
+	var dt = new Date(row.timeStamp);   // get a Date obj back so we can call some presentation methods
 	
 	//var t = document.createTextNode(dt.toDateString() + "at " + dt.toTimeString() + ": " + row.text);
 	pts.textContent = "Jotted on " + dt.toDateString() + " at " + dt.toLocaleTimeString() + ":";
@@ -268,7 +290,7 @@ function renderTodo(row) {
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteTodo(row.text);
-		tj.indexedDB.editTodo(this);
+		tj.indexedDB.editTodo(this, pjot);
 	});
 	
 	//jdiv.appendChild(t);
@@ -278,40 +300,45 @@ function renderTodo(row) {
 	jdiv.appendChild(dellink);
 	jdiv.appendChild(pjot);
 	todos.appendChild(jdiv);
+	todos.removeChild
 }
 
 /*
 * Makes the jot contenteditable if no jot currently is: only one jot can be editable at a time.
 * If the jot is currently editable then it is set not editable. Changes the link image appropriately.
+*
+* editLink - The in-jot-div edit/save link that received the click.
 */
-tj.indexedDB.editTodo = function(element) {
+tj.indexedDB.editTodo = function(editLink, jotElement) {
     //console.log("tj.indexedDB.editTodo()");
-    var editimg = element.childNodes[0];
-    if(tj.editing != null && element != tj.editing) {
+    var editimg = editLink.childNodes[0];
+    if(tj.editing != null && editLink != tj.editing) {
     	alert("Only one jot can be edited at a time.");
     	return;
     }
 
 
-    if(element.title == "Edit this jot") {
-        element.title = "Save the edit";
+    if(editLink.title == "Edit this jot") {
+        editLink.title = "Save the edit";
         editimg.src = ".\/images\/tick32.png";
-        tj.editing = element;
+	    jotElement.setAttribute("contenteditable", true);
+        tj.editing = editLink;
     }
     else {
-        element.title = "Edit this jot";
+        editLink.title = "Edit this jot";
         editimg.src = ".\/images\/pen32.png";
+	    jotElement.setAttribute("contenteditable", false);
         tj.editing = null;   	
     }
 };
 
-tj.indexedDB.deleteTodo = function(id) {
+tj.indexedDB.deleteTodo = function(iDBkey) {
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readwrite");
 	var store = trans.objectStore("todo");
 	
 	//var request = store.delete(id);
-	var request = store['delete'](id);    // ugly but solves warning error due to delete being a keyword, just like continue issue
+	var request = store['delete'](iDBkey);    // ugly but solves warning error due to delete being a keyword, just like continue issue
 	
 	request.onsuccess = function(e) {
 		tj.indexedDB.getAllTodoItems();   // rerender with deleted item gone
@@ -369,6 +396,8 @@ function toggleOrdering() {
 function addTodo() {
 	var todo = document.getElementById('todo');
 	tj.indexedDB.addTodo(todo.value);
+
+	// clear the compose area of the input text
 	todo.value = '';
 }
 
