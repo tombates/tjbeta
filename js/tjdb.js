@@ -333,6 +333,7 @@ tj.indexedDB.editTodo = function(editLink, jotElement) {
 };
 
 tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
+	var byebyeDiv = jotDiv;
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readwrite");
 	var store = trans.objectStore("todo");
@@ -343,7 +344,7 @@ tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
 	request.onsuccess = function(e) {
 		// delete the view of the jot by removing it's jotDiv - no more recreating all the jot view's html!
 	    var todos = document.getElementById("todoItems");
-        todos.removeChild(jotDiv);
+        todos.removeChild(byebyeDiv);
 		tj.indexedDB.getAllTodoItems();   // rerender with deleted item gone
 	};
 	
