@@ -284,7 +284,7 @@ function renderTodo(row) {
 		//tj.indexedDB.deleteTodo(row.text);
 		var yesno = confirm("Are you sure you want to delete this jot?\n\nThis is not undoable.");
 		if(yesno) {
-		    tj.indexedDB.deleteTodo(row.timeStamp);
+		    tj.indexedDB.deleteTodo(row.timeStamp, jdiv);
         }
 	});
 	
@@ -333,7 +333,6 @@ tj.indexedDB.editTodo = function(editLink, jotElement) {
 };
 
 tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
-	var byebyeDiv = jotDiv;
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readwrite");
 	var store = trans.objectStore("todo");
