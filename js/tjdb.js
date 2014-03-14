@@ -343,7 +343,7 @@ tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
 	request.onsuccess = function(e) {
 		// delete the view of the jot by removing it's jotDiv - no more recreating all the jot view's html!
 	    var todos = document.getElementById("todoItems");
-        todos.removeChild(byebyeDiv);
+        todos.removeChild(jotDiv);
 		tj.indexedDB.getAllTodoItems();   // rerender with deleted item gone
 	};
 	
