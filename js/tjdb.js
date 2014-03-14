@@ -82,7 +82,8 @@ tj.indexedDB.open = function() {
 
 tj.indexedDB.addTodo = function(todoText) {
 	//TODO since we are saving to multiple places we need to check for errors back from each store location
-	//     recover/report
+	//     and recover/report
+	//TODO must change data to be same in indexedDB and remote records
 
 	// add the jot to indexedDB store
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
@@ -118,6 +119,11 @@ tj.indexedDB.addTodo = function(todoText) {
         nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":now});
         console.log(nbx.jotreal.id);
         console.log(nbx.jotreal.time);
+        // that worked and we can use nbx.Jots.find(id) later if we squirrel away the id and bind
+        // it to our indexedDB version of the jot
+        // how should we bind - we can't use the lovely callback way i don't think. could put it in the indexedDB
+        // version but we are currently storing that before the NimbusBase version...
+
         //nbx.jotreal.jot = "does save do something to the time field?";
         //nbx.jotreal.save();
         //nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
@@ -347,7 +353,7 @@ tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
 		// delete the view of the jot by removing it's jotDiv - no more recreating all the jot view's html!
 	    var todos = document.getElementById("todoItems");
         todos.removeChild(jotDiv);
-		tj.indexedDB.getAllTodoItems();   // rerender with deleted item gone
+		//tj.indexedDB.getAllTodoItems();   // rerender with deleted item gone
 	};
 	
 	request.onerror = function(e) {
