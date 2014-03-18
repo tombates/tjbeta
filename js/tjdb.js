@@ -104,7 +104,8 @@ tj.indexedDB.addTodo = function(todoText) {
     		//edit/save link. Ahhh but that's what we do in render
     	
     	var newentry = e;
-    	var newresult = e.target.result;
+    	var newresult = e.target.result;   // this is the store key for this row
+    	var mightberow = store.get(newresult);
     	var x = 3;
 
 	    var todos = document.getElementById("todoItems");
