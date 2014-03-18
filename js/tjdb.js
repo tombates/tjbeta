@@ -102,13 +102,19 @@ tj.indexedDB.addTodo = function(todoText) {
     		//of the contenteditability of a jot. This means at a minimum we need to be able
     		//to easily get the text container (p or div) that corresponds to a clicked
     		//edit/save link. Ahhh but that's what we do in render
-    		
+    	
+    	var newentry = e;
+    	var newresult = e.target.result;
+    	var x = 3;
+
 	    var todos = document.getElementById("todoItems");
-	        if(tj.indexedDB.order === "prev")    // newest are currently shown first
-	            todos.insertBefore(jotDiv, todos.firstChild);
-	        else    // oldest are currently shown first
-                todos.appendChild(jotDiv);
-    		//tj.indexedDB.getAllTodoItems();    // cause all jots to render
+	        // if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
+	        //     todos.insertBefore(jotDiv, todos.firstChild);
+	        // }
+	        // else {  // oldest are currently shown first
+         //        todos.appendChild(jotDiv);
+         //    }
+    		tj.indexedDB.getAllTodoItems();    // cause all jots to render
     		//uhhh why not just make this function add ahla the call to renderTodo in getAllTodoItems
     		//for just this new jot either top or bottom
 
@@ -240,7 +246,7 @@ tj.indexedDB.getAllTodoItems = function() {
 		if(!!result == false)   // the !! ensures result becomes true boolean value
 		    return;
 			
-		renderTodo(result.value);
+		renderTodo(result.value);    // result.value is a table row
 		//result.continue();    // compiler warning is bogus and due to 'continue' being a javascript keyword
 		result['continue']();    // solution to warning, and for IE8 if we care
 	};
@@ -317,7 +323,7 @@ function renderTodo(row) {
 	jdiv.appendChild(dellink);
 	jdiv.appendChild(pjot);
 	todos.appendChild(jdiv);
-	todos.removeChild
+	//todos.removeChild
 }
 
 /*
