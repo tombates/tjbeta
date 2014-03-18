@@ -103,9 +103,9 @@ tj.indexedDB.addTodo = function(todoText) {
     		//to easily get the text container (p or div) that corresponds to a clicked
     		//edit/save link. Ahhh but that's what we do in render
     	
-    	var newentry = e;
-    	var newresult = e.target.result;   // this is the store key for this row
-    	var mightberow = store.get(newresult);
+    	// newentry = e;
+    	var key = e.target.result;   // this is the store key for the new row
+    	var mightberow = store.get(key).result;
     	var x = 3;
 
 	    var todos = document.getElementById("todoItems");
