@@ -89,12 +89,16 @@ tj.indexedDB.addTodo = function(todoText) {
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
     	var trans = db.transaction(["todo"], "readwrite");
-    	var store = trans.objectStore("todo");
+    	var store = trans.objectStore("todo");   // why is this line suddenly failing??? i changed nothing!
     	var htmlizedText = htmlizeText(todoText);
     	var request = store.put({
     							"text": htmlizedText,
     							"timeStamp": new Date().getTime()
     							});
+    	
+    	trans.oncomplete = function() {
+    		console.log("trans.oncomplete() called");
+    	}
     	
     	request.onsuccess = function(e) {
     		//TODO OPTIMIZE to just slip a new div in if possible at either top or bottom
