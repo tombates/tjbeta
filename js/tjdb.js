@@ -245,7 +245,7 @@ tj.indexedDB.getAllTodoItems = function() {
 		    return;
 			
 		var newJotDiv = renderTodo(result.value);    // result.value is a table row
-		todos.appendChild(jdiv);
+		todos.appendChild(newJotDiv);
 		//result.continue();    // compiler warning is bogus and due to 'continue' being a javascript keyword
 		result['continue']();    // solution to warning, and for IE8 if we care
 	};
