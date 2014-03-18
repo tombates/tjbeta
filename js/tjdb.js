@@ -110,6 +110,7 @@ tj.indexedDB.addTodo = function(todoText) {
 
 		    var todos = document.getElementById("todoItems");
 	        if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
+	        	var first = todos.firstChild;
 	            todos.insertBefore(jotDiv, todos.firstChild);
 	        }
 	        else {  // oldest are currently shown first
@@ -142,90 +143,6 @@ tj.indexedDB.addTodo = function(todoText) {
     }
 };
 
-/*
-* Worker bee function that lets user's carriage returns shine through.
-*   Very simple for now: we just replace n returns with with n <br />
-*   elements. We do not yet try to create actual separate html
-*   paragraphs.
-*
-*   Also, we attempt to recognize urls and wrap them in <a></a> to make
-*   them into real links within the jot.
-*
-*   That's all for the moment.
-*/
-function htmlizeText(text) {
-	// converts url strings in a jot to actual links - currently assuming no already existing <a> stuff in the jot text
-	
-    //var parse_url = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?/$;
-	//var parse_url = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
-	//var parse_url = /((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;  // like all three: only sort of works
-	
-	//OK I've mod'd and munged and this works pretty well, probably has leaks, and doesn't yet handle
-	//things like "file:///C:/WebSites/ThoughtJotBasic/tj.html" but it's definitely a good start
-	//
-	//refs: started with /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
-	//from: http://stackoverflow.com/questions/8188645/javascript-regex-to-match-a-url-in-a-field-of-text
-	//and mod'd, mostly to not require a scheme
-	//TODO: must also find local urls like "file:///C:/WebSites/ThoughtJotBasic/tj.html" - prefilter for that using another regex
-	var parse_url = /((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;
-	var parse_file = /file:(\/){2,3}([A-Za-z]:\/)?[\w-\.\/]+/g;
-	//var parse_file = /file:[\w-\.\/:]+/g;
-	//var parse_url = /((http|ftp|https|file):(\/){2-3})?([A-Za-z]:\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;
-	var parse_scheme = /((http|ftp|https|file):\/\/)?/;
-	var allurls = [];
-	var newlinks = [];
-	var result = null;
-	var linktext = "";
-	// first find any url-ish strings
-	while(result = parse_url.exec(text)) {
-        allurls.push(result[0]);   // the url-ish string, must not change as we need below for the replace operation
-
-        // add a scheme of http:// if there isn't one or we'll get the local page root tacked on and end up nowhere
-        var proto = parse_scheme.exec(result[0]);
-		if(proto === null || proto[0] === "")
-		    linktext = "<a href='http://" + result[0] + "'> " + result[0] + " </a>";
-		else  // add the http://
-		    linktext = "<a href='" + result[0] + "'> " + result[0] + " </a>";
-		
-		newlinks.push(linktext);
-	}
-	// next any file-ish strings
-	//TODO: this works BUT there can be collision between the two finders so that no matter what order one might find
-	//      something that's really the others pervue. We might need to split the text up around things file finder gets
-	//      and send those pieces to url finder then splice it all back together. A bit ugly but probably better for
-	//      comprehensibility than trying to make an even more complex regex...
-	/*while(result = parse_file.exec(text)) {
-        allurls.push(result[0]);   // the url-ish string, must not change as we need below for the replace operation
-	    linktext = "<a href='" + result[0] + "'> " + result[0] + " </a>";		
-		newlinks.push(linktext);
-	}*/
-		
-	// now replace the "links" we found in the jot - and possibly http-ized - with the real links we just made
-	//TODO: this replace can cause problems if the same url string is in the jot text more than once - whether
-	// or not one has a scheme prefix and the other doesn't ...
-	for(var i = 0; i < allurls.length; i++) {
-	    var zeta = text.replace(allurls[i], newlinks[i]);
-		text = zeta;
-	}
-
-    // finally, deal with converting returns to <br /> elements
-	// TODO: convert ws at front of newline to nbsps to wrap up our current minimal format-intention preservation
-	var pieces = text.split('\n');
-	if(pieces.length == 1)
-	    return(text);
-	// single returns will vanish, n>1 returns in a row lead to n-1 blank array elements
-	var htmlized = "";
-	for(var i = 0; i < pieces.length; i++) {
-		if(pieces[i] === "")
-		    htmlized = htmlized + "<br />";
-		else if(i === pieces.length - 1)
-		    htmlized = htmlized + pieces[i];
-		else
-		    htmlized = htmlized + pieces[i] + "<br />";
-	}
-	//alert(htmlized);
-	return(htmlized);
-}
 
 tj.indexedDB.getAllTodoItems = function() {
 	console.log("in getAllTodoItems");
@@ -432,5 +349,89 @@ function removeAll() {
 	
 }
 
+/*
+* Worker bee function that lets user's carriage returns shine through.
+*   Very simple for now: we just replace n returns with with n <br />
+*   elements. We do not yet try to create actual separate html
+*   paragraphs.
+*
+*   Also, we attempt to recognize urls and wrap them in <a></a> to make
+*   them into real links within the jot.
+*
+*   That's all for the moment.
+*/
+function htmlizeText(text) {
+	// converts url strings in a jot to actual links - currently assuming no already existing <a> stuff in the jot text
+	
+    //var parse_url = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?/$;
+	//var parse_url = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+	//var parse_url = /((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;  // like all three: only sort of works
+	
+	//OK I've mod'd and munged and this works pretty well, probably has leaks, and doesn't yet handle
+	//things like "file:///C:/WebSites/ThoughtJotBasic/tj.html" but it's definitely a good start
+	//
+	//refs: started with /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+	//from: http://stackoverflow.com/questions/8188645/javascript-regex-to-match-a-url-in-a-field-of-text
+	//and mod'd, mostly to not require a scheme
+	//TODO: must also find local urls like "file:///C:/WebSites/ThoughtJotBasic/tj.html" - prefilter for that using another regex
+	var parse_url = /((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;
+	var parse_file = /file:(\/){2,3}([A-Za-z]:\/)?[\w-\.\/]+/g;
+	//var parse_file = /file:[\w-\.\/:]+/g;
+	//var parse_url = /((http|ftp|https|file):(\/){2-3})?([A-Za-z]:\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;
+	var parse_scheme = /((http|ftp|https|file):\/\/)?/;
+	var allurls = [];
+	var newlinks = [];
+	var result = null;
+	var linktext = "";
+	// first find any url-ish strings
+	while(result = parse_url.exec(text)) {
+        allurls.push(result[0]);   // the url-ish string, must not change as we need below for the replace operation
+
+        // add a scheme of http:// if there isn't one or we'll get the local page root tacked on and end up nowhere
+        var proto = parse_scheme.exec(result[0]);
+		if(proto === null || proto[0] === "")
+		    linktext = "<a href='http://" + result[0] + "'> " + result[0] + " </a>";
+		else  // add the http://
+		    linktext = "<a href='" + result[0] + "'> " + result[0] + " </a>";
+		
+		newlinks.push(linktext);
+	}
+	// next any file-ish strings
+	//TODO: this works BUT there can be collision between the two finders so that no matter what order one might find
+	//      something that's really the others pervue. We might need to split the text up around things file finder gets
+	//      and send those pieces to url finder then splice it all back together. A bit ugly but probably better for
+	//      comprehensibility than trying to make an even more complex regex...
+	/*while(result = parse_file.exec(text)) {
+        allurls.push(result[0]);   // the url-ish string, must not change as we need below for the replace operation
+	    linktext = "<a href='" + result[0] + "'> " + result[0] + " </a>";		
+		newlinks.push(linktext);
+	}*/
+		
+	// now replace the "links" we found in the jot - and possibly http-ized - with the real links we just made
+	//TODO: this replace can cause problems if the same url string is in the jot text more than once - whether
+	// or not one has a scheme prefix and the other doesn't ...
+	for(var i = 0; i < allurls.length; i++) {
+	    var zeta = text.replace(allurls[i], newlinks[i]);
+		text = zeta;
+	}
+
+    // finally, deal with converting returns to <br /> elements
+	// TODO: convert ws at front of newline to nbsps to wrap up our current minimal format-intention preservation
+	var pieces = text.split('\n');
+	if(pieces.length == 1)
+	    return(text);
+	// single returns will vanish, n>1 returns in a row lead to n-1 blank array elements
+	var htmlized = "";
+	for(var i = 0; i < pieces.length; i++) {
+		if(pieces[i] === "")
+		    htmlized = htmlized + "<br />";
+		else if(i === pieces.length - 1)
+		    htmlized = htmlized + pieces[i];
+		else
+		    htmlized = htmlized + pieces[i] + "<br />";
+	}
+	//alert(htmlized);
+	return(htmlized);
+}
 
 
