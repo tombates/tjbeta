@@ -103,23 +103,19 @@ tj.indexedDB.addTodo = function(todoText) {
     		//to easily get the text container (p or div) that corresponds to a clicked
     		//edit/save link. Ahhh but that's what we do in render
     	
-    	// newentry = e;
-    	var key = e.target.result;   // this is the store key for the new row
-    	var idbReq = store.get(key);
-    	var therow = idbReq.result;
-    	var x = 3;
+	    	var key = e.target.result;   // the key for the new row just added to the indexedDB
+	    	var idbReq = store.get(key);
+	    	var therow = idbReq.result;
+		    var jotDiv = renderTodo(therow);
 
-	    var todos = document.getElementById("todoItems");
-	        // if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
-	        //     todos.insertBefore(jotDiv, todos.firstChild);
-	        // }
-	        // else {  // oldest are currently shown first
-         //        todos.appendChild(jotDiv);
-         //    }
-    		tj.indexedDB.getAllTodoItems();    // cause all jots to render
-    		//uhhh why not just make this function add ahla the call to renderTodo in getAllTodoItems
-    		//for just this new jot either top or bottom
-
+		    var todos = document.getElementById("todoItems");
+	        if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
+	            todos.insertBefore(jotDiv, todos.firstChild);
+	        }
+	        else {  // oldest are currently shown first
+                todos.appendChild(jotDiv);
+            }
+    		///tj.indexedDB.getAllTodoItems();    // cause all jots to render
     	};
     	
     	request.onerror = function(e) {
@@ -248,7 +244,8 @@ tj.indexedDB.getAllTodoItems = function() {
 		if(!!result == false)   // the !! ensures result becomes true boolean value
 		    return;
 			
-		renderTodo(result.value);    // result.value is a table row
+		var newJotDiv = renderTodo(result.value);    // result.value is a table row
+		todos.appendChild(jdiv);
 		//result.continue();    // compiler warning is bogus and due to 'continue' being a javascript keyword
 		result['continue']();    // solution to warning, and for IE8 if we care
 	};
@@ -257,10 +254,10 @@ tj.indexedDB.getAllTodoItems = function() {
 };
 
 /*
-* Creates all the HTML elements for a single jot and sets them into the todoItems div
+* Creates all the HTML elements for a single jot and sets them into a new div ready to be added to the all-jots-div
 */
 function renderTodo(row) {	
-	var todos = document.getElementById("todoItems");   // grab the containing div for all displayed jots
+	///var todos = document.getElementById("todoItems");   // grab the containing div for all displayed jots
 	
 	// a div for each jot
 	var jdiv = document.createElement("div");
@@ -318,14 +315,13 @@ function renderTodo(row) {
 		tj.indexedDB.editTodo(this, pjot);
 	});
 	
-	//jdiv.appendChild(t);
 	jdiv.appendChild(pts);
 	editlink.appendChild(editimage);
 	jdiv.appendChild(editlink);
 	jdiv.appendChild(dellink);
 	jdiv.appendChild(pjot);
-	todos.appendChild(jdiv);
-	//todos.removeChild
+	///todos.appendChild(jdiv);
+	return jdiv;
 }
 
 /*
