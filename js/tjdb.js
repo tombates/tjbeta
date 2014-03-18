@@ -105,7 +105,8 @@ tj.indexedDB.addTodo = function(todoText) {
     	
     	// newentry = e;
     	var key = e.target.result;   // this is the store key for the new row
-    	var mightberow = store.get(key).result;
+    	var idbReq = store.get(key);
+    	var therow = idbReq.result;
     	var x = 3;
 
 	    var todos = document.getElementById("todoItems");
