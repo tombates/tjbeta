@@ -103,7 +103,15 @@ tj.indexedDB.addTodo = function(todoText) {
     		//to easily get the text container (p or div) that corresponds to a clicked
     		//edit/save link. Ahhh but that's what we do in render
     		
-    		tj.indexedDB.getAllTodoItems();    // cause all jots to render
+	    var todos = document.getElementById("todoItems");
+	        if(tj.indexedDB.order === "prev")    // newest are currently shown first
+	            todos.insertBefore(jotDiv, todos.firstChild);
+	        else    // oldest are currently shown first
+                todos.appendChild(jotDiv);
+    		//tj.indexedDB.getAllTodoItems();    // cause all jots to render
+    		//uhhh why not just make this function add ahla the call to renderTodo in getAllTodoItems
+    		//for just this new jot either top or bottom
+
     	};
     	
     	request.onerror = function(e) {
@@ -350,10 +358,10 @@ tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
 	var request = store['delete'](iDBkey);    // can't do store.delete(id) due to delete being a keyword, just like continue issue
 	
 	request.onsuccess = function(e) {
-		// delete the view of the jot by removing it's jotDiv - no more recreating all the jot view's html!
+		// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
 	    var todos = document.getElementById("todoItems");
         todos.removeChild(jotDiv);
-		//tj.indexedDB.getAllTodoItems();   // rerender with deleted item gone
+		//tj.indexedDB.getAllTodoItems();   // NO LONGER NEEDED rerender with deleted item gone
 	};
 	
 	request.onerror = function(e) {
