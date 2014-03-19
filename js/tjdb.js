@@ -122,7 +122,7 @@ tj.indexedDB.addTodo = function(todoText) {
 	        else {  // oldest are currently shown first
                 todos.appendChild(jotDiv);
             }
-    		///tj.indexedDB.getAllTodoItems();    // cause all jots to render
+    		///tj.indexedDB.getAllTodoItems();    // cause all jots to rerender - NO MORE
     	};
     	
     	request.onerror = function(e) {
@@ -258,8 +258,19 @@ function renderTodo(row) {
 * Makes the jot contenteditable if no jot currently is: only one jot can be editable at a time.
 * If the jot is currently editable then it is set not editable. Changes the link image appropriately.
 *
-* editLink - The in-jot-div edit/save link that received the click.
+* editLink - The in-jot-div edit/save link (i.e. the pencil icon button) that received the click.
+* jotElement - The element containing the jot text (currently a p element, might become a div with sep p's in future...)
 */
+//TODO now we need to actually save the edits and persist the changes.
+//this is tricky for two reasons
+//1. the content in the p we are setting to contenteditable has already been htmlized with <br> and <a> elements
+//   and that is what is stored in both our local indexedDB database and remotely. so first we need to take a look
+//   at what we can get from the p when they are done - do we get plaintext or html
+//
+//2. when we go to save it in the database we want to update the contents of a row, but do we htmlize it again. What
+//   I don't want to get into is going back and forth - i don't want to un-htmlize. Maybe this means we should only be
+//   persisting plain text and htmlizing it only for display on the page. but then how do we preserve creturns - i think
+//   the available DOM methods strip out the creturns... time to experiment.
 tj.indexedDB.editTodo = function(editLink, jotElement) {
     //console.log("tj.indexedDB.editTodo()");
     var editimg = editLink.childNodes[0];
@@ -279,7 +290,13 @@ tj.indexedDB.editTodo = function(editLink, jotElement) {
         editLink.title = "Edit this jot";
         editimg.src = ".\/images\/pen32.png";
 	    jotElement.setAttribute("contenteditable", false);
-        tj.editing = null;   	
+        tj.editing = null;
+        var textcontent = jotElement.textContent;
+        var wholecontent = jotElement.wholeText;
+        var innerttextcontent = jotElement.innerText;
+        var htmlcontent = jotElement.innerHTML;
+        var datacontent = jotElement.data;
+        var x = 3;
     }
 };
 
