@@ -89,6 +89,12 @@ tj.indexedDB.addTodo = function(todoText) {
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
     	var trans = db.transaction(["todo"], "readwrite");
+    	trans.oncomplete = function(e) {
+    		console.log("addTodo trans.oncomplete() called");
+    	}
+    	trans.onerror = function(e) {
+    		console.log("addTodo trans.onerror() called");
+    	}
     	var store = trans.objectStore("todo");   // why is this line suddenly failing??? i changed nothing!
     	var htmlizedText = htmlizeText(todoText);
     	var request = store.put({
@@ -96,11 +102,9 @@ tj.indexedDB.addTodo = function(todoText) {
     							"timeStamp": new Date().getTime()
     							});
     	
-    	trans.oncomplete = function() {
-    		console.log("trans.oncomplete() called");
-    	}
     	
     	request.onsuccess = function(e) {
+    		console.log("addTodo in put request.onsuccess");
     		//TODO OPTIMIZE to just slip a new div in if possible at either top or bottom
     		//hmmm best way to maintain array of layout so that we can do on the fly toggling
     		//of the contenteditability of a jot. This means at a minimum we need to be able
@@ -155,12 +159,19 @@ tj.indexedDB.getAllTodoItems = function() {
 	
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readwrite");
-	var store = trans.objectStore("todo");
-	
+	trans.oncomplete = function(e) {
+		console.log("getAllTodoItems transaction.oncomplete() called");
+	};
+	trans.onerror = function(e) {
+		console.log("getAllTodoItems transaction.onerror() called");
+	}
+
+	var store = trans.objectStore("todo");	
 	var keyRange = IDBKeyRange.lowerBound(0);
 	var cursorRequest = store.openCursor(keyRange, tj.indexedDB.order);
 	
 	cursorRequest.onsuccess = function(e) {
+		console.log("getAllTodoItems in cursorRequest.onsuccess()")
 		var result = e.target.result;
 		if(!!result == false)   // the !! ensures result becomes true boolean value
 		    return;
