@@ -94,7 +94,7 @@ tj.indexedDB.addTodo = function(todoText) {
     	}
     	trans.onerror = function(e) {
     		console.log("addTodo trans.onerror() called");
-    		console.log(e);
+    		console.log(trans.error);
     	}
     	var store = trans.objectStore("todo");   // why is this line suddenly failing??? i changed nothing!
     	var htmlizedText = htmlizeText(todoText);
