@@ -98,12 +98,9 @@ tj.indexedDB.addTodo = function(todoText) {
     	}
     	var store = trans.objectStore("todo");   // why is this line suddenly failing??? i changed nothing!
     	var htmlizedText = htmlizeText(todoText);
-    	var request = store.put({
-    							"text": htmlizedText,
-    							"timeStamp": new Date().getTime()
-    							});
-    	
-    	
+    	var row = {"text": htmlizedText, "timeStamp": new Date().getTime()};
+    	var request = store.put(row);
+    	    	
     	request.onsuccess = function(e) {
     		console.log("addTodo in put request.onsuccess");
     		//TODO OPTIMIZE to just slip a new div in if possible at either top or bottom
@@ -112,10 +109,10 @@ tj.indexedDB.addTodo = function(todoText) {
     		//to easily get the text container (p or div) that corresponds to a clicked
     		//edit/save link. Ahhh but that's what we do in render
     	
-	    	var key = e.target.result;   // the key for the new row just added to the indexedDB
-	    	var idbReq = store.get(key);
-	    	var therow = idbReq.result;
-		    var jotDiv = renderTodo(therow);
+	    	//var key = e.target.result;   // the key for the new row just added to the indexedDB
+	    	//var idbReq = store.get(key);
+	    	//var therow = idbReq.result;
+		    var jotDiv = renderTodo(row);
 
 		    var todos = document.getElementById("todoItems");
 	        if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
