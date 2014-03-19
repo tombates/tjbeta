@@ -94,6 +94,7 @@ tj.indexedDB.addTodo = function(todoText) {
     	}
     	trans.onerror = function(e) {
     		console.log("addTodo trans.onerror() called");
+    		console.log(e);
     	}
     	var store = trans.objectStore("todo");   // why is this line suddenly failing??? i changed nothing!
     	var htmlizedText = htmlizeText(todoText);
@@ -135,7 +136,7 @@ tj.indexedDB.addTodo = function(todoText) {
 	// add the jot to cloud storage location(s)
 	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
         //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
-        console.log("attempting store of real jot on DB");
+        console.log("addTodo: attempting store of real jot on Dropbox");
         var now = Date().toString();
         nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":now});
         console.log(nbx.jotreal.id);
