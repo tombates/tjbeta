@@ -284,6 +284,7 @@ tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
         editLink.title = "Save the edit";
         editimg.src = ".\/images\/tick32.png";
 	    jotElement.setAttribute("contenteditable", true);
+	    jotElement.className = "jottext_editing"
         tj.editing = editLink;
     }
     else {    // time to save the edits
@@ -316,11 +317,16 @@ tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
             };
         };
         
+        //now we need to update the remote storage as well
+
+
         //TODO should we move this into the requestUpdate.onsuccess?
+        //AND if there was an indexedDB error we should probably revert the page text...?
         editLink.title = "Edit this jot";
         editimg.src = ".\/images\/pen32.png";
 	    jotElement.setAttribute("contenteditable", false);
-        tj.editing = null;
+        jotElement.className = "jottext"
+            tj.editing = null;
         //var textcontent = jotElement.textContent;    // works on FF, Chrome  - looses markup AND NEWLINES! (which are markup really)
         //var wholecontent = jotElement.wholeText;
         //var innerttextcontent = jotElement.innerText;// works on Chrome - looses <a> markup and converts <b> to crlf apparently
