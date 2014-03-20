@@ -242,7 +242,7 @@ function renderTodo(row) {
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteTodo(row.text);
-		tj.indexedDB.editTodo(this, pjot);
+		tj.indexedDB.editTodo(this, row.timeStamp, pjot);
 	});
 	
 	jdiv.appendChild(pts);
@@ -271,7 +271,7 @@ function renderTodo(row) {
 //   I don't want to get into is going back and forth - i don't want to un-htmlize. Maybe this means we should only be
 //   persisting plain text and htmlizing it only for display on the page. but then how do we preserve creturns - i think
 //   the available DOM methods strip out the creturns... time to experiment.
-tj.indexedDB.editTodo = function(editLink, jotElement) {
+tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
     //console.log("tj.indexedDB.editTodo()");
     var editimg = editLink.childNodes[0];
     if(tj.editing != null && editLink != tj.editing) {
@@ -287,22 +287,66 @@ tj.indexedDB.editTodo = function(editLink, jotElement) {
         tj.editing = editLink;
     }
     else {    // time to save the edits
+		var db = tj.indexedDB.db;
+		var trans = db.transaction(["todo"], "readwrite");
+		trans.oncomplete = function(e) {
+			console.log("editTodo transaction.oncomplete() called");
+		};
+		trans.onerror = function(e) {
+			console.log("editTodo transaction.onerror() called");
+		}
+		var store = trans.objectStore("todo");
+        var request = store.get(iDBkey);
+        request.onerror = function(e) {
+            console.log("editTodo request.onerror() called");
+        };
+        request.onsuccess = function(e) {
+            console.log("editTodo request.onsuccess() called");
+
+            var row = request.result;
+            row.text = jotElement.innerHTML;
+
+            // a nested request to update the indexedDB
+            var requestUpdate = store.put(row);
+            requestUpdate.onerror = function(e) {
+                console.log("editTodo requestUpdate.onerror() called");
+            };
+            requestUpdate.onsuccess = function(e) {
+                console.log("editTodo requestUpdate.onsuccess() called");
+            };
+        };
+        
+        //TODO should we move this into the requestUpdate.onsuccess?
         editLink.title = "Edit this jot";
         editimg.src = ".\/images\/pen32.png";
 	    jotElement.setAttribute("contenteditable", false);
         tj.editing = null;
-        var textcontent = jotElement.textContent;
-        var wholecontent = jotElement.wholeText;
-        var innerttextcontent = jotElement.innerText;
-        var htmlcontent = jotElement.innerHTML;
-        var datacontent = jotElement.data;
-        var x = 3;
+        //var textcontent = jotElement.textContent;    // works on FF, Chrome  - looses markup AND NEWLINES! (which are markup really)
+        //var wholecontent = jotElement.wholeText;
+        //var innerttextcontent = jotElement.innerText;// works on Chrome - looses <a> markup and converts <b> to crlf apparently
+        //var htmlcontent = jotElement.innerHTML;      // works on FF, Chrome - retains the htmlization
+        //var datacontent = jotElement.data;
+        //var x = 3;
+
+        // so we have a problem indeed as Firefox does not support inner text which is a bummer as what it does is return
+        // basically our prehtmlized text, which we could then easily rehtmlize after the editing is done. ugh...
+        // SINCE the user can't enter markup anyway (we'd need a whole editor for that) and them entering normal text without
+        // new carriage returns will still come across in the innerHTML maybe we should go with that for now. We really need
+        // a full editor in place when a jot goes editable...
+        // OMG actually adding newlines causes the innerHTML to show <div><br></div> type stuff and similarly for spaces they
+        // become <div>&nbsp;... not too suprising really
     }
 };
 
 tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readwrite");
+	trans.oncomplete = function(e) {
+		console.log("deleteTodo transaction.oncomplete() called");
+	};
+	trans.onerror = function(e) {
+		console.log("deleteTodo transaction.onerror() called");
+	}
 	var store = trans.objectStore("todo");
 	
 	// deletel the indexedDB entry for this jot
