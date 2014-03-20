@@ -149,7 +149,10 @@ tj.indexedDB.addTodo = function(todoText) {
     }
 };
 
-
+//TODO we are getting them all from the current local store instead of from a remote and possibly aggregated from
+//several devices store. The user needs to be in control of this (and perhaps we even over very fine granularity you
+// can decide which jots get put remotely and which don't) but the default should be to aggregrate on the remote store(s)
+// and sync on connect the local stores updating either side from the other appropriately.
 tj.indexedDB.getAllTodoItems = function() {
 	console.log("in getAllTodoItems");
 	var todos = document.getElementById("todoItems");
@@ -306,7 +309,7 @@ tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
 
             var row = request.result;
             row.text = jotElement.innerHTML;
-
+            console.log(row.timeStamp);
             // a nested request to update the indexedDB
             var requestUpdate = store.put(row);
             requestUpdate.onerror = function(e) {
@@ -319,6 +322,22 @@ tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
         
         //now we need to update the remote storage as well
 
+	    if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
+	        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
+	        console.log("editTodo: updating Dropbox");
+	        var editjot = nbx.Jots.findByAttribute("time", iDBkey);
+	        console.log(editjot.id);
+	        console.log(editjot.time);
+	        // that worked and we can use nbx.Jots.find(id) later if we squirrel away the id and bind
+	        // it to our indexedDB version of the jot
+	        // how should we bind - we can't use the lovely callback way i don't think. could put it in the indexedDB
+	        // version but we are currently storing that before the NimbusBase version...
+
+	        //nbx.jotreal.jot = "does save do something to the time field?";
+	        //nbx.jotreal.save();
+	        //nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
+	    }
+ 
 
         //TODO should we move this into the requestUpdate.onsuccess?
         //AND if there was an indexedDB error we should probably revert the page text...?
