@@ -122,7 +122,7 @@ tj.indexedDB.addTodo = function(todoText) {
 	    	//var therow = idbReq.result;
 		    var jotDiv = renderTodo(row);
 
-		    var todos = document.getElementById("todoItems");
+		    var todos = document.getElementById("jotItems");
 	        if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
 	        	var first = todos.firstChild;
 	            todos.insertBefore(jotDiv, todos.firstChild);
@@ -167,7 +167,7 @@ tj.indexedDB.addTodo = function(todoText) {
 */
 tj.indexedDB.getAllTodoItems = function() {
 	console.log("in getAllTodoItems");
-	var todos = document.getElementById("todoItems");
+	var todos = document.getElementById("jotItems");
 	todos.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 	
 	var db = tj.indexedDB.db;
@@ -202,7 +202,7 @@ tj.indexedDB.getAllTodoItems = function() {
 * Creates all the HTML elements for a single jot and sets them into a new div ready to be added to the all-jots-div
 */
 function renderTodo(row) {	
-	///var todos = document.getElementById("todoItems");   // grab the containing div for all displayed jots
+	///var todos = document.getElementById("jotItems");   // grab the containing div for all displayed jots
 	
 	// a div for each jot
 	var jdiv = document.createElement("div");
@@ -412,7 +412,7 @@ tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
 	
 	request.onsuccess = function(e) {
 		// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
-	    var todos = document.getElementById("todoItems");
+	    var todos = document.getElementById("jotItems");
         todos.removeChild(jotDiv);
 		//tj.indexedDB.getAllTodoItems();   // NO LONGER NEEDED rerender with deleted item gone
 	};
