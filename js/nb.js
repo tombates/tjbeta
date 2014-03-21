@@ -48,8 +48,12 @@ nbx.open = function() {
     Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
 	if(nbx.auth == true) { // change link text to connected
-		nbx.linkDropbox.innerHTML = "nbx.open: Connected to Dropbox already!";
-	}
+		nbx.linkDropbox.innerHTML = "nbx.open: Connected to Dropbox already! Doing a sync_all";
+		nbx.Jots.sync_all(function() {
+			console.log("nbx.Jots.sync_all() callback called.");
+			console.log("Nimbus instance count is now: " + nbx.Jots.count());
+		});
+    }
 	    //Nimbus.Auth.setup(sync_string);
     //DUDE you need to be calling authorize() first, but before that set a callback funtion authorized_callback = function...
     //then have the callback set the link text based on result of authorized there - that's the way you do it, silly
