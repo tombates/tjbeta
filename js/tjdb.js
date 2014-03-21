@@ -56,6 +56,14 @@ tj.indexedDB.onerror = function (e){
 
 tj.indexedDB.open = function() {
     "use strict";
+
+    // Warn user that we do not support early versions o findexedDB
+    if(!window.indexedDB) {    
+    	window.alert("Your browser doesn't support a stable version of IndexedDB, which Thought Jot uses.\nSome features might not be available or might not work correctly.");
+    }
+    //TODO Get user's initial preferences for local and remote storage
+    //TODO Get user's access info for their prefered remote storage locations
+
     var version = 4;
     var request = indexedDB.open("todos", version);  // returns an IDBOpenDBRequest object
 	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
@@ -99,7 +107,7 @@ tj.indexedDB.addTodo = function(todoText) {
     	var store = trans.objectStore("todo");   // why is this line suddenly failing??? i changed nothing!
     	var htmlizedText = htmlizeText(todoText);
     	var row = {"text": htmlizedText, "timeStamp": new Date().getTime()};
-    	var request = store.put(row);
+    	var request = store.add(row);
     	    	
     	request.onsuccess = function(e) {
     		console.log("addTodo in put request.onsuccess");
@@ -159,7 +167,7 @@ tj.indexedDB.getAllTodoItems = function() {
 	todos.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 	
 	var db = tj.indexedDB.db;
-	var trans = db.transaction(["todo"], "readwrite");
+	var trans = db.transaction(["todo"], "readonly");
 	trans.oncomplete = function(e) {
 		console.log("getAllTodoItems transaction.oncomplete() called");
 	};
@@ -325,9 +333,30 @@ tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
 	    if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
 	        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
 	        console.log("editTodo: updating Dropbox");
-	        var editjot = nbx.Jots.findByAttribute("time", iDBkey);
-	        console.log(editjot.id);
-	        console.log(editjot.time);
+	        //3-20-14 BUG iDBkey will not in general match the time in the remote object so this doesn't work as is
+	        //for getting the remote object corresponding to the jot. But since we are still on the road of allowing
+	        //mixed storage options we need something that is both unique and for sure the same in both local and
+	        //remote versions and since "time" is a NBase keyword we can't necessarily use that field even though
+	        //a time value is the most logical choice for the "common key" we need. Also of course if user is only
+	        //storing locally we can't just use whatever NBase set "time" to on an update, which it does, or the id
+	        //field it sets since that won't exist if no remote storage is being used or is unavailable.
+	        //
+	        // So I think
+	        //we need to update our schema, which we need to do anyway, and have a timestamp that we create generate
+	        //on the client side but use in both the client side and the remote object. Time to save this version of
+	        //things as this is a major change and will be a onupgradeneeded event on the indexedDB client side meaning
+	        //everthing previous is gone.
+	        //The new schema:  the commonKey is a timestamp of local jot creation (which should not be a prob assuming
+	        //                 a single user with multiple devices running Thought Jot). We also have a 
+	        // IndexedDB on client side:
+            // {keyPath: "commonKey"}, "nimbusID", nimbusTime, title, jot", "tagList", "extra", isTodo", "done", 
+	        // NimbusBase:
+	        // commonKey, id, time, title, jot, tagList, extra, isTodo, done
+	        //
+
+	        //NO WORKY var editjot = nbx.Jots.findByAttribute("time", iDBkey);
+	        //console.log(editjot.id);
+	        //console.log(editjot.time);
 	        // that worked and we can use nbx.Jots.find(id) later if we squirrel away the id and bind
 	        // it to our indexedDB version of the jot
 	        // how should we bind - we can't use the lovely callback way i don't think. could put it in the indexedDB
