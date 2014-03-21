@@ -57,7 +57,7 @@ tj.indexedDB.onerror = function (e){
 tj.indexedDB.open = function() {
     "use strict";
 
-    // Warn user that we do not support early versions o findexedDB
+    // Warn user that we do not support early versions of indexedDB
     if(!window.indexedDB) {    
     	window.alert("Your browser doesn't support a stable version of IndexedDB, which Thought Jot uses.\nSome features might not be available or might not work correctly.");
     }
@@ -81,7 +81,7 @@ tj.indexedDB.open = function() {
 	request.onsuccess = function(e) {
 		console.log("tj.indexedDB.open: in request.onsuccess() callback");
 		tj.indexedDB.db = e.target.result;
-		// Do things here
+		// update the DOM with all the jots we got
 		tj.indexedDB.getAllTodoItems();
 	};
 	
@@ -144,6 +144,7 @@ tj.indexedDB.addTodo = function(todoText) {
         console.log("addTodo: attempting store of real jot on Dropbox");
         var now = Date().toString();
         nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":now});
+        console.log("Nimbus instance count is now: " + nbx.Jots.count());
         console.log(nbx.jotreal.id);
         console.log(nbx.jotreal.time);
         // that worked and we can use nbx.Jots.find(id) later if we squirrel away the id and bind
@@ -161,6 +162,9 @@ tj.indexedDB.addTodo = function(todoText) {
 //several devices store. The user needs to be in control of this (and perhaps we even over very fine granularity you
 // can decide which jots get put remotely and which don't) but the default should be to aggregrate on the remote store(s)
 // and sync on connect the local stores updating either side from the other appropriately.
+/*
+*   Clears the 
+*/
 tj.indexedDB.getAllTodoItems = function() {
 	console.log("in getAllTodoItems");
 	var todos = document.getElementById("todoItems");
@@ -425,7 +429,7 @@ tj.indexedDB.emptyDB = function() {
 	var request = indexedDB.open("todos", version);  // returns an IDBOpenDBRequest object
 	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
 	request.onupgradeneeded = function(e) {
-		alert("I am called");
+		alert("emptyDB in request.onupgradeneeded");
 		var db = e.target.result;
 		// A versionchange transaction is tarted automatically.
 		e.target.transaction.onerror = tj.indexedDB.onerror;
