@@ -88,7 +88,7 @@ tj.indexedDB.open = function() {
 	request.onerror = tj.indexedDB.onerror;
 };
 
-tj.indexedDB.addTodo = function(todoText) {
+tj.indexedDB.addJot = function(todoText) {
 	//TODO since we are saving to multiple places we need to check for errors back from each store location
 	//     and recover/report
 	//TODO must change data to be same in indexedDB and remote records
@@ -98,10 +98,10 @@ tj.indexedDB.addTodo = function(todoText) {
     	var db = tj.indexedDB.db;
     	var trans = db.transaction(["todo"], "readwrite");
     	trans.oncomplete = function(e) {
-    		console.log("addTodo trans.oncomplete() called");
+    		console.log("addJot trans.oncomplete() called");
     	}
     	trans.onerror = function(e) {
-    		console.log("addTodo trans.onerror() called");
+    		console.log("addJot trans.onerror() called");
     		console.log(trans.error);
     	}
     	var store = trans.objectStore("todo");   // why is this line suddenly failing??? i changed nothing!
@@ -110,7 +110,7 @@ tj.indexedDB.addTodo = function(todoText) {
     	var request = store.add(row);
     	    	
     	request.onsuccess = function(e) {
-    		console.log("addTodo in put request.onsuccess");
+    		console.log("addJot in put request.onsuccess");
     		//TODO OPTIMIZE to just slip a new div in if possible at either top or bottom
     		//hmmm best way to maintain array of layout so that we can do on the fly toggling
     		//of the contenteditability of a jot. This means at a minimum we need to be able
@@ -141,7 +141,7 @@ tj.indexedDB.addTodo = function(todoText) {
 	// add the jot to cloud storage location(s)
 	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
         //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
-        console.log("addTodo: attempting store of real jot on Dropbox");
+        console.log("addJot: attempting store of real jot on Dropbox");
         var now = Date().toString();
         nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":now});
         console.log("Nimbus instance count is now: " + nbx.Jots.count());
@@ -467,9 +467,9 @@ function toggleOrdering() {
 }
 
 // add contents of text area as a new jot
-function addTodo() {
+function addJot() {
 	var todo = document.getElementById('todo');
-	tj.indexedDB.addTodo(todo.value);
+	tj.indexedDB.addJot(todo.value);
 
 	// clear the compose area of the input text
 	todo.value = '';
