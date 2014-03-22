@@ -323,6 +323,8 @@ function renderJot(row) {
 //   the available DOM methods strip out the creturns... time to experiment.
 tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
     //console.log("tj.indexedDB.editJot()");
+    var newContent = jotElement.innerHTML;
+
     var editimg = editLink.childNodes[0];
     if(tj.editing != null && editLink != tj.editing) {
     	alert("Only one jot can be edited at a time.");
@@ -333,7 +335,7 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
         editLink.title = "Save the edit";
         editimg.src = ".\/images\/tick32.png";
 	    jotElement.setAttribute("contenteditable", true);
-	    jotElement.className = "jottext_editing"
+	    jotElement.className = "jottext_editing";
         tj.editing = editLink;
     }
     else {    // time to save the edit
@@ -355,7 +357,7 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
 
             var row = request.result;
             //row.text = jotElement.innerHTML;
-            row.jot = jotElement.innerHTML;
+            row.jot = newContent;
             console.log(row.commonKeyTS);
             // a nested request to update the indexedDB
             var requestUpdate = store.put(row);
@@ -373,27 +375,19 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
 	        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
 	        console.log("editJot: updating Dropbox, except we aren't really yet!");
 
-	        //NO WORKY var editjot = nbx.Jots.findByAttribute("time", iDBkey);
-	        //console.log(editjot.id);
-	        //console.log(editjot.time);
-	        // that worked and we can use nbx.Jots.find(id) later if we squirrel away the id and bind
-	        // it to our indexedDB version of the jot
-	        // how should we bind - we can't use the lovely callback way i don't think. could put it in the indexedDB
-	        // version but we are currently storing that before the NimbusBase version...
-
-	        //nbx.jotreal.jot = "does save do something to the time field?";
-	        //nbx.jotreal.save();
-	        //nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
+	        var nbJot = nbx.Jots.findByAttribute("commonKeyTS", iDBkey);
+	        nbJot.jot = newContent;
+	        nbJot.save();
+	        nbx.Jots.sync_all(function() {console.log("tj.indexedDB.editJot nbx.Jots.sync_all() callback called.")});
 	    }
  
-
         //TODO should we move this into the requestUpdate.onsuccess?
         //AND if there was an indexedDB error we should probably revert the page text...?
         editLink.title = "Edit this jot";
         editimg.src = ".\/images\/pen32.png";
 	    jotElement.setAttribute("contenteditable", false);
-        jotElement.className = "jottext"
-            tj.editing = null;
+        jotElement.className = "jottext";
+        tj.editing = null;
         //var textcontent = jotElement.textContent;    // works on FF, Chrome  - looses markup AND NEWLINES! (which are markup really)
         //var wholecontent = jotElement.wholeText;
         //var innerttextcontent = jotElement.innerText;// works on Chrome - looses <a> markup and converts <b> to crlf apparently
@@ -406,7 +400,7 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
         // SINCE the user can't enter markup anyway (we'd need a whole editor for that) and them entering normal text without
         // new carriage returns will still come across in the innerHTML maybe we should go with that for now. We really need
         // a full editor in place when a jot goes editable...
-        // OMG actually adding newlines causes the innerHTML to show <div><br></div> type stuff and similarly for spaces they
+        // Actually, adding newlines causes the innerHTML to show <div><br></div> type stuff and similarly for spaces they
         // become <div>&nbsp;... not too suprising really
     }
 };
