@@ -109,7 +109,7 @@ tj.indexedDB.addJot = function(jotText) {
         //nbx.jotreal.save();
         //nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
     }
-    
+
     // add the jot locally, saving in it the id of the remote store copy
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
@@ -245,18 +245,18 @@ function renderTodo(row) {
 	pjot.innerHTML = row.text;
 	//t.data = row.text;
 	//console.log("in renderTodo");
-	// wire up Delete link handler and pass the inner deleteTodo the keyPath and jotdiv it will need
+	// wire up Delete link handler and pass the inner deleteJot the keyPath and jotdiv it will need
 	dellink.addEventListener("click", function(e) {
-		//tj.indexedDB.deleteTodo(row.text);
+		//tj.indexedDB.deleteJot(row.text);
 		var yesno = confirm("Are you sure you want to delete this jot?\n\nThis is not undoable.");
 		if(yesno) {
-		    tj.indexedDB.deleteTodo(row.timeStamp, jdiv);
+		    tj.indexedDB.deleteJot(row.timeStamp, jdiv);
         }
 	});
 	
 	editlink.addEventListener("click", function(e) {
-		//tj.indexedDB.deleteTodo(row.text);
-		tj.indexedDB.editTodo(this, row.timeStamp, pjot);
+		//tj.indexedDB.deleteJot(row.text);
+		tj.indexedDB.editJot(this, row.timeStamp, pjot);
 	});
 	
 	jdiv.appendChild(pts);
@@ -284,8 +284,8 @@ function renderTodo(row) {
 //   I don't want to get into is going back and forth - i don't want to un-htmlize. Maybe this means we should only be
 //   persisting plain text and htmlizing it only for display on the page. but then how do we preserve creturns - i think
 //   the available DOM methods strip out the creturns... time to experiment.
-tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
-    //console.log("tj.indexedDB.editTodo()");
+tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
+    //console.log("tj.indexedDB.editJot()");
     var editimg = editLink.childNodes[0];
     if(tj.editing != null && editLink != tj.editing) {
     	alert("Only one jot can be edited at a time.");
@@ -304,18 +304,18 @@ tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
 		var db = tj.indexedDB.db;
 		var trans = db.transaction(["todo"], "readwrite");
 		trans.oncomplete = function(e) {
-			console.log("editTodo transaction.oncomplete() called");
+			console.log("editJot transaction.oncomplete() called");
 		};
 		trans.onerror = function(e) {
-			console.log("editTodo transaction.onerror() called");
+			console.log("editJot transaction.onerror() called");
 		}
 		var store = trans.objectStore("todo");
         var request = store.get(iDBkey);
         request.onerror = function(e) {
-            console.log("editTodo request.onerror() called");
+            console.log("editJot request.onerror() called");
         };
         request.onsuccess = function(e) {
-            console.log("editTodo request.onsuccess() called");
+            console.log("editJot request.onsuccess() called");
 
             var row = request.result;
             row.text = jotElement.innerHTML;
@@ -323,10 +323,10 @@ tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
             // a nested request to update the indexedDB
             var requestUpdate = store.put(row);
             requestUpdate.onerror = function(e) {
-                console.log("editTodo requestUpdate.onerror() called");
+                console.log("editJot requestUpdate.onerror() called");
             };
             requestUpdate.onsuccess = function(e) {
-                console.log("editTodo requestUpdate.onsuccess() called");
+                console.log("editJot requestUpdate.onsuccess() called");
             };
         };
         
@@ -334,7 +334,7 @@ tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
 
 	    if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
 	        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
-	        console.log("editTodo: updating Dropbox");
+	        console.log("editJot: updating Dropbox, except we aren't really yet!");
 	        //3-20-14 BUG iDBkey will not in general match the time in the remote object so this doesn't work as is
 	        //for getting the remote object corresponding to the jot. But since we are still on the road of allowing
 	        //mixed storage options we need something that is both unique and for sure the same in both local and
@@ -394,14 +394,14 @@ tj.indexedDB.editTodo = function(editLink, iDBkey, jotElement) {
     }
 };
 
-tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
+tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readwrite");
 	trans.oncomplete = function(e) {
-		console.log("deleteTodo transaction.oncomplete() called");
+		console.log("deleteJot transaction.oncomplete() called");
 	};
 	trans.onerror = function(e) {
-		console.log("deleteTodo transaction.onerror() called");
+		console.log("deleteJot transaction.onerror() called");
 	}
 	var store = trans.objectStore("todo");
 	
