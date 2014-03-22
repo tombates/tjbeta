@@ -49,6 +49,7 @@ tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // TODO make user controlled
 // open the database
 
 tj.indexedDB.db = null;
+tj.indexedDB.IDB_SCHEMA_VERSION = 4;
 tj.indexedDB.order = "prev";   // default to showing newest jots at top
 tj.indexedDB.onerror = function (e){
     console.log(e);
@@ -64,8 +65,7 @@ tj.indexedDB.open = function() {
     //TODO Get user's initial preferences for local and remote storage
     //TODO Get user's access info for their prefered remote storage locations
 
-    var version = 4;
-    var request = indexedDB.open("todos", version);  // returns an IDBOpenDBRequest object
+    var request = indexedDB.open("todos", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
 	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
     request.onupgradeneeded = function(e) {
 		var db = e.target.result;
@@ -136,15 +136,15 @@ tj.indexedDB.addJot = function(jotText) {
 	    	//var key = e.target.result;   // the key for the new row just added to the indexedDB
 	    	//var idbReq = store.get(key);
 	    	//var therow = idbReq.result;
-		    var jotDiv = renderTodo(row);
+		    var jotDiv = renderJot(row);
 
-		    var todos = document.getElementById("jotItems");
+		    var jotsContainer = document.getElementById("jotItems");
 	        if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
-	        	var first = todos.firstChild;
-	            todos.insertBefore(jotDiv, todos.firstChild);
+	        	var first = jotsContainer.firstChild;
+	            jotsContainer.insertBefore(jotDiv, jotsContainer.firstChild);
 	        }
 	        else {  // oldest are currently shown first
-                todos.appendChild(jotDiv);
+                jotsContainer.appendChild(jotDiv);
             }
     		///tj.indexedDB.showAllJots();    // cause all jots to rerender - NO MORE
     	};
@@ -166,8 +166,8 @@ tj.indexedDB.addJot = function(jotText) {
 */
 tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
-	var todos = document.getElementById("jotItems");
-	todos.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
+	var jotsContainer = document.getElementById("jotItems");
+	jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 	
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readonly");
@@ -188,8 +188,8 @@ tj.indexedDB.showAllJots = function() {
 		if(!!result == false)   // the !! ensures result becomes true boolean value
 		    return;
 			
-		var newJotDiv = renderTodo(result.value);    // result.value is a table row
-		todos.appendChild(newJotDiv);
+		var newJotDiv = renderJot(result.value);    // result.value is a table row
+		jotsContainer.appendChild(newJotDiv);
 		//result.continue();    // compiler warning is bogus and due to 'continue' being a javascript keyword
 		result['continue']();    // solution to warning, and for IE8 if we care
 	};
@@ -201,7 +201,7 @@ tj.indexedDB.showAllJots = function() {
 * Creates all the HTML elements for a single jot and sets them into a new div ready to be added to the
 * all-jots-div. The caller is reponsible for adding the retuned div to the jotItems div.
 */
-function renderTodo(row) {	
+function renderJot(row) {	
 	
 	// a div for each jot
 	var jdiv = document.createElement("div");
@@ -244,7 +244,7 @@ function renderTodo(row) {
 	//pjot.textContent = row.text;
 	pjot.innerHTML = row.text;
 	//t.data = row.text;
-	//console.log("in renderTodo");
+	//console.log("in renderJot");
 	// wire up Delete link handler and pass the inner deleteJot the keyPath and jotdiv it will need
 	dellink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteJot(row.text);
@@ -410,8 +410,8 @@ tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
 	
 	request.onsuccess = function(e) {
 		// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
-	    var todos = document.getElementById("jotItems");
-        todos.removeChild(jotDiv);
+	    var jotsContainer = document.getElementById("jotItems");
+        jotsContainer.removeChild(jotDiv);
 		//tj.indexedDB.showAllJots();   // NO LONGER NEEDED rerender with deleted item gone
 	};
 	
@@ -419,23 +419,6 @@ tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
 		console.log(e);
 	};
 
-};
-
-tj.indexedDB.emptyDB = function() {
-	alert("in th.indexedDB.emptyDB");
-    var version = 1;
-	var request = indexedDB.open("todos", version);  // returns an IDBOpenDBRequest object
-	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
-	request.onupgradeneeded = function(e) {
-		alert("emptyDB in request.onupgradeneeded");
-		var db = e.target.result;
-		// A versionchange transaction is tarted automatically.
-		e.target.transaction.onerror = tj.indexedDB.onerror;
-		console.log("deleting objectstore");
-		
-		var store = db.deleteObjectStore("todo");
-	};
-	
 };
 
 function init() {
@@ -474,10 +457,27 @@ function addJot() {
 }
 
 function removeAll() {
-	alert("Whoa! Deleting all jots is not reversible. Are you sure you want to do this?");
-	//tj.indexedDB.emptyDB();
-	
+    var yesno = confirm("Whoa! Deleting all jots is not reversible. Are you sure you want to do this?");
+	if(yesno) {
+	    tj.indexedDB.emptyDB();
+	}	
 }
+
+tj.indexedDB.emptyDB = function() {
+	alert("in tj.indexedDB.emptyDB");
+	var request = indexedDB.open("todos", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
+	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
+	request.onupgradeneeded = function(e) {
+		alert("emptyDB in request.onupgradeneeded");
+		var db = e.target.result;
+		// A versionchange transaction is tarted automatically.
+		e.target.transaction.onerror = tj.indexedDB.onerror;
+		console.log("deleting objectstore");
+		
+		var store = db.deleteObjectStore("todo");
+	};
+	
+};
 
 /*
 * Worker bee function that lets user's carriage returns shine through.
