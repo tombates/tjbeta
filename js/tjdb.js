@@ -88,12 +88,29 @@ tj.indexedDB.open = function() {
 	request.onerror = tj.indexedDB.onerror;
 };
 
-tj.indexedDB.addJot = function(todoText) {
+tj.indexedDB.addJot = function(jotText) {
 	//TODO since we are saving to multiple places we need to check for errors back from each store location
 	//     and recover/report
 	//TODO must change data to be same in indexedDB and remote records
 
-	// add the jot to indexedDB store
+    var htmlizedText = htmlizeText(jotText);
+
+	// add the jot to cloud storage location(s)
+	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
+        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
+        console.log("addJot: attempting store of real jot on Dropbox");
+        var now = Date().toString();
+        nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":now});
+        console.log("Nimbus instance count is now: " + nbx.Jots.count());
+        console.log(nbx.jotreal.id);
+        console.log(nbx.jotreal.time);
+
+        //nbx.jotreal.jot = "does save do something to the time field?";
+        //nbx.jotreal.save();
+        //nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
+    }
+    
+    // add the jot locally, saving in it the id of the remote store copy
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
     	var trans = db.transaction(["todo"], "readwrite");
@@ -104,8 +121,7 @@ tj.indexedDB.addJot = function(todoText) {
     		console.log("addJot trans.onerror() called");
     		console.log(trans.error);
     	}
-    	var store = trans.objectStore("todo");   // why is this line suddenly failing??? i changed nothing!
-    	var htmlizedText = htmlizeText(todoText);
+    	var store = trans.objectStore("todo");
     	var row = {"text": htmlizedText, "timeStamp": new Date().getTime()};
     	var request = store.add(row);
     	    	
@@ -138,24 +154,6 @@ tj.indexedDB.addJot = function(todoText) {
     	};
     }
 
-	// add the jot to cloud storage location(s)
-	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
-        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
-        console.log("addJot: attempting store of real jot on Dropbox");
-        var now = Date().toString();
-        nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":now});
-        console.log("Nimbus instance count is now: " + nbx.Jots.count());
-        console.log(nbx.jotreal.id);
-        console.log(nbx.jotreal.time);
-        // that worked and we can use nbx.Jots.find(id) later if we squirrel away the id and bind
-        // it to our indexedDB version of the jot
-        // how should we bind - we can't use the lovely callback way i don't think. could put it in the indexedDB
-        // version but we are currently storing that before the NimbusBase version...
-
-        //nbx.jotreal.jot = "does save do something to the time field?";
-        //nbx.jotreal.save();
-        //nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
-    }
 };
 
 //TODO we are getting them all from the current local store instead of from a remote and possibly aggregated from
@@ -163,7 +161,8 @@ tj.indexedDB.addJot = function(todoText) {
 // can decide which jots get put remotely and which don't) but the default should be to aggregrate on the remote store(s)
 // and sync on connect the local stores updating either side from the other appropriately.
 /*
-*   Clears the 
+*   Clears all jots on the page and re-renders them. Used on open, reload, order toggling or filtering. Generally not
+*   used just when a single jot is added or deleted or edited. In those cases we update the DOM directly.
 */
 tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
