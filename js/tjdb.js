@@ -329,7 +329,6 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
     	return;
     }
 
-
     if(editLink.title == "Edit this jot") {
         editLink.title = "Save the edit";
         editimg.src = ".\/images\/tick32.png";
@@ -337,7 +336,7 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
 	    jotElement.className = "jottext_editing"
         tj.editing = editLink;
     }
-    else {    // time to save the edits
+    else {    // time to save the edit
 		var db = tj.indexedDB.db;
 		var trans = db.transaction(["Jots"], "readwrite");
 		trans.oncomplete = function(e) {
@@ -413,30 +412,39 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
 };
 
 tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
-	var db = tj.indexedDB.db;
-	var trans = db.transaction(["Jots"], "readwrite");
-	trans.oncomplete = function(e) {
-		console.log("deleteJot transaction.oncomplete() called");
-	};
-	trans.onerror = function(e) {
-		console.log("deleteJot transaction.onerror() called");
-	}
-	var store = trans.objectStore("Jots");
-	
-	// deletel the indexedDB entry for this jot
-	var request = store['delete'](iDBkey);    // can't do store.delete(id) due to delete being a keyword, just like continue issue
-	
-	request.onsuccess = function(e) {
-		// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
-	    var jotsContainer = document.getElementById("jotItems");
-        jotsContainer.removeChild(jotDiv);
-		//tj.indexedDB.showAllJots();   // NO LONGER NEEDED rerender with deleted item gone
-	};
-	
-	request.onerror = function(e) {
-		console.log(e);
-	};
 
+	// delete the local indexedDB version of the jot
+	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
+		var db = tj.indexedDB.db;
+		var trans = db.transaction(["Jots"], "readwrite");
+		trans.oncomplete = function(e) {
+			console.log("deleteJot transaction.oncomplete() called");
+		};
+		trans.onerror = function(e) {
+			console.log("deleteJot transaction.onerror() called");
+		}
+		var store = trans.objectStore("Jots");
+		
+		// deletel the indexedDB entry for this jot
+		var request = store['delete'](iDBkey);    // can't do store.delete(id) due to delete being a keyword, just like continue issue
+		
+		request.onsuccess = function(e) {
+			// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
+		    var jotsContainer = document.getElementById("jotItems");
+	        jotsContainer.removeChild(jotDiv);
+			//tj.indexedDB.showAllJots();   // NO LONGER NEEDED rerender with deleted item gone
+		};
+		
+		request.onerror = function(e) {
+			console.log(e);
+		};
+    }
+
+    // delete the Dropbox version
+	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
+	    var nbJot = nbx.Jots.findByAttribute("commonKeyTS", iDBkey);
+        nbJot.destroy();
+    }
 };
 
 function init() {
