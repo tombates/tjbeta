@@ -50,9 +50,9 @@ nbx.open = function() {
 	if(nbx.auth == true) { // change link text to connected
 		nbx.linkDropbox.innerHTML = "nbx.open: Connected to Dropbox already! Doing a sync_all";
 	        // NimbusBase new schema 3-22-2014:
-	        // commonKey, id, time, title, jot, tagList, extra, isTodo, done
+	        // commonKeyTS, id, time, modTime, title, jot, tagList, extra, isTodo, done
         //OLDnbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
-        nbx.Jots = Nimbus.Model.setup("Jots", ["commomKey", "id", "time", "title", "jot", "tagList", "extra", "isTodo", "done"]);
+        nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra", "isTodo", "done"]);
 		nbx.Jots.sync_all(function() {
 			console.log("nbx.Jots.sync_all() callback called.");
 			console.log("Nimbus instance count is now: " + nbx.Jots.count());
