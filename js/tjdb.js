@@ -132,7 +132,7 @@ tj.indexedDB.addJot = function(jotText) {
         //var now = Date().toString();
         //NimbusBase populates the id field (specified in nb.js) automatically, then we get it and put it in the iDB record
         nbx.jotreal = nbx.Jots.create({"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
-                                       "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false "done":false});
+                                       "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false});
         nbID = nbx.jotreal.id;
         console.log("Nimbus instance count is now: " + nbx.Jots.count());
         console.log("addJot nbx.jotreal.id = " + nbID);
