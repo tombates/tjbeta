@@ -199,10 +199,10 @@ tj.indexedDB.getAllTodoItems = function() {
 };
 
 /*
-* Creates all the HTML elements for a single jot and sets them into a new div ready to be added to the all-jots-div
+* Creates all the HTML elements for a single jot and sets them into a new div ready to be added to the
+* all-jots-div. The caller is reponsible for adding the retuned div to the jotItems div.
 */
 function renderTodo(row) {	
-	///var todos = document.getElementById("jotItems");   // grab the containing div for all displayed jots
 	
 	// a div for each jot
 	var jdiv = document.createElement("div");
@@ -265,7 +265,6 @@ function renderTodo(row) {
 	jdiv.appendChild(editlink);
 	jdiv.appendChild(dellink);
 	jdiv.appendChild(pjot);
-	///todos.appendChild(jdiv);
 	return jdiv;
 }
 
