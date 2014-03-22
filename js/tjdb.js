@@ -72,7 +72,7 @@ tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // TODO make user controlled
 	        //
 
 tj.indexedDB.db = null;
-tj.indexedDB.IDB_SCHEMA_VERSION = 6;
+tj.indexedDB.IDB_SCHEMA_VERSION = 7;
 tj.indexedDB.order = "prev";   // default to showing newest jots at top
 tj.indexedDB.onerror = function (e){
     console.log(e);
