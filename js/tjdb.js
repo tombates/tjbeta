@@ -48,6 +48,29 @@ tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // TODO make user controlled
 
 // open the database
 
+	        //3-20-14 BUG iDBkey will not in general match the time in the remote object so this doesn't work as is
+	        //for getting the remote object corresponding to the jot. But since we are still on the road of allowing
+	        //mixed storage options we need something that is both unique and for sure the same in both local and
+	        //remote versions and since "time" is a NBase keyword we can't necessarily use that field even though
+	        //a time value is the most logical choice for the "common key" we need. Also of course if user is only
+	        //storing locally we can't just use whatever NBase set "time" to on an update, which it does, or the id
+	        //field it sets since that won't exist if no remote storage is being used or is unavailable. However, if
+	        //we are storing remotely as well then the NB id field is obviously the thing to use to link our local
+	        //and remote records.
+	        //
+	        // So I think
+	        //we need to update our schema, which we need to do anyway, and have a timestamp that we create generate
+	        //on the client side but use in both the client side and the remote object. Time to save this version of
+	        //things as this is a major change and will be a onupgradeneeded event on the indexedDB client side meaning
+	        //everthing previous is moot.
+	        //The new schema:  the commonKey is a timestamp of local jot creation (which should not be a prob assuming
+	        //                 a single user with multiple devices running Thought Jot). We also have a 
+	        // IndexedDB on client side:
+            // {keyPath: "commonKey"}, "nimbusID", nimbusTime, title, jot", "tagList", "extra", isTodo", "done", 
+	        // NimbusBase:
+	        // commonKey, id, time, title, jot, tagList, extra, isTodo, done
+	        //
+
 tj.indexedDB.db = null;
 tj.indexedDB.IDB_SCHEMA_VERSION = 4;
 tj.indexedDB.order = "prev";   // default to showing newest jots at top
@@ -94,6 +117,7 @@ tj.indexedDB.addJot = function(jotText) {
 	//TODO must change data to be same in indexedDB and remote records
 
     var htmlizedText = htmlizeText(jotText);
+    var commonKey = new Date().getTime();
 
 	// add the jot to cloud storage location(s)
 	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
@@ -122,7 +146,7 @@ tj.indexedDB.addJot = function(jotText) {
     		console.log(trans.error);
     	}
     	var store = trans.objectStore("todo");
-    	var row = {"text": htmlizedText, "timeStamp": new Date().getTime()};
+    	var row = {"text": htmlizedText, "timeStamp": commonKey};
     	var request = store.add(row);
     	    	
     	request.onsuccess = function(e) {
@@ -335,26 +359,6 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
 	    if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
 	        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
 	        console.log("editJot: updating Dropbox, except we aren't really yet!");
-	        //3-20-14 BUG iDBkey will not in general match the time in the remote object so this doesn't work as is
-	        //for getting the remote object corresponding to the jot. But since we are still on the road of allowing
-	        //mixed storage options we need something that is both unique and for sure the same in both local and
-	        //remote versions and since "time" is a NBase keyword we can't necessarily use that field even though
-	        //a time value is the most logical choice for the "common key" we need. Also of course if user is only
-	        //storing locally we can't just use whatever NBase set "time" to on an update, which it does, or the id
-	        //field it sets since that won't exist if no remote storage is being used or is unavailable.
-	        //
-	        // So I think
-	        //we need to update our schema, which we need to do anyway, and have a timestamp that we create generate
-	        //on the client side but use in both the client side and the remote object. Time to save this version of
-	        //things as this is a major change and will be a onupgradeneeded event on the indexedDB client side meaning
-	        //everthing previous is gone.
-	        //The new schema:  the commonKey is a timestamp of local jot creation (which should not be a prob assuming
-	        //                 a single user with multiple devices running Thought Jot). We also have a 
-	        // IndexedDB on client side:
-            // {keyPath: "commonKey"}, "nimbusID", nimbusTime, title, jot", "tagList", "extra", isTodo", "done", 
-	        // NimbusBase:
-	        // commonKey, id, time, title, jot, tagList, extra, isTodo, done
-	        //
 
 	        //NO WORKY var editjot = nbx.Jots.findByAttribute("time", iDBkey);
 	        //console.log(editjot.id);
