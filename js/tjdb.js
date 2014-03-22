@@ -467,11 +467,11 @@ function toggleOrdering() {
 
 // add contents of text area as a new jot
 function addJot() {
-	var todo = document.getElementById('todo');
-	tj.indexedDB.addJot(todo.value);
+	var jotComposeArea = document.getElementById('jot_composer');
+	tj.indexedDB.addJot(jotComposeArea.value);
 
 	// clear the compose area of the input text
-	todo.value = '';
+	jotComposeArea.value = '';
 }
 
 function removeAll() {
