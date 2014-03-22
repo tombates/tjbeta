@@ -146,7 +146,7 @@ tj.indexedDB.addJot = function(jotText) {
     // add the jot locally, saving in it the id of the remote store copy
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
-    	var trans = db.transaction(["todo"], "readwrite");
+    	var trans = db.transaction(["Jots"], "readwrite");
     	trans.oncomplete = function(e) {
     		console.log("addJot trans.oncomplete() called");
     	}
@@ -156,7 +156,7 @@ tj.indexedDB.addJot = function(jotText) {
     	}
 	        // IndexedDB on client side new schema 3-22-2014:
             // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
-    	var store = trans.objectStore("todo");
+    	var store = trans.objectStore("Jots");
     	var row = {"commonKeyTS":commonKey, "nimbusID":nbID, "nimbusTime":"none", "modTime":commonKey,
     	           "title":"none", "jot": htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
     	var request = store.add(row);
@@ -205,7 +205,7 @@ tj.indexedDB.showAllJots = function() {
 	jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 	
 	var db = tj.indexedDB.db;
-	var trans = db.transaction(["todo"], "readonly");
+	var trans = db.transaction(["Jots"], "readonly");
 	trans.oncomplete = function(e) {
 		console.log("showAllJots transaction.oncomplete() called");
 	};
@@ -213,7 +213,7 @@ tj.indexedDB.showAllJots = function() {
 		console.log("showAllJots transaction.onerror() called");
 	}
 
-	var store = trans.objectStore("todo");	
+	var store = trans.objectStore("Jots");	
 	var keyRange = IDBKeyRange.lowerBound(0);
 	var cursorRequest = store.openCursor(keyRange, tj.indexedDB.order);
 	
@@ -339,14 +339,14 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
     }
     else {    // time to save the edits
 		var db = tj.indexedDB.db;
-		var trans = db.transaction(["todo"], "readwrite");
+		var trans = db.transaction(["Jots"], "readwrite");
 		trans.oncomplete = function(e) {
 			console.log("editJot transaction.oncomplete() called");
 		};
 		trans.onerror = function(e) {
 			console.log("editJot transaction.onerror() called");
 		}
-		var store = trans.objectStore("todo");
+		var store = trans.objectStore("Jots");
         var request = store.get(iDBkey);
         request.onerror = function(e) {
             console.log("editJot request.onerror() called");
@@ -414,14 +414,14 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
 
 tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
 	var db = tj.indexedDB.db;
-	var trans = db.transaction(["todo"], "readwrite");
+	var trans = db.transaction(["Jots"], "readwrite");
 	trans.oncomplete = function(e) {
 		console.log("deleteJot transaction.oncomplete() called");
 	};
 	trans.onerror = function(e) {
 		console.log("deleteJot transaction.onerror() called");
 	}
-	var store = trans.objectStore("todo");
+	var store = trans.objectStore("Jots");
 	
 	// deletel the indexedDB entry for this jot
 	var request = store['delete'](iDBkey);    // can't do store.delete(id) due to delete being a keyword, just like continue issue
@@ -492,7 +492,7 @@ tj.indexedDB.emptyDB = function() {
 		e.target.transaction.onerror = tj.indexedDB.onerror;
 		console.log("deleting objectstore");
 		
-		var store = db.deleteObjectStore("todo");
+		var store = db.deleteObjectStore("Jots");
 	};
 	
 };
