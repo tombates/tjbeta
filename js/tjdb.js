@@ -82,7 +82,7 @@ tj.indexedDB.open = function() {
 		console.log("tj.indexedDB.open: in request.onsuccess() callback");
 		tj.indexedDB.db = e.target.result;
 		// update the DOM with all the jots we got
-		tj.indexedDB.getAllTodoItems();
+		tj.indexedDB.showAllJotS();
 	};
 	
 	request.onerror = tj.indexedDB.onerror;
@@ -130,7 +130,7 @@ tj.indexedDB.addJot = function(todoText) {
 	        else {  // oldest are currently shown first
                 todos.appendChild(jotDiv);
             }
-    		///tj.indexedDB.getAllTodoItems();    // cause all jots to rerender - NO MORE
+    		///tj.indexedDB.showAllJotS();    // cause all jots to rerender - NO MORE
     	};
     	
     	request.onerror = function(e) {
@@ -165,18 +165,18 @@ tj.indexedDB.addJot = function(todoText) {
 /*
 *   Clears the 
 */
-tj.indexedDB.getAllTodoItems = function() {
-	console.log("in getAllTodoItems");
+tj.indexedDB.showAllJots = function() {
+	console.log("in showAllJots");
 	var todos = document.getElementById("jotItems");
 	todos.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 	
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["todo"], "readonly");
 	trans.oncomplete = function(e) {
-		console.log("getAllTodoItems transaction.oncomplete() called");
+		console.log("showAllJots transaction.oncomplete() called");
 	};
 	trans.onerror = function(e) {
-		console.log("getAllTodoItems transaction.onerror() called");
+		console.log("showAllJots transaction.onerror() called");
 	}
 
 	var store = trans.objectStore("todo");	
@@ -184,7 +184,7 @@ tj.indexedDB.getAllTodoItems = function() {
 	var cursorRequest = store.openCursor(keyRange, tj.indexedDB.order);
 	
 	cursorRequest.onsuccess = function(e) {
-		console.log("getAllTodoItems in cursorRequest.onsuccess()")
+		console.log("showAllJots in cursorRequest.onsuccess()")
 		var result = e.target.result;
 		if(!!result == false)   // the !! ensures result becomes true boolean value
 		    return;
@@ -413,7 +413,7 @@ tj.indexedDB.deleteTodo = function(iDBkey, jotDiv) {
 		// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
 	    var todos = document.getElementById("jotItems");
         todos.removeChild(jotDiv);
-		//tj.indexedDB.getAllTodoItems();   // NO LONGER NEEDED rerender with deleted item gone
+		//tj.indexedDB.showAllJots();   // NO LONGER NEEDED rerender with deleted item gone
 	};
 	
 	request.onerror = function(e) {
@@ -462,7 +462,7 @@ function toggleOrdering() {
 		toggle.title = "Press to show oldest jots first.";
 		tj.indexedDB.order = "prev";
 	}
-	tj.indexedDB.getAllTodoItems(); 
+	tj.indexedDB.showAllJots(); 
 }
 
 // add contents of text area as a new jot
