@@ -72,7 +72,7 @@ tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // TODO make user controlled
 	        //
 
 tj.indexedDB.db = null;
-tj.indexedDB.IDB_SCHEMA_VERSION = 4;
+tj.indexedDB.IDB_SCHEMA_VERSION = 5;
 tj.indexedDB.order = "prev";   // default to showing newest jots at top
 tj.indexedDB.onerror = function (e){
     console.log(e);
@@ -95,10 +95,14 @@ tj.indexedDB.open = function() {
 		console.log("tj.indexedDB.open: in request.onupgradeneeded() callback");
 		// A versionchange transaction is started automatically.
 		e.target.transaction.onerror = tj.indexedDB.onerror;
+		//TODO remove delete "todo" store once we are cooking with the new schema
 		if(db.objectStoreNames.contains("todo")) {
 			db.deleteObjectStore("todo");
 		}		
-		var store = db.createObjectStore("todo", {keyPath: "timeStamp"});
+		if(db.objectStoreNames.contains("Jots")) {
+			db.deleteObjectStore("Jots");
+		}		
+		var store = db.createObjectStore("Jots", {keyPath: "commonKeyTS"});
 	};
 	
 	request.onsuccess = function(e) {
@@ -118,16 +122,21 @@ tj.indexedDB.addJot = function(jotText) {
 
     var htmlizedText = htmlizeText(jotText);
     var commonKey = new Date().getTime();
+    var nbID = null;
 
 	// add the jot to cloud storage location(s)
 	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
-        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
+        //nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra", "isTodo", "done"]);
+        //OLD nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
         console.log("addJot: attempting store of real jot on Dropbox");
-        var now = Date().toString();
-        nbx.jotreal = nbx.Jots.create({"descrip":"New jot", "done":false, "jot":htmlizedText, "time":now});
+        //var now = Date().toString();
+        //NimbusBase populates the id field (specified in nb.js) automatically, then we get it and put it in the iDB record
+        nbx.jotreal = nbx.Jots.create({"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
+                                       "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false "done":false});
+        nbID = nbx.jotreal.id;
         console.log("Nimbus instance count is now: " + nbx.Jots.count());
-        console.log(nbx.jotreal.id);
-        console.log(nbx.jotreal.time);
+        console.log("addJot nbx.jotreal.id = " + nbID);
+        console.log("addJot nbx.jotreal.time = " + nbx.jotreal.time);
 
         //nbx.jotreal.jot = "does save do something to the time field?";
         //nbx.jotreal.save();
@@ -145,8 +154,11 @@ tj.indexedDB.addJot = function(jotText) {
     		console.log("addJot trans.onerror() called");
     		console.log(trans.error);
     	}
+	        // IndexedDB on client side new schema 3-22-2014:
+            // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
     	var store = trans.objectStore("todo");
-    	var row = {"text": htmlizedText, "timeStamp": commonKey};
+    	var row = {"commonKeyTS":commonKey, "nimbusID":nbID, "nimbusTime":"none", "modTime":commonKey,
+    	           "title":"none", "jot": htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
     	var request = store.add(row);
     	    	
     	request.onsuccess = function(e) {
@@ -177,7 +189,6 @@ tj.indexedDB.addJot = function(jotText) {
     		console.log(e.value);
     	};
     }
-
 };
 
 //TODO we are getting them all from the current local store instead of from a remote and possibly aggregated from
@@ -261,12 +272,14 @@ function renderJot(row) {
     // is solved without any arrays or assoc objects -- WOW is that right? Actually, that worked great! No need for lists
     // of associations and all that entails mgmt-wise. 
 
-	var dt = new Date(row.timeStamp);   // get a Date obj back so we can call some presentation methods
+	//var dt = new Date(row.timeStamp);   // get a Date obj back so we can call some presentation methods
+	var dt = new Date(row.commonKeyTS);   // get a Date obj back so we can call some presentation methods
 	
 	//var t = document.createTextNode(dt.toDateString() + "at " + dt.toTimeString() + ": " + row.text);
 	pts.textContent = "Jotted on " + dt.toDateString() + " at " + dt.toLocaleTimeString() + ":";
 	//pjot.textContent = row.text;
-	pjot.innerHTML = row.text;
+	//pjot.innerHTML = row.text;
+	pjot.innerHTML = row.jot;
 	//t.data = row.text;
 	//console.log("in renderJot");
 	// wire up Delete link handler and pass the inner deleteJot the keyPath and jotdiv it will need
@@ -274,13 +287,13 @@ function renderJot(row) {
 		//tj.indexedDB.deleteJot(row.text);
 		var yesno = confirm("Are you sure you want to delete this jot?\n\nThis is not undoable.");
 		if(yesno) {
-		    tj.indexedDB.deleteJot(row.timeStamp, jdiv);
+		    tj.indexedDB.deleteJot(row.commonKeyTS, jdiv);
         }
 	});
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteJot(row.text);
-		tj.indexedDB.editJot(this, row.timeStamp, pjot);
+		tj.indexedDB.editJot(this, row.commonKeyTS, pjot);
 	});
 	
 	jdiv.appendChild(pts);
@@ -342,8 +355,9 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
             console.log("editJot request.onsuccess() called");
 
             var row = request.result;
-            row.text = jotElement.innerHTML;
-            console.log(row.timeStamp);
+            //row.text = jotElement.innerHTML;
+            row.jot = jotElement.innerHTML;
+            console.log(row.commonKeyTS);
             // a nested request to update the indexedDB
             var requestUpdate = store.put(row);
             requestUpdate.onerror = function(e) {
