@@ -82,7 +82,7 @@ tj.indexedDB.open = function() {
 		console.log("tj.indexedDB.open: in request.onsuccess() callback");
 		tj.indexedDB.db = e.target.result;
 		// update the DOM with all the jots we got
-		tj.indexedDB.showAllJotS();
+		tj.indexedDB.showAllJots();
 	};
 	
 	request.onerror = tj.indexedDB.onerror;
@@ -130,7 +130,7 @@ tj.indexedDB.addJot = function(todoText) {
 	        else {  // oldest are currently shown first
                 todos.appendChild(jotDiv);
             }
-    		///tj.indexedDB.showAllJotS();    // cause all jots to rerender - NO MORE
+    		///tj.indexedDB.showAllJots();    // cause all jots to rerender - NO MORE
     	};
     	
     	request.onerror = function(e) {
