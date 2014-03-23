@@ -240,7 +240,7 @@ tj.indexedDB.showAllJots = function() {
 		if(!!result == false) {  // the !! ensures result becomes true boolean value
 			// there are no more rows in the cursor
 			var missingLocalVersions = remoteJotsNotInLocalStore(localJots, remoteJots);
-			alert("Number of Jots local but not remote:   " + pushToRemote.length + "Number of Jots remote but not local:   " + missingLocalVersions.length);
+			alert("Number of Jots local but not remote:   " + pushToRemote.length + "\n\nNumber of Jots remote but not local:   " + missingLocalVersions.length);
 		    return;
 		}
 
