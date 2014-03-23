@@ -237,7 +237,7 @@ tj.indexedDB.showAllJots = function() {
 		console.log("showAllJots in cursorRequest.onsuccess()")
 		var result = e.target.result;
 		if(!!result == false) {  // the !! ensures result becomes true boolean value
-			alert("Number of Jots local but not remote: " + pushToRemote.length);
+			alert("Number of Jots local but not remote:   " + pushToRemote.length);
 		    return;
 		}
 		var newJotDiv = renderJot(result.value);    // result.value is a table row
