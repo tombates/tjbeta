@@ -20,18 +20,11 @@ a.delete {  /* this isn't good enough because length of timestamp span is variab
 }
 
 h1.thetitle {
-  padding-top:35px;
+  padding-top:20px;
   padding-bottom:10px;
   color:#000;
   text-align:center;
   font: 16px Verdana, Geneva, sans-serif
-}
-h2.subtitle {
-  padding-top:0px;
-  padding-bottom:35px;
-  color:#000;
-  text-align:center;
-  font: 12px Verdana, Geneva, sans-serif
 }
 
 #container {
