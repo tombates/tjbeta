@@ -237,7 +237,7 @@ tj.indexedDB.showAllJots = function() {
 		console.log("showAllJots in cursorRequest.onsuccess()")
 		var result = e.target.result;
 		if(!!result == false) {  // the !! ensures result becomes true boolean value
-			alert("Number of Jots local but not remote:" + pushToRemote.length);
+			alert("Number of Jots local but not remote: " + pushToRemote.length);
 		    return;
 		}
 		var newJotDiv = renderJot(result.value);    // result.value is a table row
@@ -256,11 +256,11 @@ tj.indexedDB.showAllJots = function() {
 function isJotInRemoteStore(localJot, remoteJots) {
 	//TODO need to optimize this totally simplistic and bad performance search
 	//especially since we've already sorted the remoteJots array
-	var result = false;
 	for(i = 0; i < remoteJots.length; i++) {
         if(remoteJots[i].commonKeyTS == localJot.commonKeyTS)
         	return true;
 	}
+	return false;
 }
 
 /*
