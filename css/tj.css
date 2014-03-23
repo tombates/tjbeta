@@ -20,7 +20,7 @@ a.delete {  /* this isn't good enough because length of timestamp span is variab
 }
 
 h1.thetitle {
-  padding-top:20px;
+  padding-top:10px;
   padding-bottom:10px;
   color:#000;
   text-align:center;
@@ -42,7 +42,7 @@ h1.thetitle {
 }
 
 #jotcontrols {
-	height:75px;
+	height:35px;
 	padding:10px;
 }
 
