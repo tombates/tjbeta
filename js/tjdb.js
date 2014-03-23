@@ -207,7 +207,14 @@ tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
 
     // get all the remote jots and sort them
+    var pushToRemote = [];
     var remoteJots = nbx.Jots.all();
+    var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
+    if(remoteJots.length > 0) {
+    	remoteJots.sort(function(a,b) {
+            return flip * (a - b);
+    	});
+    }
 
 	// get all the local jots and see if they all exist on the remote store(s)
 	var jotsContainer = document.getElementById("jotItems");
@@ -229,10 +236,15 @@ tj.indexedDB.showAllJots = function() {
 	cursorRequest.onsuccess = function(e) {
 		console.log("showAllJots in cursorRequest.onsuccess()")
 		var result = e.target.result;
-		if(!!result == false)   // the !! ensures result becomes true boolean value
+		if(!!result == false) {  // the !! ensures result becomes true boolean value
+			alert("Number of Jots local but not remote:" + pushToRemote.length);
 		    return;
-			
+		}
 		var newJotDiv = renderJot(result.value);    // result.value is a table row
+		var sync = isJotInRemoteStore(result.value, remoteJots);
+		if(!sync) {
+			pushToRemote.push(result.value);
+		}
 		jotsContainer.appendChild(newJotDiv);
 		//result.continue();    // compiler warning is bogus and due to 'continue' being a javascript keyword
 		result['continue']();    // solution to warning, and for IE8 if we care
@@ -240,6 +252,16 @@ tj.indexedDB.showAllJots = function() {
 	
 	cursorRequest.onerror = tj.indexedDB.onerror;
 };
+
+function isJotInRemoteStore(localJot, remoteJots) {
+	//TODO need to optimize this totally simplistic and bad performance search
+	//especially since we've already sorted the remoteJots array
+	var result = false;
+	for(i = 0; i < remoteJots.length; i++) {
+        if(remoteJots[i].commonKeyTS == localJot.commonKeyTS)
+        	return true;
+	}
+}
 
 /*
 * Creates all the HTML elements for a single jot and sets them into a new div ready to be added to the
@@ -457,6 +479,8 @@ function indexedDB_init() {
 
 // 3-23-2014 removed because we need nimbus to be ready before call to showAllJots so moved init
 // call into nbx.open so that call to nbx.Jots.all() in showAllJots will return nonzero length array
+//TODO that seems to work but raises the issue of what happens if the route through nb.open is different
+// because we weren't connect yet - then we might never call indexedDB_init
 //window.addEventListener("DOMContentLoaded", indexedDB_init, false);
 
 //
