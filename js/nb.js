@@ -111,6 +111,7 @@ nbx.open = function() {
 };
 
 function nimbus_init() {
+	console.log("doing NimbusBase nimbus_init()");
 	nbx.open();  // connects to user storage using NimbusBase
 }
 

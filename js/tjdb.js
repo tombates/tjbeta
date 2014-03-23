@@ -208,7 +208,7 @@ tj.indexedDB.showAllJots = function() {
 
     // get all the remote jots and sort them
     var remoteJots = nbx.Jots.all();
-    
+
 	// get all the local jots and see if they all exist on the remote store(s)
 	var jotsContainer = document.getElementById("jotItems");
 	jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
@@ -451,6 +451,7 @@ tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
 };
 
 function init() {
+	console.log("doing indexedDB init()");
 	tj.indexedDB.open();  // shows any data previously stored
 }
 
