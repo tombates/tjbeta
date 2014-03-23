@@ -456,8 +456,8 @@ function indexedDB_init() {
 }
 
 // 3-23-2014 removed because we need nimbus to be ready before call to showAllJots so moved init
-// call into nbx.open
-window.addEventListener("DOMContentLoaded", indexedDB_init, false);
+// call into nbx.open so that call to nbx.Jots.all() in showAllJots will return nonzero length array
+//window.addEventListener("DOMContentLoaded", indexedDB_init, false);
 
 //
 // Our action handlers for sort order, date range, etc.,.
