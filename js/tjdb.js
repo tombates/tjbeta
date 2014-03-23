@@ -450,12 +450,14 @@ tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
     }
 };
 
-function init() {
+function indexedDB_init() {
 	console.log("doing indexedDB init()");
 	tj.indexedDB.open();  // shows any data previously stored
 }
 
-window.addEventListener("DOMContentLoaded", init, false);
+// 3-23-2014 removed because we need nimbus to be ready before call to showAllJots so moved init
+// call into nbx.open
+window.addEventListener("DOMContentLoaded", indexedDB_init, false);
 
 //
 // Our action handlers for sort order, date range, etc.,.
@@ -505,8 +507,7 @@ tj.indexedDB.emptyDB = function() {
 		console.log("deleting objectstore");
 		
 		var store = db.deleteObjectStore("Jots");
-	};
-	
+	};	
 };
 
 /*
