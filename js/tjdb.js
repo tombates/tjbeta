@@ -207,6 +207,7 @@ tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
 
     // get all the remote jots and sort them
+    var localJots = [];
     var pushToRemote = [];
     var remoteJots = nbx.Jots.all();
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
@@ -237,15 +238,21 @@ tj.indexedDB.showAllJots = function() {
 		console.log("showAllJots in cursorRequest.onsuccess()")
 		var result = e.target.result;
 		if(!!result == false) {  // the !! ensures result becomes true boolean value
-			alert("Number of Jots local but not remote:   " + pushToRemote.length);
+			// there are no more rows in the cursor
+			var missingLocalVersions = remoteJotsNotInLocalStore(localJots, remoteJots);
+			alert("Number of Jots local but not remote:   " + pushToRemote.length + "Number of Jots remote but not local:   " + missingLocalVersions.length);
 		    return;
 		}
+
+        // deal with next row in the cursor
 		var newJotDiv = renderJot(result.value);    // result.value is a table row
-		var sync = isJotInRemoteStore(result.value, remoteJots);
+		localJots.push(result.value);
+		var sync = isLocalJotInRemoteStore(result.value, remoteJots);
 		if(!sync) {
 			pushToRemote.push(result.value);
 		}
 		jotsContainer.appendChild(newJotDiv);
+
 		//result.continue();    // compiler warning is bogus and due to 'continue' being a javascript keyword
 		result['continue']();    // solution to warning, and for IE8 if we care
 	};
@@ -253,7 +260,8 @@ tj.indexedDB.showAllJots = function() {
 	cursorRequest.onerror = tj.indexedDB.onerror;
 };
 
-function isJotInRemoteStore(localJot, remoteJots) {
+/* Returns whether or not a local jot exists in the remote store */
+function isLocalJotInRemoteStore(localJot, remoteJots) {
 	//TODO need to optimize this totally simplistic and bad performance search
 	//especially since we've already sorted the remoteJots array
 	for(i = 0; i < remoteJots.length; i++) {
@@ -261,6 +269,22 @@ function isJotInRemoteStore(localJot, remoteJots) {
         	return true;
 	}
 	return false;
+}
+
+/* Returns an array of remote jot records not in the local store */
+function remoteJotsNotInLocalStore(localJots, remoteJots) {
+	var missingLocalJots = [];
+	for(i = 0; i < remoteJots.length; i++) {
+		var foundRemoteLocally = false;
+		for(j = 0; j < localJots.length; j++) {
+            if(remoteJots[i].commonKeyTS == localJots[j].commonKeyTS)
+        	    foundRemoteLocally = true;
+		}
+		if(!foundRemoteLocally) {
+			missingLocalJots.push(remoteJots[i]);
+		}
+	}
+	return missingLocalJots;
 }
 
 /*
