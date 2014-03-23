@@ -195,12 +195,21 @@ tj.indexedDB.addJot = function(jotText) {
 //several devices store. The user needs to be in control of this (and perhaps we even over very fine granularity you
 // can decide which jots get put remotely and which don't) but the default should be to aggregrate on the remote store(s)
 // and sync on connect the local stores updating either side from the other appropriately.
+// 3-23-2014 OK today's big job is to be able to see on device A all jots from multiple devices (i.e. all jots on the 
+// remote store). This means we have to be using the remote store as the source for this function. And more than that,
+// there might be local jots that haven't been written for some reason. So we need to do a superset of the local and
+// remote jots really.
 /*
 *   Clears all jots on the page and re-renders them. Used on open, reload, order toggling or filtering. Generally not
 *   used just when a single jot is added or deleted or edited. In those cases we update the DOM directly.
 */
 tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
+
+    // get all the remote jots and sort them
+    var remoteJots = nbx.Jots.all();
+    
+	// get all the local jots and see if they all exist on the remote store(s)
 	var jotsContainer = document.getElementById("jotItems");
 	jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 	
