@@ -289,7 +289,7 @@ function addMissingRemoteJot(missing) {
 	        // IndexedDB on client side new schema 3-22-2014:
             // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
     	var store = trans.objectStore("Jots");
-    	var row = {"commonKeyTS":missing.commonKey, "nimbusID":missing.id, "nimbusTime":missing.time, "modTime":missing.modTime,
+    	var row = {"commonKeyTS":missing.commonKeyTS, "nimbusID":missing.id, "nimbusTime":missing.time, "modTime":missing.modTime,
     	           "title":missing.title, "jot":missing.jot, "tagList":missing.tagList, "extra":missing.extra, "isTodo":missing.isTodo, "done":missing.done};
     	var request = store.add(row);
     	    	
