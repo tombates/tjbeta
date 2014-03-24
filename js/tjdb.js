@@ -276,7 +276,7 @@ tj.indexedDB.showAllJots = function() {
 *  correct commonKey timestamp based location, a call to showAllJots will be made after all missing jots have
 *  been added.
 */
-function addMissingLocalJot(missing) {
+function addMissingRemoteJot(missing) {
     	var db = tj.indexedDB.db;
     	var trans = db.transaction(["Jots"], "readwrite");
     	trans.oncomplete = function(e) {
