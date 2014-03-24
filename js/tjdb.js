@@ -248,7 +248,7 @@ tj.indexedDB.showAllJots = function() {
 				for(i = 0; i < missingLocalVersions.length; i++) {
 				    addMissingRemoteJot(missingLocalVersions[i]);
 				}
-				showAllJots();
+				tj.indexedDB.showAllJots();
 			}
 		    return;
 		}
