@@ -144,6 +144,7 @@ tj.indexedDB.addJot = function(jotText) {
     }
 
     // add the jot locally, saving in it the id of the remote store copy
+    //TODO refactor into sep function so can be used by addMissingLocalJots
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
     	var trans = db.transaction(["Jots"], "readwrite");
@@ -238,14 +239,23 @@ tj.indexedDB.showAllJots = function() {
 		console.log("showAllJots in cursorRequest.onsuccess()")
 		var result = e.target.result;
 		if(!!result == false) {  // the !! ensures result becomes true boolean value
-			// there are no more rows in the cursor
+			// there are no more locally stored rows in the cursor
+			// see if there are any remote jots not yet local
 			var missingLocalVersions = remoteJotsNotInLocalStore(localJots, remoteJots);
-			alert("Number of Jots local but not remote:   " + pushToRemote.length + "\n\nNumber of Jots remote but not local:   " + missingLocalVersions.length);
+			console.log("Number of Jots local but not remote:   " + pushToRemote.length);
+			console.log("Number of Jots remote but not local:   " + missingLocalVersions.length);
+			if(missingLocalVersions.length > 0) {
+				for(i = 0; i < missingLocalVersions.length; i++) {
+				    addMissingRemoteJot(missingLocalVersions[i]);
+				}
+				showAllJots();
+			}
 		    return;
 		}
 
-        // deal with next row in the cursor
-		var newJotDiv = renderJot(result.value);    // result.value is a table row
+        // Deal with next row in the cursor and remember it if it is not stored remotely yet.
+        // If the user has remote storage enabled there should typically be no cases of this.
+		var newJotDiv = renderJot(result.value);    // result.value is essentially a table row
 		localJots.push(result.value);
 		var sync = isLocalJotInRemoteStore(result.value, remoteJots);
 		if(!sync) {
@@ -259,6 +269,38 @@ tj.indexedDB.showAllJots = function() {
 	
 	cursorRequest.onerror = tj.indexedDB.onerror;
 };
+
+/* Adds a jot that is on the remote store but not in our local indexedDB store to the local store. Most likely
+*  the jot is not local because it was added via another device or browswer. Does not cause page redraw. It is
+*  assumed that generally there will be several missing jots to add. Rather than try to insert each one in the
+*  correct commonKey timestamp based location, a call to showAllJots will be made after all missing jots have
+*  been added.
+*/
+function addMissingLocalJot(missing) {
+    	var db = tj.indexedDB.db;
+    	var trans = db.transaction(["Jots"], "readwrite");
+    	trans.oncomplete = function(e) {
+    		console.log("addMissingLocalJot trans.oncomplete() called");
+    	}
+    	trans.onerror = function(e) {
+    		console.log("addMissingLocalJot trans.onerror() called");
+    		console.log(trans.error);
+    	}
+	        // IndexedDB on client side new schema 3-22-2014:
+            // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
+    	var store = trans.objectStore("Jots");
+    	var row = {"commonKeyTS":missing.commonKey, "nimbusID":missing.id, "nimbusTime":missing.time, "modTime":missing.modTime,
+    	           "title":missing.title, "jot":missing.jot, "tagList":missing.tagList, "extra":missing.extra, "isTodo":missing.isTodo, "done":missing.done};
+    	var request = store.add(row);
+    	    	
+    	request.onsuccess = function(e) {
+    		console.log("addMissingLocalJot in put request.onsuccess");
+    	};
+    	
+    	request.onerror = function(e) {
+    		console.log(e.value);
+    	};
+}
 
 /* Returns whether or not a local jot exists in the remote store */
 function isLocalJotInRemoteStore(localJot, remoteJots) {
