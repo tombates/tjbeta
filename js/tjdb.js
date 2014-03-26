@@ -274,7 +274,7 @@ tj.indexedDB.showAllJots = function() {
 *  the jot is not local because it was added via another device or browswer. Does not cause page redraw. It is
 *  assumed that generally there will be several missing jots to add. Rather than try to insert each one in the
 *  correct commonKey timestamp based location, a call to showAllJots should be made after all missing jots have
-*  been added.
+*  been added .
 */
 function addMissingRemoteJot(missing) {
     	var db = tj.indexedDB.db;
