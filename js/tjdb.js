@@ -273,7 +273,7 @@ tj.indexedDB.showAllJots = function() {
 /* Adds a jot that is on the remote store but not in our local indexedDB store to the local store. Most likely
 *  the jot is not local because it was added via another device or browswer. Does not cause page redraw. It is
 *  assumed that generally there will be several missing jots to add. Rather than try to insert each one in the
-*  correct commonKey timestamp based location, a call to showAllJots will be made after all missing jots have
+*  correct commonKey timestamp based location, a call to showAllJots should be made after all missing jots have
 *  been added.
 */
 function addMissingRemoteJot(missing) {
