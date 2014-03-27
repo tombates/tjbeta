@@ -388,7 +388,7 @@ function renderJot(row) {
 	else
 	    titlespan.textContent = row.title;
 
-	timespan.textContent = "Jotted on " + dt.toDateString() + " at " + dt.toLocaleTimeString() + ":";
+	timespan.textContent = "created " + dt.toDateString() + " at " + dt.toLocaleTimeString();
 	//pjot.textContent = row.text;
 	//pjot.innerHTML = row.text;
 	pjot.innerHTML = row.jot;

@@ -78,6 +78,7 @@ textarea.jot {
     padding-top:4px;
 }
 .title {
+    width: 200px;
     background-color:#888;
     color:#fff;
     font-size:12px;
