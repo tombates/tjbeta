@@ -13,9 +13,11 @@ body a {
 a#connectDropbox {color:#0C6;}
 
 a.edit {
+  cursor: pointer;
   margin-left:10px;
 }
 a.delete {
+  cursor: pointer;
   float:right;
   margin-right:10px;
 }
