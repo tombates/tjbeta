@@ -339,7 +339,7 @@ function renderJot(row) {
 	var jdiv = document.createElement("div");
 	jdiv.className = "jotdiv";
 	// another div for the title, etc., which will remain when a jot is collapsed
-	titlediv = document.createElement("div");
+	var titlediv = document.createElement("div");
 	titlediv.className = "titlediv";
 	// spans for stuff in the titlediv
 	var titlespan = document.createElement("span");
@@ -353,12 +353,16 @@ function renderJot(row) {
 
 	var dellink = document.createElement("a");
 	dellink.className = "delete";
-	dellink.textContent = " [Delete]";
+	dellink.title = "Delete this jot"
+	//dellink.textContent = " [Delete]";
+	var delimage = document.createElement("img");
+	delimage.src = ".\/images\/bin32.png"
+
 	var editlink = document.createElement("a");
 	editlink.className = "edit";
 	editlink.title = "Edit this jot"
 	//editlink.textContent = " [Edit]";
-	editimage = document.createElement("img");
+	var editimage = document.createElement("img");
 	editimage.src = ".\/images\/pen32.png"
 	//var ts = toString(row.timeStamp);
 
