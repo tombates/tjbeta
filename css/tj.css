@@ -88,7 +88,8 @@ textarea.jot {
     background-color:#888;
     color:#eee;
     font-size:12px;
-    margin-left:5px;
+    margin-right:10px;
+    margin-left:10px;
     float:right;
 }
 p.jottext {

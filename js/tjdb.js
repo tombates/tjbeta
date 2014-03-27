@@ -416,8 +416,8 @@ function renderJot(row) {
 	
 	titlediv.appendChild(editlink);
 	titlediv.appendChild(titlespan);
-	titlediv.appendChild(timespan);
 	titlediv.appendChild(dellink);
+	titlediv.appendChild(timespan);
 	jdiv.appendChild(titlediv);
 	//jdiv.appendChild(editlink);
 	//jdiv.appendChild(dellink);
