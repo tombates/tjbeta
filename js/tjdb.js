@@ -458,8 +458,9 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan) {
         editLink.title = "Save the edit";
         editimg.src = ".\/images\/tick32.png";
 	    jotElement.setAttribute("contenteditable", true);
-	    titlespan.setAttribute("contenteditable", true);
 	    jotElement.className = "jottext_editing";
+	    titlespan.setAttribute("contenteditable", true);
+	    titlespan.className = "title_editing";
         tj.editing = editLink;
     }
     else {    // time to save the edit
@@ -510,9 +511,10 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan) {
         editLink.title = "Edit this jot";
         editimg.src = ".\/images\/pen32.png";
 	    jotElement.setAttribute("contenteditable", false);
-	    titlespan.setAttribute("contenteditable", false);
         jotElement.className = "jottext";
-        tj.editing = null;
+	    titlespan.setAttribute("contenteditable", false);
+ 	    titlespan.className = "title";
+         tj.editing = null;
         //var textcontent = jotElement.textContent;    // works on FF, Chrome  - looses markup AND NEWLINES! (which are markup really)
         //var wholecontent = jotElement.wholeText;
         //var innerttextcontent = jotElement.innerText;// works on Chrome - looses <a> markup and converts <b> to crlf apparently
