@@ -407,10 +407,11 @@ function renderJot(row) {
 	titlediv.appendChild(editlink);
 	titlediv.appendChild(titlespan);
 	titlediv.appendChild(timespan);
+	titlediv.appendChild(dellink);
 	jdiv.appendChild(titlediv);
 	editlink.appendChild(editimage);
 	//jdiv.appendChild(editlink);
-	jdiv.appendChild(dellink);
+	//jdiv.appendChild(dellink);
 	jdiv.appendChild(pjot);
 	return jdiv;
 }

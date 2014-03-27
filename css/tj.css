@@ -13,10 +13,11 @@ body a {
 a#connectDropbox {color:#0C6;}
 
 a.edit {  /* this isn't good enough because length of timestamp span is variable */
-  margin-left:500px;
+  margin-left:10px;
 }
 a.delete {  /* this isn't good enough because length of timestamp span is variable */
-  margin-left:50px;
+  float:right;
+  margin-right:50px;
 }
 
 h1.thetitle {
@@ -74,6 +75,7 @@ textarea.jot {
     border-top-left-radius:10px;
     border-top-right-radius:10px;
     margin:0px;
+    padding-top:4px;
 }
 .title {
     background-color:#888;
@@ -95,7 +97,7 @@ p.jottext {
     margin:10px 20px 10px 20px;
 }
 p.jottext_editing {
-    background-color:#e0e;
+    background-color:#efe;
     font-size:12px;
     margin:10px 20px 10px 20px;
 }
