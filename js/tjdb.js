@@ -383,7 +383,7 @@ function renderJot(row) {
         console.log("Someone, or something, clicked on me!");
 	});
 	if(row.title == "none") {
-		titlespan.textContent = ".....";
+		titlespan.textContent = "untitled";
 	}
 	else
 	    titlespan.textContent = row.title;
