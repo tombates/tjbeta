@@ -406,18 +406,19 @@ function renderJot(row) {
 		    tj.indexedDB.deleteJot(row.commonKeyTS, jdiv);
         }
 	});
+	dellink.appendChild(delimage);
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteJot(row.text);
 		tj.indexedDB.editJot(this, row.commonKeyTS, pjot);
 	});
+	editlink.appendChild(editimage);
 	
 	titlediv.appendChild(editlink);
 	titlediv.appendChild(titlespan);
 	titlediv.appendChild(timespan);
 	titlediv.appendChild(dellink);
 	jdiv.appendChild(titlediv);
-	editlink.appendChild(editimage);
 	//jdiv.appendChild(editlink);
 	//jdiv.appendChild(dellink);
 	jdiv.appendChild(pjot);
