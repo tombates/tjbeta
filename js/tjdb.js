@@ -404,11 +404,12 @@ function renderJot(row) {
 		tj.indexedDB.editJot(this, row.commonKeyTS, pjot);
 	});
 	
+	titlediv.appendChild(editlink);
 	titlediv.appendChild(titlespan);
 	titlediv.appendChild(timespan);
 	jdiv.appendChild(titlediv);
 	editlink.appendChild(editimage);
-	jdiv.appendChild(editlink);
+	//jdiv.appendChild(editlink);
 	jdiv.appendChild(dellink);
 	jdiv.appendChild(pjot);
 	return jdiv;
