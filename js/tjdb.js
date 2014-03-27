@@ -335,12 +335,18 @@ function remoteJotsNotInLocalStore(localJots, remoteJots) {
 */
 function renderJot(row) {	
 	
-	// a div for each jot
+	// a containing div for each jot
 	var jdiv = document.createElement("div");
 	jdiv.className = "jotdiv";
-	// a paragraph for the timestamp
-	var pts = document.createElement("span");
-	pts.className = "timestamp";
+	// another div for the title, etc., which will remain when a jot is collapsed
+	titlediv = document.createElement("div");
+	titlediv.className = "titlediv";
+	// spans for stuff in the titlediv
+	var titlespan = document.createElement("span");
+	titlespan.className = "title";
+	var timespan = document.createElement("span");
+	timespan.className = "timestamp";
+
 	// a paragraph for the jot - simple for now: just one basic paragraph is all we handle
 	var pjot = document.createElement("p");
 	pjot.className = "jottext";
@@ -373,7 +379,12 @@ function renderJot(row) {
 	var dt = new Date(row.commonKeyTS);   // get a Date obj back so we can call some presentation methods
 	
 	//var t = document.createTextNode(dt.toDateString() + "at " + dt.toTimeString() + ": " + row.text);
-	pts.textContent = "Jotted on " + dt.toDateString() + " at " + dt.toLocaleTimeString() + ":";
+	titlediv.addEventListener("click", function(e){
+        console.log("Someone, or something, clicked on me!");
+	});
+	titlespan.textContent = row.title;
+
+	timespan.textContent = "Jotted on " + dt.toDateString() + " at " + dt.toLocaleTimeString() + ":";
 	//pjot.textContent = row.text;
 	//pjot.innerHTML = row.text;
 	pjot.innerHTML = row.jot;
@@ -393,7 +404,9 @@ function renderJot(row) {
 		tj.indexedDB.editJot(this, row.commonKeyTS, pjot);
 	});
 	
-	jdiv.appendChild(pts);
+	titlediv.appendChild(titlespan);
+	titlediv.appendChild(timespan);
+	jdiv.appendChild(titlediv);
 	editlink.appendChild(editimage);
 	jdiv.appendChild(editlink);
 	jdiv.appendChild(dellink);
