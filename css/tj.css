@@ -89,7 +89,7 @@ textarea.jot {
     color:#eee;
     font-size:12px;
     margin-left:5px;
-
+    float:right;
 }
 p.jottext {
     background-color:#fff;
