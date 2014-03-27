@@ -410,7 +410,7 @@ function renderJot(row) {
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteJot(row.text);
-		tj.indexedDB.editJot(this, row.commonKeyTS, pjot);
+		tj.indexedDB.editJot(this, row.commonKeyTS, pjot, titlespan);
 	});
 	editlink.appendChild(editimage);
 	
@@ -444,7 +444,7 @@ function renderJot(row) {
 //   I don't want to get into is going back and forth - i don't want to un-htmlize. Maybe this means we should only be
 //   persisting plain text and htmlizing it only for display on the page. but then how do we preserve creturns - i think
 //   the available DOM methods strip out the creturns... time to experiment.
-tj.indexedDB.editJot = function(editLink, commonKey, jotElement) {
+tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan) {
     //console.log("tj.indexedDB.editJot()");
     var newContent = jotElement.innerHTML;
 
@@ -458,6 +458,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement) {
         editLink.title = "Save the edit";
         editimg.src = ".\/images\/tick32.png";
 	    jotElement.setAttribute("contenteditable", true);
+	    titlespan.setAttribute("contenteditable", true);
 	    jotElement.className = "jottext_editing";
         tj.editing = editLink;
     }
@@ -509,6 +510,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement) {
         editLink.title = "Edit this jot";
         editimg.src = ".\/images\/pen32.png";
 	    jotElement.setAttribute("contenteditable", false);
+	    titlespan.setAttribute("contenteditable", false);
         jotElement.className = "jottext";
         tj.editing = null;
         //var textcontent = jotElement.textContent;    // works on FF, Chrome  - looses markup AND NEWLINES! (which are markup really)
