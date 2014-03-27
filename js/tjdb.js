@@ -382,7 +382,11 @@ function renderJot(row) {
 	titlediv.addEventListener("click", function(e){
         console.log("Someone, or something, clicked on me!");
 	});
-	titlespan.textContent = row.title;
+	if(row.title == "none") {
+		titlespan.textContent = ".....";
+	}
+	else
+	    titlespan.textContent = row.title;
 
 	timespan.textContent = "Jotted on " + dt.toDateString() + " at " + dt.toLocaleTimeString() + ":";
 	//pjot.textContent = row.text;
@@ -418,9 +422,11 @@ function renderJot(row) {
 
 /*
 * Makes the jot contenteditable if no jot currently is: only one jot can be editable at a time.
-* If the jot is currently editable then it is set not editable. Changes the link image appropriately.
+* If the jot is currently editable then it is set not editable and saves the current innerHTML.
+* Changes the link image appropriately for the new state (edit or done), if any.
 *
 * editLink - The in-jot-div edit/save link (i.e. the pencil icon button) that received the click.
+* commonKey - The commonKeyTS value for the jot, which links the different store's particular instances of the same jot.
 * jotElement - The element containing the jot text (currently a p element, might become a div with sep p's in future...)
 */
 //TODO now we need to actually save the edits and persist the changes.
@@ -433,7 +439,7 @@ function renderJot(row) {
 //   I don't want to get into is going back and forth - i don't want to un-htmlize. Maybe this means we should only be
 //   persisting plain text and htmlizing it only for display on the page. but then how do we preserve creturns - i think
 //   the available DOM methods strip out the creturns... time to experiment.
-tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
+tj.indexedDB.editJot = function(editLink, commonKey, jotElement) {
     //console.log("tj.indexedDB.editJot()");
     var newContent = jotElement.innerHTML;
 
@@ -460,7 +466,7 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
 			console.log("editJot transaction.onerror() called");
 		}
 		var store = trans.objectStore("Jots");
-        var request = store.get(iDBkey);
+        var request = store.get(commonKey);
         request.onerror = function(e) {
             console.log("editJot request.onerror() called");
         };
@@ -487,7 +493,7 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
 	        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
 	        console.log("editJot: updating Dropbox, except we aren't really yet!");
 
-	        var nbJot = nbx.Jots.findByAttribute("commonKeyTS", iDBkey);
+	        var nbJot = nbx.Jots.findByAttribute("commonKeyTS", commonKey);
 	        nbJot.jot = newContent;
 	        nbJot.save();
 	        nbx.Jots.sync_all(function() {console.log("tj.indexedDB.editJot nbx.Jots.sync_all() callback called.")});
@@ -517,7 +523,14 @@ tj.indexedDB.editJot = function(editLink, iDBkey, jotElement) {
     }
 };
 
-tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
+/*
+*  Deletes a jot from local and remote store(s).
+*
+*  commonKey - The commonKeyTS value for the jot, which links the different store's particular instances of the same jot.
+*  jotDiv - The containing div of the jot, and its corresponding title, creation stamp and controls div.
+*
+*/
+tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
 
 	// delete the local indexedDB version of the jot
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
@@ -532,7 +545,7 @@ tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
 		var store = trans.objectStore("Jots");
 		
 		// deletel the indexedDB entry for this jot
-		var request = store['delete'](iDBkey);    // can't do store.delete(id) due to delete being a keyword, just like continue issue
+		var request = store['delete'](commonKey);    // can't do store.delete(id) due to delete being a keyword, just like continue issue
 		
 		request.onsuccess = function(e) {
 			// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
@@ -548,7 +561,7 @@ tj.indexedDB.deleteJot = function(iDBkey, jotDiv) {
 
     // delete the Dropbox version
 	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
-	    var nbJot = nbx.Jots.findByAttribute("commonKeyTS", iDBkey);
+	    var nbJot = nbx.Jots.findByAttribute("commonKeyTS", commonKey);
         nbJot.destroy();
     }
 };
