@@ -204,6 +204,16 @@ tj.indexedDB.addJot = function(jotText) {
 *   Clears all jots on the page and re-renders them. Used on open, reload, order toggling or filtering. Generally not
 *   used just when a single jot is added or deleted or edited. In those cases we update the DOM directly.
 */
+//PROBLEM we are showing all jots based on the local store. This is wrong. Consider having tj open in two browswers or
+//two devices. Edit a jot in one and save the edit. The remote store now has the correct contents. BUT this function
+//is calling renderJot with the local store data, which has not been updated with the edits.
+//
+// 1. we must check whether or not local version is out of date with remote version, not just whether it exists locally.
+//    This is afterall why we added a modified time to the schema.
+// 2. we should be calling renderJot with the remote versions if possible (only not possible if the connection to remote
+//    is down). And if the connection is down we should warn the user that jots are being rendered only from the local
+//    browswer specific store and therefore these might not have been synced with the remote store yet. A tricky situation
+//    with no great solution.
 tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
 
@@ -212,6 +222,7 @@ tj.indexedDB.showAllJots = function() {
     var pushToRemote = [];
     var remoteJots = nbx.Jots.all();
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
+    //PROBLEM how is this sorting on the commonKey? It's not.
     if(remoteJots.length > 0) {
     	remoteJots.sort(function(a,b) {
             return flip * (a - b);
