@@ -447,6 +447,7 @@ function renderJot(row) {
 tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan) {
     //console.log("tj.indexedDB.editJot()");
     var newContent = jotElement.innerHTML;
+    var newTitle = titlespan.innerText;
 
     var editimg = editLink.childNodes[0];
     if(tj.editing != null && editLink != tj.editing) {
@@ -483,6 +484,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan) {
             var row = request.result;
             //row.text = jotElement.innerHTML;
             row.jot = newContent;
+            row.title = newTitle;
             console.log(row.commonKeyTS);
             // a nested request to update the indexedDB
             var requestUpdate = store.put(row);
@@ -502,6 +504,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan) {
 
 	        var nbJot = nbx.Jots.findByAttribute("commonKeyTS", commonKey);
 	        nbJot.jot = newContent;
+	        nbJot.title = newTitle;
 	        nbJot.save();
 	        nbx.Jots.sync_all(function() {console.log("tj.indexedDB.editJot nbx.Jots.sync_all() callback called.")});
 	    }
