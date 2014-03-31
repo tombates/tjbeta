@@ -498,6 +498,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan) {
 	    jotElement.className = "jottext_editing";
 	    titlespan.setAttribute("contenteditable", true);
 	    titlespan.className = "title_editing";
+	    tagspara.className = "tagspara_editing";
         tj.editing = editLink;
     }
     else {    // time to save the edit
@@ -553,6 +554,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan) {
         jotElement.className = "jottext";
 	    titlespan.setAttribute("contenteditable", false);
  	    titlespan.className = "title";
+ 	    tagspara.className = "tagspara";
          tj.editing = null;
         //var textcontent = jotElement.textContent;    // works on FF, Chrome  - looses markup AND NEWLINES! (which are markup really)
         //var wholecontent = jotElement.wholeText;
