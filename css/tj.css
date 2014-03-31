@@ -14,6 +14,7 @@ a#connectDropbox {color:#0C6;}
 
 a.edit {
   cursor: pointer;
+  float:left;
   margin-top:4px;
   margin-left:10px;
 }
