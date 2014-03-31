@@ -417,7 +417,7 @@ function renderJot(row) {
 	titlediv.addEventListener("click", function(e){
         console.log("Someone, or something, clicked on me!");
 	});
-	if(row.title == "none" || row.title == "") {
+	if(row.title == "none" || row.title == "" || row.title == undefined) {
 		titlespan.textContent = "untitled";
 	}
 	else
@@ -490,7 +490,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
 
     var newContent = jotElement.innerHTML;
     var newTitle = titlespan.innerText;
-    if(newTitle == "")
+    if(newTitle == "" || newTitle == undefined)
     	newTitle = "untitled"
 
     if(editLink.title == "Edit this jot") {
