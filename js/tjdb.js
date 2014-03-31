@@ -417,7 +417,7 @@ function renderJot(row) {
 	titlediv.addEventListener("click", function(e){
         console.log("Someone, or something, clicked on me!");
 	});
-	if(row.title == "none") {
+	if(row.title == "none" || row.title == "") {
 		titlespan.textContent = "untitled";
 	}
 	else
@@ -482,16 +482,16 @@ function renderJot(row) {
 //   the available DOM methods strip out the creturns... time to experiment.
 tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tagspara) {
     //console.log("tj.indexedDB.editJot()");
-    var newContent = jotElement.innerHTML;
-    var newTitle = titlespan.innerText;
-    if(newTitle === "")
-    	newTitle = "untitled"
-
     var editimg = editLink.childNodes[0];
     if(tj.editing != null && editLink != tj.editing) {
     	alert("Only one jot can be edited at a time.");
     	return;
     }
+
+    var newContent = jotElement.innerHTML;
+    var newTitle = titlespan.innerText;
+    if(newTitle == "")
+    	newTitle = "untitled"
 
     if(editLink.title == "Edit this jot") {
         editLink.title = "Save the edit";
@@ -500,6 +500,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
 	    jotElement.className = "jottext_editing";
 	    titlespan.setAttribute("contenteditable", true);
 	    titlespan.className = "title_editing";
+	    tagspara.setAttribute("contenteditable", true);
 	    tagspara.className = "tagspara_editing";
         tj.editing = editLink;
     }
@@ -556,8 +557,9 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
         jotElement.className = "jottext";
 	    titlespan.setAttribute("contenteditable", false);
  	    titlespan.className = "title";
+	    tagspara.setAttribute("contenteditable", false);
  	    tagspara.className = "tagspara";
-         tj.editing = null;
+        tj.editing = null;
         //var textcontent = jotElement.textContent;    // works on FF, Chrome  - looses markup AND NEWLINES! (which are markup really)
         //var wholecontent = jotElement.wholeText;
         //var innerttextcontent = jotElement.innerText;// works on Chrome - looses <a> markup and converts <b> to crlf apparently
