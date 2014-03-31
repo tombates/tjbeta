@@ -83,19 +83,15 @@ textarea.jot {
     height:40px;
     width:50px;
     background-color:#b88;
-    border: solid 1px #999;
     border-top-left-radius:10px;
     border-bottom-left-radius:10px;
     margin:0px;
-    padding-top:4px;
+    padding:0px;
     float:left;
 }
 .titlecenterdiv {
     height:40px;
     background-color:#88b;
-    border: solid 1px #999;
-    border-top-left-radius:10px;
-    border-bottom-left-radius:10px;
     margin:0px;
     padding-top:4px;
     float:left;
@@ -104,11 +100,10 @@ textarea.jot {
     height:40px;
     width:50px;
     background-color:#b88;
-    border: solid 1px #999;
     border-top-right-radius:10px;
     border-bottom-right-radius:10px;
     margin:0px;
-    padding-top:4px;
+    padding:0px;
     float:right;
 }
 
