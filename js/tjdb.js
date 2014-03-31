@@ -375,7 +375,7 @@ function renderJot(row) {
 	var timespan = document.createElement("span");
 	timespan.className = "timestamp";
     // a paragraph for the tags, within the titlediv central column div
-    var tagspara = document.createElement.("p");
+    var tagspara = document.createElement("p");
     tagspara.className = "tagspara";
 
 	// a paragraph for the jot - simple for now: just one basic paragraph is all we handle
