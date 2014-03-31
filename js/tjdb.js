@@ -442,7 +442,7 @@ function renderJot(row) {
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteJot(row.text);
-		tj.indexedDB.editJot(this, row.commonKeyTS, pjot, titlespan);
+		tj.indexedDB.editJot(this, row.commonKeyTS, pjot, titlespan, tagspara);
 	});
 	editlink.appendChild(editimage);
 	
@@ -480,10 +480,12 @@ function renderJot(row) {
 //   I don't want to get into is going back and forth - i don't want to un-htmlize. Maybe this means we should only be
 //   persisting plain text and htmlizing it only for display on the page. but then how do we preserve creturns - i think
 //   the available DOM methods strip out the creturns... time to experiment.
-tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan) {
+tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tagspara) {
     //console.log("tj.indexedDB.editJot()");
     var newContent = jotElement.innerHTML;
     var newTitle = titlespan.innerText;
+    if(newTitle === "")
+    	newTitle = "untitled"
 
     var editimg = editLink.childNodes[0];
     if(tj.editing != null && editLink != tj.editing) {
