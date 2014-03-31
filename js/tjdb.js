@@ -214,6 +214,14 @@ tj.indexedDB.addJot = function(jotText) {
 //    is down). And if the connection is down we should warn the user that jots are being rendered only from the local
 //    browswer specific store and therefore these might not have been synced with the remote store yet. A tricky situation
 //    with no great solution.
+//  OK this function is doing too much. It's supposed to showAllJots, but it's also doing the local/remote sync
+//  thing, which gets very messy since this is asyncrhronous and the syncing will potentially fire off other async
+//  update tasks, thus making it quite tricky to know when it's safe to actually get all the remote jots and use them
+//  for rendering. Need to pull out most of this into a sep function - the first clue is that this function calls itself
+//  and that just a recursion too far
+//  WHAT'S MORE this isn't even sending to remote any jots that are only local, it is only gathering them up but in a
+//  function scope var and then nothing is ever really done with that list (badly named pushToRemote). We should
+//  push to remote at "we know we are connected" time and not so much here.
 tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
 
@@ -225,7 +233,7 @@ tj.indexedDB.showAllJots = function() {
     //PROBLEM how is this sorting on the commonKey? It's not.
     if(remoteJots.length > 0) {
     	remoteJots.sort(function(a,b) {
-            return flip * (a - b);
+            return flip * (a.commonKeyTS - b.commonKeyTS);
     	});
     }
 
@@ -257,7 +265,7 @@ tj.indexedDB.showAllJots = function() {
 			console.log("Number of Jots remote but not local:   " + missingLocalVersions.length);
 			if(missingLocalVersions.length > 0) {
 				for(i = 0; i < missingLocalVersions.length; i++) {
-				    addMissingRemoteJot(missingLocalVersions[i]);
+				    addMissingRemoteJot(missingLocalVersions[i]);    // asynchronous!
 				}
 				tj.indexedDB.showAllJots();
 			}
@@ -352,11 +360,23 @@ function renderJot(row) {
 	// another div for the title, etc., which will remain when a jot is collapsed
 	var titlediv = document.createElement("div");
 	titlediv.className = "titlediv";
-	// spans for stuff in the titlediv
+	// three divs for the left, center, and right columsn within the titlediv
+	// these contain the edit link, the title/timestamp/tags editables, and the delete link
+    var title_leftdiv = document.createElement("div");
+    title_leftdiv.className = "titleleftdiv";
+    var title_centerdiv = document.createElement("div");
+    title_centerdiv.className = "titlecenterdiv";
+    var title_rightdiv = document.createElement("div");
+    title_rightdiv.className = "titlerightdiv";
+
+	// spans for stuff in the title_centerdiv
 	var titlespan = document.createElement("span");
 	titlespan.className = "title";
 	var timespan = document.createElement("span");
 	timespan.className = "timestamp";
+    // a paragraph for the tags, within the titlediv central column div
+    var tagspara = document.createElement.("p");
+    tagspara.className = "tagspara";
 
 	// a paragraph for the jot - simple for now: just one basic paragraph is all we handle
 	var pjot = document.createElement("p");
@@ -404,6 +424,7 @@ function renderJot(row) {
 	    titlespan.textContent = row.title;
 
 	timespan.textContent = "created " + dt.toDateString() + " at " + dt.toLocaleTimeString();
+	tagspara.textContent = "tags";
 	//pjot.textContent = row.text;
 	//pjot.innerHTML = row.text;
 	pjot.innerHTML = row.jot;
@@ -425,10 +446,14 @@ function renderJot(row) {
 	});
 	editlink.appendChild(editimage);
 	
-	titlediv.appendChild(editlink);
-	titlediv.appendChild(titlespan);
-	titlediv.appendChild(dellink);
-	titlediv.appendChild(timespan);
+	title_leftdiv.appendChild(editlink);
+	titlediv.appendChild(title_leftdiv)
+	title_centerdiv.appendChild(titlespan);
+	title_centerdiv.appendChild(timespan);
+	title_centerdiv.appendChild(tagspara);
+	titlediv.appendChild(title_centerdiv);
+	title_rightdiv.appendChild(dellink);
+	titlediv.appendChild(title_rightdiv);
 	jdiv.appendChild(titlediv);
 	//jdiv.appendChild(editlink);
 	//jdiv.appendChild(dellink);
