@@ -75,7 +75,7 @@ a.delete {
 
 .titlediv {
     height:40px;
-    background-color:#888;
+    background-color:#88a;
     border-top-left-radius:10px;
     border-top-right-radius:10px;
     margin:0px;
@@ -84,7 +84,7 @@ a.delete {
 .titleleftdiv {
     height:40px;
     width:50px;
-    background-color:#b88;
+    background-color:#88a;
     border-top-left-radius:10px;
     margin:0px;
     padding:0px;
@@ -93,7 +93,7 @@ a.delete {
 .titlecenterdiv {
     height:40px;
     width:786px;
-    background-color:#88b;
+    background-color:#88a;
     margin:0px;
     padding:0px;
     float:left;
@@ -101,7 +101,7 @@ a.delete {
 .titlerightdiv {
     height:40px;
     width:50px;
-    background-color:#b88;
+    background-color:#88a;
     border-top-right-radius:10px;
     margin:0px;
     padding:0px;
@@ -109,7 +109,7 @@ a.delete {
 }
 
 .title {
-    background-color:#888;
+    background-color:#88a;
     color:#ccc;
     font-size:14px;
     margin:0px;
@@ -125,7 +125,7 @@ a.delete {
     margin-right:15px;
 }
 .timestamp {
-    background-color:#888;
+    background-color:#88a;
     color:#eee;
     font-size:12px;
     margin-right:10px;
@@ -133,7 +133,7 @@ a.delete {
     float:right;
 }
 .tagspara {
-    background-color:#666;
+    background-color:#88a;
     color:#ccc;
     font-size:14px;
     margin:0px;
