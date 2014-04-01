@@ -229,11 +229,21 @@ tj.indexedDB.showAllJots = function() {
 }
 
 function pageRenderer() {
-    var remoteJots = getSortedRemoteJots();
+    var r = getSortedRemoteJots();
+    var l = {};
+    var nextJotDiv;
     //MUST convert from result.value to remote object -> local style
 
-	var newJotDiv = renderJot(result.value);    // result.value is a basically a local store table row
-	jotsContainer.appendChild(newJotDiv);
+    // Currenly renderJot expects a local (indexedDB) style 'row' so we have to convert from the remote names
+    // nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra",
+    //                               "isTodo", "done"]);
+
+    for(i = 0; i < r.length; i++) {
+    	l = {"commonKeyTS":r.commonKeyTS, "nimbusID":r.id, "nimbusTime":r.time, "modTime":r.modTime,
+             "title":r.title, "jot":r.jot, "tagList":r.tagList, "extra":r.extra, "idTodo":r.isTodo, "done":r.done};
+ 	    nextJotDiv = renderJot(l);    // result.value is a basically a local store table row
+	    jotsContainer.appendChild(nextJotDiv);   	
+    }
 }
 
 function updateRemote(localNotOnRemote) {
@@ -262,7 +272,7 @@ function getSortedRemoteJots() {
     return remoteJots;
 }
 
-function syncAllJots(readyToRender) {
+function syncAllJots(pageRenderer) {
 	var remoteJots = getSortedRemoteJots();
     var localJots = [];
     var pushToRemote = [];
@@ -275,6 +285,7 @@ function syncAllJots(readyToRender) {
 	trans.oncomplete = function(e) {
 		console.log("showAllJots transaction.oncomplete() called");
 		updateRemote(pushToRemote);    // push local jots not on remote: should be rare
+		pageRenderer();
 	};
 	trans.onerror = function(e) {
 		console.log("showAllJots transaction.onerror() called");
