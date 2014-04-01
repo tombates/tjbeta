@@ -238,6 +238,8 @@ function pageRenderer() {
     // nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra",
     //                               "isTodo", "done"]);
 
+	var jotsContainer = document.getElementById("jotItems");
+	jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
     for(i = 0; i < r.length; i++) {
     	l = {"commonKeyTS":r.commonKeyTS, "nimbusID":r.id, "nimbusTime":r.time, "modTime":r.modTime,
              "title":r.title, "jot":r.jot, "tagList":r.tagList, "extra":r.extra, "idTodo":r.isTodo, "done":r.done};
@@ -277,8 +279,6 @@ function syncAllJots(pageRenderer) {
     var localJots = [];
     var pushToRemote = [];
 	// get all the local jots and see if they all exist on the remote store(s)
-	var jotsContainer = document.getElementById("jotItems");
-	jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 	
 	var db = tj.indexedDB.db;
 	var trans = db.transaction(["Jots"], "readonly");
@@ -321,7 +321,6 @@ function syncAllJots(pageRenderer) {
 		if(!sync) {
 			pushToRemote.push(result.value);
 		}
-		///jotsContainer.appendChild(newJotDiv);
 
 		//result.continue();    // compiler warning is bogus and due to 'continue' being a javascript keyword
 		result['continue']();    // solution to warning, and for IE8 if we care
