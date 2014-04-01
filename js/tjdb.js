@@ -231,7 +231,7 @@ tj.indexedDB.showAllJots = function() {
 function pageRenderer() {
     var remoteJots = getSortedRemoteJots();
     //MUST convert from result.value to remote object -> local style
-    
+
 	var newJotDiv = renderJot(result.value);    // result.value is a basically a local store table row
 	jotsContainer.appendChild(newJotDiv);
 }
@@ -250,7 +250,6 @@ function updateRemote(localNotOnRemote) {
 
 function getSortedRemoteJots() {
     // get all the remote jots and sort them
-    var pushToRemote = [];
     var remoteJots = nbx.Jots.all();
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
     //PROBLEM how is this sorting on the commonKey? It's not.
@@ -266,6 +265,7 @@ function getSortedRemoteJots() {
 function syncAllJots(readyToRender) {
 	var remoteJots = getSortedRemoteJots();
     var localJots = [];
+    var pushToRemote = [];
 	// get all the local jots and see if they all exist on the remote store(s)
 	var jotsContainer = document.getElementById("jotItems");
 	jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
@@ -274,7 +274,7 @@ function syncAllJots(readyToRender) {
 	var trans = db.transaction(["Jots"], "readonly");
 	trans.oncomplete = function(e) {
 		console.log("showAllJots transaction.oncomplete() called");
-		updateRemote(pushToRemote);
+		updateRemote(pushToRemote);    // push local jots not on remote: should be rare
 	};
 	trans.onerror = function(e) {
 		console.log("showAllJots transaction.onerror() called");
