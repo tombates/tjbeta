@@ -224,9 +224,32 @@ tj.indexedDB.addJot = function(jotText) {
 //  push to remote at "we know we are connected" time and not so much here.
 tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
+    syncAllJots(pageRenderer);
 
+}
+
+function pageRenderer() {
+    var remoteJots = getSortedRemoteJots();
+    //MUST convert from result.value to remote object -> local style
+    
+	var newJotDiv = renderJot(result.value);    // result.value is a basically a local store table row
+	jotsContainer.appendChild(newJotDiv);
+}
+
+function updateRemote(localNotOnRemote) {
+	var l = localNotOnRemote;
+    for(i = 0; i < localNotOnRemote.length; i++) {
+    	// our input is in local format, we need to pull the values out
+   	//var row = {"commonKeyTS":commonKey, "nimbusID":nbID, "nimbusTime":"none", "modTime":commonKey,
+    //"title":"none", "jot": htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
+ 
+        nbx.jotreal = nbx.Jots.create({"commonKeyTS":l.commonKeyTS, "time":l.commonKeyTS, "modTime":l.commonKeyTS,
+            "title":l.title, "jot":l.jot, "tagList":l.tagList, "extra":l.extra, "isTodo":l.isTodo, "done":l.done});
+    }
+}
+
+function getSortedRemoteJots() {
     // get all the remote jots and sort them
-    var localJots = [];
     var pushToRemote = [];
     var remoteJots = nbx.Jots.all();
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
@@ -237,6 +260,12 @@ tj.indexedDB.showAllJots = function() {
     	});
     }
 
+    return remoteJots;
+}
+
+function syncAllJots(readyToRender) {
+	var remoteJots = getSortedRemoteJots();
+    var localJots = [];
 	// get all the local jots and see if they all exist on the remote store(s)
 	var jotsContainer = document.getElementById("jotItems");
 	jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
@@ -245,6 +274,7 @@ tj.indexedDB.showAllJots = function() {
 	var trans = db.transaction(["Jots"], "readonly");
 	trans.oncomplete = function(e) {
 		console.log("showAllJots transaction.oncomplete() called");
+		updateRemote(pushToRemote);
 	};
 	trans.onerror = function(e) {
 		console.log("showAllJots transaction.onerror() called");
@@ -265,7 +295,7 @@ tj.indexedDB.showAllJots = function() {
 			console.log("Number of Jots remote but not local:   " + missingLocalVersions.length);
 			if(missingLocalVersions.length > 0) {
 				for(i = 0; i < missingLocalVersions.length; i++) {
-				    addMissingRemoteJot(missingLocalVersions[i]);    // asynchronous!
+				    pullMissingRemoteJot(missingLocalVersions[i]);    // asynchronous!
 				}
 				tj.indexedDB.showAllJots();
 			}
@@ -274,13 +304,13 @@ tj.indexedDB.showAllJots = function() {
 
         // Deal with next row in the cursor and remember it if it is not stored remotely yet.
         // If the user has remote storage enabled there should typically be no cases of this.
-		var newJotDiv = renderJot(result.value);    // result.value is essentially a table row
+		///var newJotDiv = renderJot(result.value);    // result.value is a basically a local store table row
 		localJots.push(result.value);
 		var sync = isLocalJotInRemoteStore(result.value, remoteJots);
 		if(!sync) {
 			pushToRemote.push(result.value);
 		}
-		jotsContainer.appendChild(newJotDiv);
+		///jotsContainer.appendChild(newJotDiv);
 
 		//result.continue();    // compiler warning is bogus and due to 'continue' being a javascript keyword
 		result['continue']();    // solution to warning, and for IE8 if we care
@@ -289,13 +319,19 @@ tj.indexedDB.showAllJots = function() {
 	cursorRequest.onerror = tj.indexedDB.onerror;
 };
 
+/* Pushes local jots that are not in the remote store(s) to the remote store(s).
+*/
+function pushMissingLocalJots(missingRemotely) {
+    console.log("pushMissingLocalJots");
+}
+
 /* Adds a jot that is on the remote store but not in our local indexedDB store to the local store. Most likely
 *  the jot is not local because it was added via another device or browswer. Does not cause page redraw. It is
 *  assumed that generally there will be several missing jots to add. Rather than try to insert each one in the
 *  correct commonKey timestamp based location, a call to showAllJots should be made after all missing jots have
 *  been added .
 */
-function addMissingRemoteJot(missing) {
+function pullMissingRemoteJot(missing) {
     	var db = tj.indexedDB.db;
     	var trans = db.transaction(["Jots"], "readwrite");
     	trans.oncomplete = function(e) {
