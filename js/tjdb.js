@@ -241,8 +241,8 @@ function pageRenderer() {
     var jotsContainer = document.getElementById("jotItems");
      jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
     for(i = 0; i < r.length; i++) {
-    	l = {"commonKeyTS":r.commonKeyTS, "nimbusID":r.id, "nimbusTime":r.time, "modTime":r.modTime,
-             "title":r.title, "jot":r.jot, "tagList":r.tagList, "extra":r.extra, "idTodo":r.isTodo, "done":r.done};
+    	l = {"commonKeyTS":r[i].commonKeyTS, "nimbusID":r[i].id, "nimbusTime":r[i].time, "modTime":r[i].modTime,
+             "title":r[i].title, "jot":r[i].jot, "tagList":r[i].tagList, "extra":r[i].extra, "idTodo":r[i].isTodo, "done":r[i].done};
  	    nextJotDiv = renderJot(l);    // result.value is a basically a local store table row
 	    jotsContainer.appendChild(nextJotDiv);   	
     }
