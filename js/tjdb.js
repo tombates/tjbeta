@@ -239,7 +239,7 @@ function pageRenderer() {
     //                               "isTodo", "done"]);
 
     var jotsContainer = document.getElementById("jotItems");
-    jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
+     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
     for(i = 0; i < r.length; i++) {
     	l = {"commonKeyTS":r.commonKeyTS, "nimbusID":r.id, "nimbusTime":r.time, "modTime":r.modTime,
              "title":r.title, "jot":r.jot, "tagList":r.tagList, "extra":r.extra, "idTodo":r.isTodo, "done":r.done};
