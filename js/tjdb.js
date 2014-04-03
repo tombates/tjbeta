@@ -535,7 +535,8 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
     }
 
     var newContent = jotElement.innerHTML;
-    var newTitle = titlespan.innerText;
+    var newTitle = titlespan.innerHTML;
+    var newTags = tagspara.innerHTML;
     if(newTitle == "" || newTitle == undefined)
     	newTitle = "untitled"
 
@@ -571,6 +572,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
             //row.text = jotElement.innerHTML;
             row.jot = newContent;
             row.title = newTitle;
+            row.tagList = newTags;
             console.log(row.commonKeyTS);
             // a nested request to update the indexedDB
             var requestUpdate = store.put(row);
@@ -591,6 +593,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
 	        var nbJot = nbx.Jots.findByAttribute("commonKeyTS", commonKey);
 	        nbJot.jot = newContent;
 	        nbJot.title = newTitle;
+	        nbJot.tagsList = newTags;
 	        nbJot.save();
 	        nbx.Jots.sync_all(function() {console.log("tj.indexedDB.editJot nbx.Jots.sync_all() callback called.")});
 	    }
