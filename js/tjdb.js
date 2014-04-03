@@ -470,7 +470,7 @@ function renderJot(row) {
 	    titlespan.textContent = row.title;
 
 	timespan.textContent = "created " + dt.toDateString() + " at " + dt.toLocaleTimeString();
-	tagspara.textContent = "tags";
+	tagspara.textContent = row.tagList;
 	//pjot.textContent = row.text;
 	//pjot.innerHTML = row.text;
 	pjot.innerHTML = row.jot;
