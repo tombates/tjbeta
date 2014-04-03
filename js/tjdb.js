@@ -593,7 +593,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
 	        var nbJot = nbx.Jots.findByAttribute("commonKeyTS", commonKey);
 	        nbJot.jot = newContent;
 	        nbJot.title = newTitle;
-	        nbJot.tagsList = newTags;
+	        nbJot.tagList = newTags;
 	        nbJot.save();
 	        nbx.Jots.sync_all(function() {console.log("tj.indexedDB.editJot nbx.Jots.sync_all() callback called.")});
 	    }
