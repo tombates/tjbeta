@@ -254,7 +254,12 @@ function updateRemote(localNotOnRemote) {
     	// our input is in local format, we need to pull the values out
    	//var row = {"commonKeyTS":commonKey, "nimbusID":nbID, "nimbusTime":"none", "modTime":commonKey,
     //"title":"none", "jot": htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
+
+    // nbx.jotreal = nbx.Jots.create({"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
+    //                                "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false});
  
+        var tostore = {"commonKeyTS":l.commonKeyTS, "time":l.commonKeyTS, "modTime":l.commonKeyTS,
+            "title":l.title, "jot":l.jot, "tagList":l.tagList, "extra":l.extra, "isTodo":l.isTodo, "done":l.done};
         nbx.jotreal = nbx.Jots.create({"commonKeyTS":l.commonKeyTS, "time":l.commonKeyTS, "modTime":l.commonKeyTS,
             "title":l.title, "jot":l.jot, "tagList":l.tagList, "extra":l.extra, "isTodo":l.isTodo, "done":l.done});
     }
@@ -639,7 +644,7 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
         removeJotDiv(jotDiv);
         return;
     }
-    
+
 	// delete the local indexedDB version of the jot
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
 		var db = tj.indexedDB.db;
