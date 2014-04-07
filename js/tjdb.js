@@ -635,6 +635,11 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
 */
 tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
 
+    if(commonKey === undefined) {
+        removeJotDiv(jotDiv);
+        return;
+    }
+    
 	// delete the local indexedDB version of the jot
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
 		var db = tj.indexedDB.db;
@@ -651,10 +656,7 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
 		var request = store['delete'](commonKey);    // can't do store.delete(id) due to delete being a keyword, just like continue issue
 		
 		request.onsuccess = function(e) {
-			// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
-		    var jotsContainer = document.getElementById("jotItems");
-	        jotsContainer.removeChild(jotDiv);
-			//tj.indexedDB.showAllJots();   // NO LONGER NEEDED rerender with deleted item gone
+			removeJotDiv(jotDiv);
 		};
 		
 		request.onerror = function(e) {
@@ -668,6 +670,12 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
         nbJot.destroy();
     }
 };
+
+function removeJotDiv(jotDiv) {
+	// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
+    var jotsContainer = document.getElementById("jotItems");
+    jotsContainer.removeChild(jotDiv);
+}
 
 function indexedDB_init() {
 	console.log("doing indexedDB init()");
