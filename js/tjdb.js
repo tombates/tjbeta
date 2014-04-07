@@ -258,10 +258,9 @@ function updateRemote(localNotOnRemote) {
     // nbx.jotreal = nbx.Jots.create({"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
     //                                "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false});
  
-        var tostore = {"commonKeyTS":l.commonKeyTS, "time":l.commonKeyTS, "modTime":l.commonKeyTS,
-            "title":l.title, "jot":l.jot, "tagList":l.tagList, "extra":l.extra, "isTodo":l.isTodo, "done":l.done};
-        nbx.jotreal = nbx.Jots.create({"commonKeyTS":l.commonKeyTS, "time":l.commonKeyTS, "modTime":l.commonKeyTS,
-            "title":l.title, "jot":l.jot, "tagList":l.tagList, "extra":l.extra, "isTodo":l.isTodo, "done":l.done});
+        var tostore = {"commonKeyTS":l[i].commonKeyTS, "time":l[i].commonKeyTS, "modTime":l[i].commonKeyTS,
+            "title":l[i].title, "jot":l[i].jot, "tagList":l[i].tagList, "extra":l[i].extra, "isTodo":l[i].isTodo, "done":l[i].done};
+        nbx.jotreal = nbx.Jots.create(tostore);
     }
 }
 
