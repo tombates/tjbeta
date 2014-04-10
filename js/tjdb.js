@@ -135,7 +135,7 @@ tj.indexedDB.addJot = function(jotText) {
         console.log("addJot nbx.jotreal.time = " + nbx.jotreal.time);
 
         var idbRow = convertNimbusRowToIDBRow(nrow);
-        var jotDiv = renderJot(row);
+        var jotDiv = renderJot(idbRow);
         var jotsContainer = document.getElementById("jotItems");
         if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
             var first = jotsContainer.firstChild;
