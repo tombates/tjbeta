@@ -39,8 +39,10 @@ nbx.userConnectRequest = function(serviceName) {
 * the asynchronicity creates a problem.
 */
 nbx.open = function() {
-    //alert("new on DOMContentLoaded way and I am getting called.");
 
+    if(!window.indexedDB) {    
+        window.alert("Your browser doesn't support a stable version of IndexedDB, which Thought Jot uses.\nSome features might not be available or might not work correctly.");
+    }
     console.log("in nbx.open, calling Nimbus.Auth.setup(nbx.sync_object");
 
     nbx.linkDropbox = document.getElementById("connectDropbox");

@@ -57,8 +57,8 @@ tj.STORE_IDB = 1;
 tj.STORE_DROPBOX = 2;
 tj.STORE_GDRIVE = 4;
 tj.STORE_BITTORRENT_SYNC = 8;
-tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // TODO make user controlled
-//tj.STORE_MASK = tj.STORE_DROPBOX;   // TODO make user controlled
+//tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // Original but problematic mode
+tj.STORE_MASK = tj.STORE_DROPBOX;   // TODO make user controlled
 
 tj.jots = [];
 tj.indexedDB = {};
@@ -70,6 +70,10 @@ tj.indexedDB.onerror = function (e){
     console.log(e);
 };
 
+/*
+* Opens a local indexedDB store for jots. Called only if tj.STORE_MASK has the tj.STORE_IDB flag on and only
+* after opening the the NimbusBase connection to the remote store.
+*/
 tj.indexedDB.open = function() {
     "use strict";
 
