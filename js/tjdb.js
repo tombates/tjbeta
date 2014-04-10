@@ -530,6 +530,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
     }
 
     var newContent = jotElement.innerHTML;
+    var testjquery = $("jottext_editing").text();
     var newTitle = titlespan.innerHTML;
     var newTags = tagspara.innerHTML;
     if(newTitle == "" || newTitle == undefined)
@@ -607,10 +608,10 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
 	    tagspara.setAttribute("contenteditable", false);
  	    tagspara.className = "tagspara";
         tj.editing = null;
-        //var textcontent = jotElement.textContent;    // works on FF, Chrome  - looses markup AND NEWLINES! (which are markup really)
+        //var textcontent = jotElement.textContent;    // works on FF, Chrome NOT IE - looses markup AND NEWLINES! (which are markup really)
         //var wholecontent = jotElement.wholeText;
-        //var innerttextcontent = jotElement.innerText;// works on Chrome - looses <a> markup and converts <b> to crlf apparently
-        //var htmlcontent = jotElement.innerHTML;      // works on FF, Chrome - retains the htmlization
+        //var innerttextcontent = jotElement.innerText;// works on Chrome, IE NOT FF - looses <a> markup and converts <b> to crlf apparently
+        //var htmlcontent = jotElement.innerHTML;      // works on IE, FF, Chrome - retains the htmlization
         //var datacontent = jotElement.data;
         //var x = 3;
 
