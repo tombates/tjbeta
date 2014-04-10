@@ -530,7 +530,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
     }
 
     var newContent = jotElement.innerHTML;
-    var testjquery = $("jottext_editing").text();
+    var testjquery = $(".jottext_editing").text();
     var newTitle = titlespan.innerHTML;
     var newTags = tagspara.innerHTML;
     if(newTitle == "" || newTitle == undefined)
