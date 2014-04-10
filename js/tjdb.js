@@ -1,79 +1,70 @@
 /*
+* Core Thought Jot functionality file. The model and controller code really, mediating between the
+* user actions in the html presentation view and the logic of persiting to local/remote stores.
+*
 * This file contains code for persisting information, conceptually rows of a table where each
 * row represents a "jot" of text. These are displayed with a time stamp and edit and delete controls in the html.
+* Each jot also has a title and a tags field. The jot, title and tags are editable. Only a single jot can be
+* in the editable state at any given time.
 *
-* The data can be persisted locally across broswer sessions (but limited to the same browser brand) on the local
-* machine via the IndexedDB mechanism in HTML5.
+* In this deprecated version, when a jot is created it is persisted both locally via explicit indexedDB code here,
+* and remotely on Dropbox through the use of the NimbusBase API, which is a javascript package.
+* 
+* NimbusBase also uses the indexedDB feature of the browswer separately separately from Thought Jot, but clears that
+* data when the session ends, leaving only the remote version. But the data saved via Thought Jot itself in the
+* browser's indexedDB remains. This means there are two copies of the jot, one local and one remote.
+
+* It must be noted that indexedDB storage is browser specific. For example, Firefox has no access to the indexedDB store
+* of Chrome or IE. This means different jots could be entered via different browswers, and they will initially be stored
+* together only remotely on Dropbox.
 *
-* The data can also be persisted on either or both Dropbox and Google Drive.
+* When a page is refreshed or opened after again after a session has ended, two way syncing occurs in this version. This
+* means that any locally stored jots not found remotely are pushed to the remote and any jots found remotely but not
+* locally are pulled and added to the browswer's indexedDB store.
 *
-* The application can be run either from a localhost or over the web.
+* For example if Firefox was used to create jotA and Chrome was used to make jotB, before refresh each browswer would show only
+* one jot even though both have been persisted to the remote store. Upon a refresh however, any jots not in the local store
+* would be pulled from the remote store and the browser's indexedDB would now contain both. In addition, if one browser was
+* offline and jotC was created in it, the next time a refresh is done and the remote storage is available jotC would be pushed
+* to the remote storage.
 *
-* The fact that IndexedDB creates a database for a web application locally is very useful but there are some
-* serious limitations that might argue against going solely that route. One is that the database is tied to
-* the browser type so that recording jots in one browser only using IndexedDB means those jots will only be
-* viewable in that browser. Jots created in Firefox and Chrome do not mix, etc. While there might be the odd
-* occasion to exploit walling off one set of jots from another, most often you'd also like to have a way to
-* have the same jots available across devices and browsers and apps and having them sync to a common store in
-* the cloud.
+* The same goes for deletes and this can cause a weird problem of resurrecting deleted jots. Assume both browsers are
+* synced with the remote store so that both have the same set of jots locally and this is the same as the remote set. Now
+* in browser A we delete jotA. This deletes it from the remote store and browser A's indexedDB local store, but it does not
+* delete if from browswer B's local store. So if browser B is now refreshed its local copy of jotA will be pushed to the
+* remote store because it is seen to exist remotely but not locally, resurrecting jotA in browser A where we deleted it.
+* Not pretty.
 *
-* We use NimbusBase to allow persistence remotely on either Dropbox or Google Drive.
+* This issue arises because in this version local and remote stores are given equal weight. This is the reason for the
+* subsequent version which makes the remote store the canonical store. A later subsequent version might be made which allows
+* for local store only if the user does not want to store jots remotely for privacy reasons. However it should be noted that
+* that will not work if the user is using private browsing mode (Incognito in Chrome) as then the indexedDB functionality is
+* disabled (and of course this would also disable NimbusBase).
 *
+* The application can be run either from a localhost rather than from a web server. However any jot content that is url
+* based such as an image added to a jot, or a string representing a url (which Though Jot 'htlmizes' to make it a real link)
+* will not be available. EXPAND ON THIS ISSUE.
 *
 */
 
-// Beginning stab at something that could become Thought Jot
+//TODO: a local only user option, requiring a new column if they want to mix modes so that local only jots are neither
+//      seen by NimbusBase or ever pushed to a remote store.
+//TODO: option for storing stuff on either (not both) GDrive and Dropbox
 
-//TODO: option for storing stuff only or not at all on local machine using IndexedDB
-//TODO: option for storing stuff only or not at all on either\both GDrive and Dropbox
-//TODO: change all "todo" stuff to jot stuff
-
-// Let's encapsulate our stuff in a namespace
+// Let's encapsulate our stuff in a namespace as object.
 var tj = {};
-tj.editing = null;
-tj.jots = [];
-tj.indexedDB = {};
 tj.STORE_IDB = 1;
 tj.STORE_DROPBOX = 2;
 tj.STORE_GDRIVE = 4;
 tj.STORE_BITTORRENT_SYNC = 8;
 tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // TODO make user controlled
 
-//
-// NimbusBase sync string for persisting to DropBox
-//var sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
-//
-
-//var tj.indexedDB = {};
-
-// open the database
-
-	        //3-20-14 BUG iDBkey will not in general match the time in the remote object so this doesn't work as is
-	        //for getting the remote object corresponding to the jot. But since we are still on the road of allowing
-	        //mixed storage options we need something that is both unique and for sure the same in both local and
-	        //remote versions and since "time" is a NBase keyword we can't necessarily use that field even though
-	        //a time value is the most logical choice for the "common key" we need. Also of course if user is only
-	        //storing locally we can't just use whatever NBase set "time" to on an update, which it does, or the id
-	        //field it sets since that won't exist if no remote storage is being used or is unavailable. However, if
-	        //we are storing remotely as well then the NB id field is obviously the thing to use to link our local
-	        //and remote records.
-	        //
-	        // So I think
-	        //we need to update our schema, which we need to do anyway, and have a timestamp that we create generate
-	        //on the client side but use in both the client side and the remote object. Time to save this version of
-	        //things as this is a major change and will be a onupgradeneeded event on the indexedDB client side meaning
-	        //everthing previous is moot.
-	        //The new schema:  the commonKey is a timestamp of local jot creation (which should not be a prob assuming
-	        //                 a single user with multiple devices running Thought Jot). We also have a 
-	        // IndexedDB on client side:
-            // {keyPath: "commonKey"}, "nimbusID", nimbusTime, title, jot", "tagList", "extra", isTodo", "done", 
-	        // NimbusBase:
-	        // commonKey, id, time, title, jot, tagList, extra, isTodo, done
-	        //
-
+tj.jots = [];
+tj.indexedDB = {};
 tj.indexedDB.db = null;
 tj.indexedDB.IDB_SCHEMA_VERSION = 7;
 tj.indexedDB.order = "prev";   // default to showing newest jots at top
+
 tj.indexedDB.onerror = function (e){
     console.log(e);
 };
@@ -86,7 +77,7 @@ tj.indexedDB.open = function() {
     	window.alert("Your browser doesn't support a stable version of IndexedDB, which Thought Jot uses.\nSome features might not be available or might not work correctly.");
     }
     //TODO Get user's initial preferences for local and remote storage
-    //TODO Get user's access info for their prefered remote storage locations
+    //TODO Get user's access info for their prefered remote storage locations - currently hard coded to my keys
 
     var request = indexedDB.open("todos", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
 	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
@@ -118,7 +109,6 @@ tj.indexedDB.open = function() {
 tj.indexedDB.addJot = function(jotText) {
 	//TODO since we are saving to multiple places we need to check for errors back from each store location
 	//     and recover/report
-	//TODO must change data to be same in indexedDB and remote records
 
     var htmlizedText = htmlizeText(jotText);
     var commonKey = new Date().getTime();
@@ -137,13 +127,8 @@ tj.indexedDB.addJot = function(jotText) {
         console.log("Nimbus instance count is now: " + nbx.Jots.count());
         console.log("addJot nbx.jotreal.id = " + nbID);
         console.log("addJot nbx.jotreal.time = " + nbx.jotreal.time);
-
-        //nbx.jotreal.jot = "does save do something to the time field?";
-        //nbx.jotreal.save();
-        //nbx.Jots.sync_all(function() {console.log("nbx.Jots.sync_all() callback called.")});
     }
 
-    // add the jot locally, saving in it the id of the remote store copy
     //TODO refactor into sep function so can be used by addMissingLocalJots
 	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
@@ -155,8 +140,8 @@ tj.indexedDB.addJot = function(jotText) {
     		console.log("addJot trans.onerror() called");
     		console.log(trans.error);
     	}
-	        // IndexedDB on client side new schema 3-22-2014:
-            // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
+	    // IndexedDB on client side new schema 3-22-2014:
+        // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
     	var store = trans.objectStore("Jots");
     	var row = {"commonKeyTS":commonKey, "nimbusID":nbID, "nimbusTime":"none", "modTime":commonKey,
     	           "title":"none", "jot": htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
@@ -164,18 +149,9 @@ tj.indexedDB.addJot = function(jotText) {
     	    	
     	request.onsuccess = function(e) {
     		console.log("addJot in put request.onsuccess");
-    		//TODO OPTIMIZE to just slip a new div in if possible at either top or bottom
-    		//hmmm best way to maintain array of layout so that we can do on the fly toggling
-    		//of the contenteditability of a jot. This means at a minimum we need to be able
-    		//to easily get the text container (p or div) that corresponds to a clicked
-    		//edit/save link. Ahhh but that's what we do in render
-    	
-	    	//var key = e.target.result;   // the key for the new row just added to the indexedDB
-	    	//var idbReq = store.get(key);
-	    	//var therow = idbReq.result;
 		    var jotDiv = renderJot(row);
-
 		    var jotsContainer = document.getElementById("jotItems");
+
 	        if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
 	        	var first = jotsContainer.firstChild;
 	            jotsContainer.insertBefore(jotDiv, jotsContainer.firstChild);
@@ -183,7 +159,6 @@ tj.indexedDB.addJot = function(jotText) {
 	        else {  // oldest are currently shown first
                 jotsContainer.appendChild(jotDiv);
             }
-    		///tj.indexedDB.showAllJots();    // cause all jots to rerender - NO MORE
     	};
     	
     	request.onerror = function(e) {
@@ -192,14 +167,6 @@ tj.indexedDB.addJot = function(jotText) {
     }
 };
 
-//TODO we are getting them all from the current local store instead of from a remote and possibly aggregated from
-//several devices store. The user needs to be in control of this (and perhaps we even over very fine granularity you
-// can decide which jots get put remotely and which don't) but the default should be to aggregrate on the remote store(s)
-// and sync on connect the local stores updating either side from the other appropriately.
-// 3-23-2014 OK today's big job is to be able to see on device A all jots from multiple devices (i.e. all jots on the 
-// remote store). This means we have to be using the remote store as the source for this function. And more than that,
-// there might be local jots that haven't been written for some reason. So we need to do a superset of the local and
-// remote jots really.
 /*
 *   Clears all jots on the page and re-renders them. Used on open, reload, order toggling or filtering. Generally not
 *   used just when a single jot is added or deleted or edited. In those cases we update the DOM directly.
@@ -213,7 +180,7 @@ tj.indexedDB.addJot = function(jotText) {
 // 2. we should be calling renderJot with the remote versions if possible (only not possible if the connection to remote
 //    is down). And if the connection is down we should warn the user that jots are being rendered only from the local
 //    browswer specific store and therefore these might not have been synced with the remote store yet. A tricky situation
-//    with no great solution.
+//    with no great solution. WHAT DOES NIMBUS DO ABOUT THIS?
 //  OK this function is doing too much. It's supposed to showAllJots, but it's also doing the local/remote sync
 //  thing, which gets very messy since this is asyncrhronous and the syncing will potentially fire off other async
 //  update tasks, thus making it quite tricky to know when it's safe to actually get all the remote jots and use them
@@ -225,7 +192,6 @@ tj.indexedDB.addJot = function(jotText) {
 tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
     syncAllJots(pageRenderer);
-
 }
 
 function pageRenderer() {
@@ -332,12 +298,6 @@ function syncAllJots(pageRenderer) {
 	
 	cursorRequest.onerror = tj.indexedDB.onerror;
 };
-
-/* Pushes local jots that are not in the remote store(s) to the remote store(s).
-*/
-function pushMissingLocalJots(missingRemotely) {
-    console.log("pushMissingLocalJots");
-}
 
 /* Adds a jot that is on the remote store but not in our local indexedDB store to the local store. Most likely
 *  the jot is not local because it was added via another device or browswer. Does not cause page redraw. It is
@@ -634,7 +594,8 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
 *  Deletes a jot from local and remote store(s).
 *
 *  commonKey - The commonKeyTS value for the jot, which links the different store's particular instances of the same jot.
-*  jotDiv - The containing div of the jot, and its corresponding title, creation stamp and controls div.
+*  jotDiv - The containing div of the jot, and its child div containing the title, tags, creation timestamp and
+*  edit/delete controls.
 *
 */
 tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
@@ -744,12 +705,11 @@ tj.indexedDB.emptyDB = function() {
 };
 
 /*
-* Worker bee function that lets user's carriage returns shine through.
+* Helper function that lets user's carriage returns shine through.
 *   Very simple for now: we just replace n returns with with n <br />
-*   elements. We do not yet try to create actual separate html
-*   paragraphs.
+*   elements. We do not yet create actual separate html paragraphs.
 *
-*   Also, we attempt to recognize urls and wrap them in <a></a> to make
+*   Also attempts to recognize urls and wrap them in <a></a> to make
 *   them into real links within the jot.
 *
 *   That's all for the moment.
@@ -827,5 +787,3 @@ function htmlizeText(text) {
 	//alert(htmlized);
 	return(htmlized);
 }
-
-
