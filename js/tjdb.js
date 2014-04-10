@@ -664,6 +664,7 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
 	if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
 	    var nbJot = nbx.Jots.findByAttribute("commonKeyTS", commonKey);
         nbJot.destroy();
+        removeJotDiv(jotDiv);
     }
 };
 
