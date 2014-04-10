@@ -120,7 +120,6 @@ tj.indexedDB.addJot = function(jotText) {
     var nbID = null;
 
 	// add the jot to cloud storage location(s)
-    var weird = tj.STORE_MASK & tj.STORE_DROPBOX;
 	if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
         //nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra", "isTodo", "done"]);
         //OLD nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
@@ -136,7 +135,7 @@ tj.indexedDB.addJot = function(jotText) {
     }
 
     //TODO refactor into sep function so can be used by addMissingLocalJots
-	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
+	if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
     	var trans = db.transaction(["Jots"], "readwrite");
     	trans.oncomplete = function(e) {
@@ -197,7 +196,7 @@ tj.indexedDB.addJot = function(jotText) {
 //  push to remote at "we know we are connected" time and not so much here.
 tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
-    if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
+    if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
         syncAllJots(pageRenderer);
     }
     else {
@@ -561,7 +560,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
         
         //now we need to update the remote storage as well
 
-	    if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
+	    if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
 	        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
 	        console.log("editJot: updating Dropbox, except we aren't really yet!");
 
@@ -617,7 +616,7 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
     }
 
 	// delete the local indexedDB version of the jot
-	if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
+	if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
 		var db = tj.indexedDB.db;
 		var trans = db.transaction(["Jots"], "readwrite");
 		trans.oncomplete = function(e) {
@@ -641,7 +640,7 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
     }
 
     // delete the Dropbox version
-	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
+	if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
 	    var nbJot = nbx.Jots.findByAttribute("commonKeyTS", commonKey);
         nbJot.destroy();
     }
