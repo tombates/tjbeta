@@ -530,9 +530,8 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
     }
 
     var newContent = jotElement.innerHTML;
-    var testjquery = $(".jottext_editing").text();
-    var newTitle = titlespan.innerHTML;
-    var newTags = tagspara.innerHTML;
+    //var newTitle = titlespan.innerHTML;
+    //var newTags = tagspara.innerHTML;
     if(newTitle == "" || newTitle == undefined)
     	newTitle = "untitled"
 
@@ -549,6 +548,9 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
     }
     else {    // time to save the edit
 
+        var newTitle = $(".title_editing").text();
+        var newTags = $(".tagspara_editing").text();
+        
         if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
 
     		var db = tj.indexedDB.db;
