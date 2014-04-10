@@ -547,38 +547,41 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
         tj.editing = editLink;
     }
     else {    // time to save the edit
-		var db = tj.indexedDB.db;
-		var trans = db.transaction(["Jots"], "readwrite");
-		trans.oncomplete = function(e) {
-			console.log("editJot transaction.oncomplete() called");
-		};
-		trans.onerror = function(e) {
-			console.log("editJot transaction.onerror() called");
-		}
-		var store = trans.objectStore("Jots");
-        var request = store.get(commonKey);
-        request.onerror = function(e) {
-            console.log("editJot request.onerror() called");
-        };
-        request.onsuccess = function(e) {
-            console.log("editJot request.onsuccess() called");
 
-            var row = request.result;
-            //row.text = jotElement.innerHTML;
-            row.jot = newContent;
-            row.title = newTitle;
-            row.tagList = newTags;
-            console.log(row.commonKeyTS);
-            // a nested request to update the indexedDB
-            var requestUpdate = store.put(row);
-            requestUpdate.onerror = function(e) {
-                console.log("editJot requestUpdate.onerror() called");
+        if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
+
+    		var db = tj.indexedDB.db;
+    		var trans = db.transaction(["Jots"], "readwrite");
+    		trans.oncomplete = function(e) {
+    			console.log("editJot transaction.oncomplete() called");
+    		};
+    		trans.onerror = function(e) {
+    			console.log("editJot transaction.onerror() called");
+    		}
+    		var store = trans.objectStore("Jots");
+            var request = store.get(commonKey);
+            request.onerror = function(e) {
+                console.log("editJot request.onerror() called");
             };
-            requestUpdate.onsuccess = function(e) {
-                console.log("editJot requestUpdate.onsuccess() called");
+            request.onsuccess = function(e) {
+                console.log("editJot request.onsuccess() called");
+
+                var row = request.result;
+                //row.text = jotElement.innerHTML;
+                row.jot = newContent;
+                row.title = newTitle;
+                row.tagList = newTags;
+                console.log(row.commonKeyTS);
+                // a nested request to update the indexedDB
+                var requestUpdate = store.put(row);
+                requestUpdate.onerror = function(e) {
+                    console.log("editJot requestUpdate.onerror() called");
+                };
+                requestUpdate.onsuccess = function(e) {
+                    console.log("editJot requestUpdate.onsuccess() called");
+                };
             };
-        };
-        
+        }
         //now we need to update the remote storage as well
 
 	    if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
