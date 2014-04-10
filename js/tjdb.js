@@ -120,6 +120,7 @@ tj.indexedDB.addJot = function(jotText) {
     var nbID = null;
 
 	// add the jot to cloud storage location(s)
+    var weird = tj.STORE_MASK & tj.STORE_DROPBOX;
 	if(tj.STORE_MASK & tj.STORE_DROPBOX == tj.STORE_DROPBOX) {
         //nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra", "isTodo", "done"]);
         //OLD nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
