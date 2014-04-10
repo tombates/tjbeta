@@ -126,12 +126,24 @@ tj.indexedDB.addJot = function(jotText) {
         console.log("addJot: attempting store of real jot on Dropbox");
         //var now = Date().toString();
         //NimbusBase populates the id field (specified in nb.js) automatically, then we get it and put it in the iDB record
-        nbx.jotreal = nbx.Jots.create({"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
-                                       "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false});
+        var nrow = {"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
+                    "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
+        nbx.jotreal = nbx.Jots.create(nrow);
         nbID = nbx.jotreal.id;
         console.log("Nimbus instance count is now: " + nbx.Jots.count());
         console.log("addJot nbx.jotreal.id = " + nbID);
         console.log("addJot nbx.jotreal.time = " + nbx.jotreal.time);
+
+        var idbRow = convertNimbusRowToIDBRow(nrow);
+        var jotDiv = renderJot(row);
+        var jotsContainer = document.getElementById("jotItems");
+        if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
+            var first = jotsContainer.firstChild;
+            jotsContainer.insertBefore(jotDiv, jotsContainer.firstChild);
+        }
+        else {  // oldest are currently shown first
+            jotsContainer.appendChild(jotDiv);
+        }
     }
 
     //TODO refactor into sep function so can be used by addMissingLocalJots
@@ -217,11 +229,20 @@ function pageRenderer() {
     var jotsContainer = document.getElementById("jotItems");
      jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
     for(i = 0; i < r.length; i++) {
-    	l = {"commonKeyTS":r[i].commonKeyTS, "nimbusID":r[i].id, "nimbusTime":r[i].time, "modTime":r[i].modTime,
-             "title":r[i].title, "jot":r[i].jot, "tagList":r[i].tagList, "extra":r[i].extra, "idTodo":r[i].isTodo, "done":r[i].done};
+        l = convertNimbusRowToIDBRow(r[i]);
+    	//l = {"commonKeyTS":r[i].commonKeyTS, "nimbusID":r[i].id, "nimbusTime":r[i].time, "modTime":r[i].modTime,
+        //     "title":r[i].title, "jot":r[i].jot, "tagList":r[i].tagList, "extra":r[i].extra, "idTodo":r[i].isTodo, "done":r[i].done};
  	    nextJotDiv = renderJot(l);    // result.value is a basically a local store table row
 	    jotsContainer.appendChild(nextJotDiv);   	
     }
+}
+
+//TODO remove once we are solid on the new scheme of mostly remote only
+function convertNimbusRowToIDBRow(nrow) {
+    var idb = {};
+    idb = {"commonKeyTS":nrow.commonKeyTS, "nimbusID":nrow.id, "nimbusTime":nrow.time, "modTime":nrow.modTime,
+           "title":nrow.title, "jot":nrow.jot, "tagList":nrow.tagList, "extra":nrow.extra, "idTodo":nrow.isTodo, "done":nrow.done};
+    return idb;
 }
 
 function updateRemote(localNotOnRemote) {
