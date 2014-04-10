@@ -56,7 +56,12 @@ nbx.open = function() {
 		nbx.Jots.sync_all(function() {
 			console.log("nbx.Jots.sync_all() callback called.");
 			console.log("Nimbus instance count is now: " + nbx.Jots.count());
-			indexedDB_init();
+            if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
+			    indexedDB_init();
+            }
+            else {
+                tj.indexedDB.showAllJots();
+            }
 		});
     }
 	    //Nimbus.Auth.setup(sync_string);

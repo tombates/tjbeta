@@ -57,7 +57,8 @@ tj.STORE_IDB = 1;
 tj.STORE_DROPBOX = 2;
 tj.STORE_GDRIVE = 4;
 tj.STORE_BITTORRENT_SYNC = 8;
-tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // TODO make user controlled
+//tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // TODO make user controlled
+tj.STORE_MASK = tj.STORE_DROPBOX;   // TODO make user controlled
 
 tj.jots = [];
 tj.indexedDB = {};
@@ -191,7 +192,12 @@ tj.indexedDB.addJot = function(jotText) {
 //  push to remote at "we know we are connected" time and not so much here.
 tj.indexedDB.showAllJots = function() {
 	console.log("in showAllJots");
-    syncAllJots(pageRenderer);
+    if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
+        syncAllJots(pageRenderer);
+    }
+    else {
+        pageRenderer();
+    }
 }
 
 function pageRenderer() {
