@@ -457,6 +457,7 @@ function renderJot(row) {
 	//var t = document.createTextNode(dt.toDateString() + "at " + dt.toTimeString() + ": " + row.text);
 	titlediv.addEventListener("click", function(e){
         console.log("Someone, or something, clicked on me!");
+        pjot.className = "jottext_hidden";
 	});
 	if(row.title == "none" || row.title == "" || row.title == undefined) {
 		titlespan.textContent = "untitled";
@@ -550,7 +551,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
 
         var newTitle = $(".title_editing").text();
         var newTags = $(".tagspara_editing").text();
-        
+
         if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
 
     		var db = tj.indexedDB.db;
