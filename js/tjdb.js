@@ -457,8 +457,12 @@ function renderJot(row) {
 	//var t = document.createTextNode(dt.toDateString() + "at " + dt.toTimeString() + ": " + row.text);
 	titlediv.addEventListener("click", function(e){
         console.log("Someone, or something, clicked on me!");
-        pjot.className = "jottext_collapsed";
+        if(pjot.className == "jottext")
+            pjot.className = "jottext_collapsed";
+        else
+            pjot.classNmae = "jottext";
 	});
+    
 	if(row.title == "none" || row.title == "" || row.title == undefined) {
 		titlespan.textContent = "untitled";
 	}
