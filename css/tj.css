@@ -75,10 +75,10 @@ a.delete {
 
 .titlediv {
     height:40px;
-    background-color:#88a;
+    background-color:#8aa;
     border-top-left-radius:10px;
     border-top-right-radius:10px;
-    border-bottom-style:solid 2px #000;
+    border-bottom:solid 2px #000;
     margin:0px;
     padding:0px;
 }
