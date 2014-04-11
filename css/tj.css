@@ -143,7 +143,6 @@ a.delete {
     margin-right:15px;
     margin-left:50px;
     white-space:nowrap;
-    overflow:scroll;
 }
 .tagspara_editing {
     background-color:#fca;
@@ -155,7 +154,6 @@ a.delete {
     margin-right:15px;
     margin-left:50px;
     white-space:nowrap;
-    overflow:scroll;
 }
 
 p.jottext {
