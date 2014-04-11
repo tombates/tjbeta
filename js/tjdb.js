@@ -460,9 +460,9 @@ function renderJot(row) {
         if(pjot.className == "jottext")
             pjot.className = "jottext_collapsed";
         else
-            pjot.classNmae = "jottext";
+            pjot.className = "jottext";
 	});
-    
+
 	if(row.title == "none" || row.title == "" || row.title == undefined) {
 		titlespan.textContent = "untitled";
 	}
