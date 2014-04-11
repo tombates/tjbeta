@@ -455,13 +455,20 @@ function renderJot(row) {
 	var dt = new Date(row.commonKeyTS);   // get a Date obj back so we can call some presentation methods
 	
 	//var t = document.createTextNode(dt.toDateString() + "at " + dt.toTimeString() + ": " + row.text);
-	titlediv.addEventListener("click", function(e){
+
+    // ensure a jot being edited is displayed fully
+    titlediv.addEventListener("click", function(e){
+        if(pjot.className == "jottext_collapsed")
+            pjot.className = "jottext";
+    });
+    // set the display toggle handler
+    title_centerdiv.addEventListener("click", function(e){
         console.log("Someone, or something, clicked on me!");
         if(pjot.className == "jottext")
             pjot.className = "jottext_collapsed";
         else
             pjot.className = "jottext";
-	});
+    });
 
 	if(row.title == "none" || row.title == "" || row.title == undefined) {
 		titlespan.textContent = "untitled";
