@@ -416,7 +416,7 @@ function renderJot(row) {
     titlespan.innerHTML = "Title: ";
     var titleinput = document.createElement("input");
     titleinput.setAttribute("type", "text");
-    titleinput.setAttribute("maxlength", "100");
+    titleinput.setAttribute("maxlength", "200");
     titleinput.className = "titleinput";
 	var timespan = document.createElement("span");
 	timespan.className = "timestamp";
@@ -476,10 +476,10 @@ function renderJot(row) {
     });
 
 	if(row.title == "none" || row.title == "" || row.title == undefined) {
-		titleinput.textContent = "untitled";
+		titleinput.value = "untitled";
 	}
 	else
-	    titleinput.textContent = row.title;
+	    titleinput.value = row.title;
 
 	timespan.textContent = "created " + dt.toDateString() + " at " + dt.toLocaleTimeString();
 	tagspara.textContent = row.tagList;
