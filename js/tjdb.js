@@ -416,6 +416,7 @@ function renderJot(row) {
     titlespan.innerHTML = "Title: ";
     var titleinput = document.createElement("input");
     titleinput.setAttribute("type", "text");
+    titleinput.setAttribute("maxlength", "100");
     titleinput.className = "titleinput";
 	var timespan = document.createElement("span");
 	timespan.className = "timestamp";
@@ -505,6 +506,7 @@ function renderJot(row) {
 	
 	title_leftdiv.appendChild(editlink);
 	titlediv.appendChild(title_leftdiv)
+    titlespan.appendChild(titleinput);
 	title_centerdiv.appendChild(titlespan);
 	title_centerdiv.appendChild(timespan);
 	title_centerdiv.appendChild(tagspara);
