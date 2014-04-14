@@ -413,6 +413,10 @@ function renderJot(row) {
 	// spans for stuff in the title_centerdiv
 	var titlespan = document.createElement("span");
 	titlespan.className = "title";
+    titlespan.innerHTML = "Title: ";
+    var titleinput = document.createElement("input");
+    titleinput.setAttribute("type", "text");
+    titleinput.className = "titleinput";
 	var timespan = document.createElement("span");
 	timespan.className = "timestamp";
     // a paragraph for the tags, within the titlediv central column div

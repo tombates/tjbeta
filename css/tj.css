@@ -126,6 +126,17 @@ a.delete {
     margin-left:15px;
     margin-right:15px;
 }
+.titleinput {
+    background-color:#fff;
+    color:#000;
+    font-size:14px;
+    margin:0px;
+    padding:0px;
+    height:16px;
+    margin-left:15px;
+    margin-right:15px;
+    border-width:0px;
+}
 .timestamp {
     background-color:#88a;
     color:#eee;
