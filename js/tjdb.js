@@ -421,7 +421,12 @@ function renderJot(row) {
 	var timespan = document.createElement("span");
 	timespan.className = "timestamp";
     // a paragraph for the tags, within the titlediv central column div
+    var tagsspan = document.createElement("span");
+    tagsspan.className = "tagsspan";
+    tagsspan.innerHTML = "Tags:";
     var tagsinput = document.createElement("input");
+    tagsinput.setAttribute("type", "text");
+    tagsinput.setAttribute("maxlength", "200");
     tagsinput.className = "tagsinput";
 
 	// a paragraph for the jot - simple for now: just one basic paragraph is all we handle
@@ -509,7 +514,8 @@ function renderJot(row) {
     titlespan.appendChild(titleinput);
 	title_centerdiv.appendChild(titlespan);
 	title_centerdiv.appendChild(timespan);
-	title_centerdiv.appendChild(tagsinput);
+    title_tagsspan.appendChild(tagsinput);
+    title_centerdiv.appendChild(tagsspan);
 	titlediv.appendChild(title_centerdiv);
 	title_rightdiv.appendChild(dellink);
 	titlediv.appendChild(title_rightdiv);
