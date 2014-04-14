@@ -423,7 +423,7 @@ function renderJot(row) {
     // a paragraph for the tags, within the titlediv central column div
     var tagsspan = document.createElement("span");
     tagsspan.className = "tagsspan";
-    tagsspan.innerHTML = "Tags:";
+    tagsspan.textContent = "Tags:";
     var tagsinput = document.createElement("input");
     tagsinput.setAttribute("type", "text");
     tagsinput.setAttribute("maxlength", "200");
