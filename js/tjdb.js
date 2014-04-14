@@ -514,7 +514,7 @@ function renderJot(row) {
     titlespan.appendChild(titleinput);
 	title_centerdiv.appendChild(titlespan);
 	title_centerdiv.appendChild(timespan);
-    title_tagsspan.appendChild(tagsinput);
+    tagsspan.appendChild(tagsinput);
     title_centerdiv.appendChild(tagsspan);
 	titlediv.appendChild(title_centerdiv);
 	title_rightdiv.appendChild(dellink);
