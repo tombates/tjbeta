@@ -81,6 +81,7 @@ a.delete {
     border-bottom:solid 2px #000;
     margin:0px;
     padding:0px;
+    overflow:hidden;
 }
 .titleleftdiv {
     height:45px;
