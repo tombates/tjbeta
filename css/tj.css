@@ -171,6 +171,7 @@ a.delete {
     margin-top:5px;
     margin-left:15px;
     width:500px;
+    float:right;
 }
 .tagsinput {
     background-color:#88a;
