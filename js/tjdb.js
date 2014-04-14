@@ -416,7 +416,7 @@ function renderJot(row) {
     titlespan.innerHTML = "Title: ";
     var titleinput = document.createElement("input");
     titleinput.setAttribute("type", "text");
-    titleinput.setAttribute("maxlength", "200");
+    titleinput.setAttribute("maxlength", "150");
     titleinput.className = "titleinput";
 	var timespan = document.createElement("span");
 	timespan.className = "timestamp";
@@ -500,7 +500,7 @@ function renderJot(row) {
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteJot(row.text);
-		tj.indexedDB.editJot(this, row.commonKeyTS, pjot, titlespan, tagspara);
+		tj.indexedDB.editJot(this, row.commonKeyTS, pjot, titleinput, tagspara);
 	});
 	editlink.appendChild(editimage);
 	
@@ -539,7 +539,7 @@ function renderJot(row) {
 //   I don't want to get into is going back and forth - i don't want to un-htmlize. Maybe this means we should only be
 //   persisting plain text and htmlizing it only for display on the page. but then how do we preserve creturns - i think
 //   the available DOM methods strip out the creturns... time to experiment.
-tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tagspara) {
+tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tagspara) {
     //console.log("tj.indexedDB.editJot()");
     var editimg = editLink.childNodes[0];
     if(tj.editing != null && editLink != tj.editing) {
@@ -558,8 +558,10 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
         editimg.src = ".\/images\/tick32.png";
 	    jotElement.setAttribute("contenteditable", true);
 	    jotElement.className = "jottext_editing";
-	    titlespan.setAttribute("contenteditable", true);
-	    titlespan.className = "title_editing";
+	    //titlespan.setAttribute("contenteditable", true);
+	    //titlespan.className = "title_editing";
+        titleinput.className = "titleinput_editing"
+        titleinput.disabled = false;
 	    tagspara.setAttribute("contenteditable", true);
 	    tagspara.className = "tagspara_editing";
         tj.editing = editLink;
@@ -623,8 +625,10 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titlespan, tags
         editimg.src = ".\/images\/pen32.png";
 	    jotElement.setAttribute("contenteditable", false);
         jotElement.className = "jottext";
-	    titlespan.setAttribute("contenteditable", false);
- 	    titlespan.className = "title";
+	    //titlespan.setAttribute("contenteditable", false);
+ 	    //titlespan.className = "title";
+        titleinput.disabled = true;
+        titleinput.className = "titleinput";
 	    tagspara.setAttribute("contenteditable", false);
  	    tagspara.className = "tagspara";
         tj.editing = null;
