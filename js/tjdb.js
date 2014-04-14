@@ -413,7 +413,7 @@ function renderJot(row) {
 	// spans for stuff in the title_centerdiv
 	var titlespan = document.createElement("span");
 	titlespan.className = "title";
-    titlespan.innerHTML = "Title: ";
+    titlespan.innerHTML = "Title:";
     var titleinput = document.createElement("input");
     titleinput.setAttribute("type", "text");
     titleinput.setAttribute("maxlength", "150");
@@ -421,8 +421,8 @@ function renderJot(row) {
 	var timespan = document.createElement("span");
 	timespan.className = "timestamp";
     // a paragraph for the tags, within the titlediv central column div
-    var tagspara = document.createElement("p");
-    tagspara.className = "tagspara";
+    var tagsinput = document.createElement("input");
+    tagsinput.className = "tagsinput";
 
 	// a paragraph for the jot - simple for now: just one basic paragraph is all we handle
 	var pjot = document.createElement("p");
@@ -482,7 +482,7 @@ function renderJot(row) {
 	    titleinput.value = row.title;
 
 	timespan.textContent = "created " + dt.toDateString() + " at " + dt.toLocaleTimeString();
-	tagspara.textContent = row.tagList;
+	tagsinput.value = row.tagList;
 	//pjot.textContent = row.text;
 	//pjot.innerHTML = row.text;
 	pjot.innerHTML = row.jot;
@@ -500,7 +500,7 @@ function renderJot(row) {
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteJot(row.text);
-		tj.indexedDB.editJot(this, row.commonKeyTS, pjot, titleinput, tagspara);
+		tj.indexedDB.editJot(this, row.commonKeyTS, pjot, titleinput, tagsinput);
 	});
 	editlink.appendChild(editimage);
 	
@@ -509,7 +509,7 @@ function renderJot(row) {
     titlespan.appendChild(titleinput);
 	title_centerdiv.appendChild(titlespan);
 	title_centerdiv.appendChild(timespan);
-	title_centerdiv.appendChild(tagspara);
+	title_centerdiv.appendChild(tagsinput);
 	titlediv.appendChild(title_centerdiv);
 	title_rightdiv.appendChild(dellink);
 	titlediv.appendChild(title_rightdiv);
@@ -539,7 +539,7 @@ function renderJot(row) {
 //   I don't want to get into is going back and forth - i don't want to un-htmlize. Maybe this means we should only be
 //   persisting plain text and htmlizing it only for display on the page. but then how do we preserve creturns - i think
 //   the available DOM methods strip out the creturns... time to experiment.
-tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tagspara) {
+tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tagsinput) {
     //console.log("tj.indexedDB.editJot()");
     var editimg = editLink.childNodes[0];
     if(tj.editing != null && editLink != tj.editing) {
@@ -562,14 +562,16 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tag
 	    //titlespan.className = "title_editing";
         titleinput.className = "titleinput_editing"
         titleinput.disabled = false;
-	    tagspara.setAttribute("contenteditable", true);
-	    tagspara.className = "tagspara_editing";
+	    tagsinput.className = "tagsinput_editing";
+        tagsinput.disabled = false;
         tj.editing = editLink;
     }
     else {    // time to save the edit
 
-        var newTitle = $(".title_editing").text();
-        var newTags = $(".tagspara_editing").text();
+        //var newTitle = $(".title_editing").text();
+        //var newTags = $(".tagspara_editing").text();
+        var newTitle = titleinput.value;
+        var newTags = tagsinput.value;
 
         if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
 
@@ -629,8 +631,8 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tag
  	    //titlespan.className = "title";
         titleinput.disabled = true;
         titleinput.className = "titleinput";
-	    tagspara.setAttribute("contenteditable", false);
- 	    tagspara.className = "tagspara";
+	    tagsinput.disabled = true;
+ 	    tagsinput.className = "tagsinput";
         tj.editing = null;
         //var textcontent = jotElement.textContent;    // works on FF, Chrome NOT IE - looses markup AND NEWLINES! (which are markup really)
         //var wholecontent = jotElement.wholeText;
