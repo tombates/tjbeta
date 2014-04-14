@@ -476,10 +476,10 @@ function renderJot(row) {
     });
 
 	if(row.title == "none" || row.title == "" || row.title == undefined) {
-		titlespan.textContent = "untitled";
+		titleinput.textContent = "untitled";
 	}
 	else
-	    titlespan.textContent = row.title;
+	    titleinput.textContent = row.title;
 
 	timespan.textContent = "created " + dt.toDateString() + " at " + dt.toLocaleTimeString();
 	tagspara.textContent = row.tagList;
