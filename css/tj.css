@@ -119,13 +119,13 @@ a.delete {
     margin-left:15px;
     margin-right:15px;
 }
-.title_editing {
-    background-color:#fca;
+/*.title_editing {
+    background-color:#fdd;
     color:#000;
     font-size:14px;
     margin-left:15px;
     margin-right:15px;
-}
+}*/
 .titleinput {
     background-color:#88a;
     color:#ccc;
@@ -140,7 +140,7 @@ a.delete {
     border-width:0px;
 }
 .titleinput_editing {
-    background-color:#fca;
+    background-color:#fdd;
     color:#000;
     font-size:14px;
     margin:0px;
@@ -185,7 +185,7 @@ a.delete {
     border-width:0px;
 }
 .tagsinput_editing {
-    background-color:#fca;
+    background-color:#fdd;
     color:#000;
     font-size:14px;
     margin:0px;
@@ -231,7 +231,7 @@ p.jottext_collapsed {
     margin:10px 20px 10px 20px;
 }
 p.jottext_editing {
-    background-color:#fca;
+    background-color:#fdd;
     font-size:12px;
     margin:10px 20px 10px 20px;
 }
