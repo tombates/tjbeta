@@ -467,7 +467,7 @@ function renderJot(row) {
 	//var t = document.createTextNode(dt.toDateString() + "at " + dt.toTimeString() + ": " + row.text);
 
     // ensure a jot being edited is displayed fully
-    titlediv.addEventListener("click", function(e){
+    title_leftdiv.addEventListener("click", function(e){
         if(pjot.className == "jottext_collapsed")
             pjot.className = "jottext";
     });
