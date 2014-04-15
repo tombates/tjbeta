@@ -238,11 +238,11 @@ p.jottext_editing {
 
 .addjot_img {  /* temp  & silly - moves the add this jot button over */
 	margin-left:15px;
-    background-image: url(..\/images\/add32.png);
-    background-position:  2px 2px;
+    background-image: url(..\/images\/add32-trans.png);
+    background-position:  3px 3px;
     background-repeat: no-repeat;
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border: solid 1px #000;
     border-top-left-radius:5px;
     border-top-right-radius:5px;
