@@ -41,7 +41,7 @@ h1.thetitle {
 }
 #rightcontrols {
     float:right;
-    width:300px;
+    width:320px;
     height:200px;
     background-color: #eef;    
 }
@@ -55,11 +55,11 @@ form {
 }
 
 textarea.jot {
-	width:400px;
+	width:500px;
 	height:200px;
 	min-height:100px;
 	max-height:400px;
-	max-width:600px;
+	max-width:500px;
 	padding:20px 10px 5px 10px;
 	border:solid 1px #000;
 	border-radius:5px;
