@@ -116,6 +116,10 @@ tj.indexedDB.addJot = function(jotText) {
 	//     and recover/report
 
     var htmlizedText = htmlizeText(jotText);
+    if(htmlizedText === "") {
+        alert("There is no jot content.");
+        return;
+    }
     var commonKey = new Date().getTime();
     var nbID = null;
 
