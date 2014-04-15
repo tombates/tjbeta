@@ -46,12 +46,14 @@ h1.thetitle {
     background-color: #eef;    
 }
 #filterby_span {
+    float:left;
     height:205px;
     width:150px;
     margin:10px;
     background-color: #efe;
 }
 #tagselector_span {
+    float:right;
     height:205px;
     width:150px;
     margin:10px;
