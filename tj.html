@@ -68,7 +68,17 @@
   <!--input type"text" id="todo" placeholder="What'cha got to do?" style="width:200px;" /-->
   <div class="jottextarea">
       <textarea class="jot" id="jot_composer" placeholder="Type a New Jot"></textarea>
-      <div id="rightcontrols"><div id="filterby_span">Filter By:</div><div id="tagselector_span">Tag Selector</div></div>
+      <div id="rightcontrols">
+        <div id="filterby_span">Filter By:</div>
+        <div id="tagselector_span">Tag Selector<select multiple>
+                                                  <option value="tagA">tagA</option>
+                                                  <option value="tagB">tagB</option>
+                                                  <option value="tagC">tagC</option>
+                                                  <option value="tagD">tagD</option>
+                                                  <option value="tagE">tagE</option>
+                                               </select>
+        </div>
+      </div>
   </div>
   <div class="jotaddbtn"><input type="submit" class="addjot_img" value="" title="Add this jot" />&nbsp;&nbsp;Title:
                          <input type="text" class="add_titleinput" placeholder="untitled" maxlength="200">&nbsp;&nbsp;Tags:
