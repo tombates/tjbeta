@@ -474,9 +474,10 @@ function renderJot(row) {
     // set the display toggle handler
     title_centerdiv.addEventListener("click", function(e){
         console.log("Someone, or something, clicked on me!");
+        //Note: we do nothing to pjot.classname if it is jottext_editing
         if(pjot.className == "jottext")
             pjot.className = "jottext_collapsed";
-        else
+        else if(pjot.className == "jottext_collapsed")
             pjot.className = "jottext";
     });
 
