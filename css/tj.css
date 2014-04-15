@@ -69,9 +69,9 @@ h1.thetitle {
     border-radius:5px;
 }
 #selecttags_btn {
-    margin-left:10px;
+    margin-top:5px;
     background-image: url(..\/images\/arrow-down20h-trans.png);
-    background-position:  2px 2px;
+    background-position:  58px 2px;
     background-repeat: no-repeat;
     width: 150px;
     height: 25px;
