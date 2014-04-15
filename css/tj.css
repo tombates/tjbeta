@@ -45,14 +45,14 @@ h1.thetitle {
     height:225px;
     background-color: #eef;    
 }
-#filterby_span {
+#filterby_div {
     float:left;
     height:205px;
     width:150px;
     margin:10px;
     background-color: #efe;
 }
-#tagselector_span {
+#tagselector_div {
     float:right;
     height:205px;
     width:150px;
@@ -62,11 +62,27 @@ h1.thetitle {
 }
 #tagselector{
     height:150px;
-    width:130px;
+    width:150px;
     margin:0px;
-    margin-top:10px;
-    margin-bottom:5px;
+    margin-top:5px;
+    margin-bottom:2px;
     border-radius:5px;
+}
+#selecttags_btn {
+    margin-left:10px;
+    background-image: url(..\/images\/arrow-down20h-trans.png);
+    background-position:  2px 2px;
+    background-repeat: no-repeat;
+    width: 150px;
+    height: 25px;
+    border: solid 1px #000;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    background-color: #88a;
+    cursor: pointer;
+    outline: 0;
 }
 #jotcontrols {
 	height:25px;
