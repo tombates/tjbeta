@@ -67,7 +67,9 @@
 <form type="post" onSubmit="addJot(); return false;">
   <!--input type"text" id="todo" placeholder="What'cha got to do?" style="width:200px;" /-->
   <div class="jottextarea"><textarea class="jot" id="jot_composer" placeholder="Type a New Jot"></textarea></div>
-  <div class="jotaddbtn"><input type="submit" value="" title="Add this jot" class="addjot_img"/></div>
+  <div class="jotaddbtn"><input type="submit" value="" title="Add this jot" class="addjot_img"/>
+                         <input type="text" placeholder="no tags" maxlength="400">
+  </div>
 </form>
 
 <div id="jotcontrols">
