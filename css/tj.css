@@ -45,6 +45,19 @@ h1.thetitle {
     height:225px;
     background-color: #eef;    
 }
+#filterby_span {
+    height:205px;
+    width:150px;
+    margin:10px;
+    background-color: #efe;
+}
+#tagselector_span {
+    height:205px;
+    width:150px;
+    margin:10px;
+    margin-right: 0px;
+    background-color: #fee;
+}
 #jotcontrols {
 	height:25px;
 	padding:5px;
