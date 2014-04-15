@@ -39,6 +39,11 @@ h1.thetitle {
 .add_tagsinput {
     width:330px;
 }
+#rightcontrols {
+    width:400px;
+    height:200px;
+    background-color: #eef;    
+}
 #jotcontrols {
 	height:25px;
 	padding:5px;
