@@ -238,16 +238,16 @@ p.jottext_editing {
 
 .addjot_img {  /* temp  & silly - moves the add this jot button over */
 	margin-left:15px;
-    /*background-image: url(http://inspectelement.com/wp-content/themes/inspectelementv2/style/images/button.png);
+    background-image: url(.\/images\/add32.png);
     background-position:  0px 0px;
-    background-repeat: no-repeat;*/
+    background-repeat: no-repeat;
     width: 32px;
     height: 32px;
     border: solid 1px #000;
-    border-top-left-radius:10px;
-    border-top-right-radius:10px;
-    border-bottom-left-radius:10px;
-    border-bottom-right-radius:10px;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
     background-color: none;
     cursor: pointer;
     outline: 0;
