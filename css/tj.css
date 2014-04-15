@@ -60,6 +60,14 @@ h1.thetitle {
     margin-right: 0px;
     background-color: #fee;
 }
+#tagselector{
+    height:150px;
+    width:130px;
+    margin:0px;
+    margin-top:10px;
+    margin-bottom:5px;
+    border-radius:5px;
+}
 #jotcontrols {
 	height:25px;
 	padding:5px;
