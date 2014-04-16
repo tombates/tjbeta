@@ -757,10 +757,9 @@ function stageTags() {
             tags.push(tagSelector.options[i].value)
         }
     }
-    document.getElementById('add_tagsinput').value = tags.join(",");
-
+    var textfield = document.getElementById('add_tagsinput');
+    textfield.value = tags.join(",");
     console.log(tags.join(","));
-    return tags;
 }
 
 // clear the Tags text field for jot being added
