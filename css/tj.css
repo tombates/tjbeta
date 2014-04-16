@@ -33,10 +33,10 @@ h1.thetitle {
 .jotaddbtn {
 	margin-bottom:10px;
 }
-.add_titleinput {
+#add_titleinput {
     width:350px;
 }
-.add_tagsinput {
+#add_tagsinput {
     width:270px;
 }
 #rightcontrols {
