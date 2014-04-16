@@ -757,7 +757,7 @@ function stageTags() {
             tags.push(tagSelector.options[i].value)
         }
     }
-    console.log(n.join(","));
+    console.log(tags.join(","));
     return tags;
 }
 
