@@ -46,6 +46,7 @@ h1.thetitle {
     background-color: #eef;    
 }
 .span_centered {
+    display:block;
     margin:0px auto;
 }
 #filterby_div {
