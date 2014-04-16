@@ -781,6 +781,9 @@ function clearStagedTags() {
 // as filters even though there might still be jots with the removed tags.
 function mergeStagedTags() {
     console.log("mergeStagedTags() called");
+    var tagsField = document.getElementById("add_tagsinput");
+    var tagString = tagsField.value();
+    tagManagerMerge(tagString);
 }
 
 // add contents of text area as a new jot
@@ -823,7 +826,7 @@ function tagManager_init() {
 * Adds or removes tags from the master tag list maintained remotely via NimbusBase, and updates the UI
 * select element on the page.
 *
-* mergeList - a list of tags to add or remove. This is a comma separated list of tag phrases which
+* mergeList - a list of tags to add or remove. This is a string of comma separated 'tag phrases' which
 *             can contain white space (runs of spaces and tabs are collapsed to single spaces though).
 *             Tags in the mergeList beginning with '-' indicate tags to be removed from the master
 *             list. This means actual tags cannot begin with '-'. For tags not beginning with '-' the
