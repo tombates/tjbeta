@@ -782,7 +782,7 @@ function clearStagedTags() {
 function mergeStagedTags() {
     console.log("mergeStagedTags() called");
     var tagsField = document.getElementById("add_tagsinput");
-    var tagString = tagsField.value();
+    var tagString = tagsField.value;
     tagManagerMerge(tagString);
 }
 
@@ -840,6 +840,8 @@ function tagManager_init() {
 *       thus be an available filter target once again.
 */           
 function tagManagerMerge(mergeList) {
+    if(mergeList === undefined || mergeList == null || mergeList === "")
+        return;
     var tagContainer = nbx.Tags.all();    // should be one or zero items, we need the inner list
     var existing = [];
     var stringOfTags;
