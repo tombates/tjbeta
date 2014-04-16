@@ -840,7 +840,7 @@ function tagManagerMerge(mergeList) {
     var tagContainer = nbx.Tags.all();    // should be one or zero items, we need the inner list
     var existing = [];
     var stringOfTags;
-    if(!(tagContainer === undefined || tagContainer === null || tagContainer.length === 0) {}
+    if(!(tagContainer === undefined || tagContainer === null || tagContainer.length === 0) {
         stringOfTags = tagContainer[0].tagList;
         if(stringOfTags != undefined && stringOfTags != "")
             existing = stringOfTags.split(",");

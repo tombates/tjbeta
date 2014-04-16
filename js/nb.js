@@ -4,7 +4,7 @@ var nbx = {};
 
 nbx.linkDropbox;
 nbx.Jots;  // a model (table) for the jots
-nbs.Tags;  // current tags
+nbx.Tags;  // current tags
 nbx.jot1;
 nbx.jot2;
 nbx.jotreal;
