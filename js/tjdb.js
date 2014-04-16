@@ -749,7 +749,7 @@ function toggleOrdering() {
 // place selected tags in Tags text field for when jot is added
 function stageTags() {
     console.log("stageTags() called");
-    var tagSelector = document.getElementById('stagetags_btn');
+    var tagSelector = document.getElementById('tagselector');
     var tags = [];
     var n = tagSelector.options.length;
     for(var i = 0; i < n; i++) {
