@@ -814,6 +814,114 @@ tj.indexedDB.emptyDB = function() {
 	};	
 };
 
+/* Sets up the initial state of the Tag Selector UI list */
+function tagManager_init() {
+    tagManagerPopulateSelector();
+}
+
+/*
+* Adds or removes tags from the master tag list maintained remotely via NimbusBase, and updates the UI
+* select element on the page.
+*
+* mergeList - a list of tags to add or remove. This is a comma separated list of tag phrases which
+*             can contain white space (runs of spaces and tabs are collapsed to single spaces though).
+*             Tags in the mergeList beginning with '-' indicate tags to be removed from the master
+*             list. This means actual tags cannot begin with '-'. For tags not beginning with '-' the
+*             tag is added to the master list if it is not already in it.
+*
+* Note: For now we do not search all jots for use of tags being removed from the master list. Since filtering
+*       jots based on tags is based on the master tag list this means that filtering cannot be based on tags
+*       that have been removed from the master list. Such orphan tags will still be in any jots they were applied
+*       to and would have to be removed manually per jot (using the jot editing feature, which allows for title,
+*       tags, and content editing). Alternatively the removed tag could be re-added to the master list and would
+*       thus be an available filter target once again.
+*/           
+function tagManagerMerge(mergeList) {
+    var tagContainer = nbx.Tags.all();    // should be one or zero items, we need the inner list
+    var existing = [];
+    var stringOfTags;
+    if(!(tagContainer === undefined || tagContainer === null || tagContainer.length === 0) {}
+        stringOfTags = tagContainer[0].tagList;
+        if(stringOfTags != undefined && stringOfTags != "")
+            existing = stringOfTags.split(",");
+    }
+
+    // separate candidates into add and remove categories
+    var mergeCands = mergeList.split(",");
+    var mergeAdd = [];
+    var mergeRemove = [];
+    for(var i = 0; i < mergeCands.length; i++) {
+        var trimmed = mergeCands[i].trim();
+        if(trimmed.substr(0,1) == "-")
+            mergeRemove.push(trimmed.substr(1, trimmed.length - 1));
+        else
+            mergeAdd.push(trimmed);
+    }
+    // do removals first
+    var existingMinusRemoved = [];
+    if(existing.length != 0) {    // if no existing tags then there's nothing to remove
+        for(var i = 0; i < existing.length; i++) {
+            for(var j = 0; j < mergeRemove.length; j++) {
+                if(existing[i].toLowerCase() === mergeRemove[j].toLowerCase())
+                {
+                    existing[i] = null;
+                    break;
+                }
+            }
+            if(existing[i] != null)      
+                existingMinusRemoved.push(existing[i]);
+        }
+    }
+    // now additions and sort
+    for(var i = 0; i < mergeAdd.length; i++) {
+        existingMinusRemoved.push(mergeAdd[i]);
+    }
+    existingMinusRemoved.sort();
+
+    // update the remote tag list, which might be empty or non-existent
+    var tags = existingMinusRemoved.join();
+    var taglist = {"tagList":tags, "extra":"none"};
+    var tagsRemote = nbx.Tags.all();
+    if(tagsRemote === undefined || tagsRemote.length == 0) {
+        nbx.Tags.create({tagList:tags, "extra":""})
+    }
+    else {
+        tagsRemote[0].tagList = tags;
+        tagsRemote[0].save();
+        nbx.Tags.sync_all(function() {console.log("tagManagerMerge() nbx.Tags.sync_all() callback called.")});
+    }
+    // update the page's Tag Selector select element
+    tagManagerPopulateSelector(existingMinusRemoved);
+}
+
+/*
+* Populates the Tag Selector list select element on the page with the tags stored on the remote.
+*
+* fromList - optional argument. If present fromList should be the definitive tags list as a comma
+*            separated string of strings, equivalent to what is one the remote. If fromList is
+*            undefined we will populate using the remote list.
+*/
+function tagManagerPopulateSelector(fromList) {
+    var allTags = [];
+    var tagList = fromList;
+    var selector = document.getElementById('tagselector');
+    if(fromList === undefined) {   // meaning pull from remote
+        var tagContainer = nbx.Tags.all();    // should be one or zero items, we need the inner array
+        if(tagContainer === undefined || tagContainer === null || tagContainer.length === 0 || tagContainer[0].tagList.length === 0)
+            return null;
+        tagList = tagContainer[0].tagList;
+    }
+    // need to add a bunch of these: <option value="tagA">tagA</option>
+    selector.innerHTML = "";
+    allTags = tagList.split(",");
+    for(var i = 0; i < allTags.length; i++) {
+        var newItem = document.createElement("option");
+        newItem.setAttribute("value", allTags[i]);
+        newItem.innerHTML = allTags[i];
+        selector.appendChild(newItem);
+    }
+}
+
 /*
 * Helper function that lets user's carriage returns shine through.
 *   Very simple for now: we just replace n returns with with n <br />

@@ -3,7 +3,8 @@
 var nbx = {};
 
 nbx.linkDropbox;
-nbx.Jots;  // a model (table)
+nbx.Jots;  // a model (table) for the jots
+nbs.Tags;  // current tags
 nbx.jot1;
 nbx.jot2;
 nbx.jotreal;
@@ -55,16 +56,21 @@ nbx.open = function() {
 	        // commonKeyTS, id, time, modTime, title, jot, tagList, extra, isTodo, done
         //OLDnbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
         nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra", "isTodo", "done"]);
-		nbx.Jots.sync_all(function() {
-			console.log("nbx.Jots.sync_all() callback called.");
-			console.log("Nimbus instance count is now: " + nbx.Jots.count());
+        nbx.Tags = Nimbus.Model.setup("Tags", ["id", "tagList", "extra"]);
+        nbx.Jots.sync_all(function() {
+            console.log("nbx.Jots.sync_all() callback called.");
+            console.log("Nimbus instance count is now: " + nbx.Jots.count());
             if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
-			    indexedDB_init();
+                indexedDB_init();
             }
             else {
                 tj.indexedDB.showAllJots();
             }
-		});
+        });
+        nbx.Tags.sync_all(function() {
+            console.log("nbx.Tags.sync_all() callback called.");
+            tagManager_init();
+        });
     }
 	    //Nimbus.Auth.setup(sync_string);
     //DUDE you need to be calling authorize() first, but before that set a callback funtion authorized_callback = function...
