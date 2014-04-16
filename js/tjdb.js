@@ -746,6 +746,16 @@ function toggleOrdering() {
 	tj.indexedDB.showAllJots(); 
 }
 
+// place selected tags in Tags text field for when jot is added
+function stageTags() {
+    console.log("stageTags() called");
+}
+
+// place selected tags in Tags text field for when jot is added
+function clearStagedTags() {
+    console.log("clearStagedTags() called");
+}
+
 // add contents of text area as a new jot
 function addJot() {
 	var jotComposeArea = document.getElementById('jot_composer');
