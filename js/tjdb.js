@@ -749,6 +749,14 @@ function toggleOrdering() {
 // place selected tags in Tags text field for when jot is added
 function stageTags() {
     console.log("stageTags() called");
+    var tagSelector = document.getElementById('stagetags_btn');
+    var tags = [];
+    for(var i = 0; i < options.length; i++) {
+        if(tagSelector.options[i].selected) {
+            tags.push(tagSelector.options[i].value)
+        }
+    }
+    return tags;
 }
 
 // place selected tags in Tags text field for when jot is added
