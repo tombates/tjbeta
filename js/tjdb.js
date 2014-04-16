@@ -746,7 +746,7 @@ function toggleOrdering() {
 	tj.indexedDB.showAllJots(); 
 }
 
-// place selected tags in Tags text field for when jot is added
+// place selected tags in Tags text field for jot being added
 function stageTags() {
     console.log("stageTags() called");
     var tagSelector = document.getElementById('tagselector');
@@ -760,9 +760,19 @@ function stageTags() {
     return tags;
 }
 
-// place selected tags in Tags text field for when jot is added
+// clear the Tags text field for jot being added
 function clearStagedTags() {
     console.log("clearStagedTags() called");
+}
+
+// remove or add tags in Tags text field into the Tag Selector list
+// a tag that does not exist in the list will be added, a tag prefixed
+// with '-' that does exist in the list will be removed. This does not
+// remove such tags from individual jot taglists that might have used
+// the tags being removed. This means that these tags cannot be used
+// as filters even though there might still be jots with the removed tags.
+function mergeStagedTags() {
+    console.log("mergeStagedTags() called");
 }
 
 // add contents of text area as a new jot
