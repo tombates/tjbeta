@@ -45,6 +45,9 @@ h1.thetitle {
     height:225px;
     background-color: #eef;    
 }
+.span_centered {
+    margin:0px auto;
+}
 #filterby_div {
     float:left;
     height:205px;
