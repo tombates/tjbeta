@@ -751,7 +751,8 @@ function stageTags() {
     console.log("stageTags() called");
     var tagSelector = document.getElementById('stagetags_btn');
     var tags = [];
-    for(var i = 0; i < options.length; i++) {
+    var n = tagSelector.options.length;
+    for(var i = 0; i < n; i++) {
         if(tagSelector.options[i].selected) {
             tags.push(tagSelector.options[i].value)
         }
