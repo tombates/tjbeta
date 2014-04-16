@@ -37,7 +37,7 @@ h1.thetitle {
     width:350px;
 }
 .add_tagsinput {
-    width:280px;
+    width:260px;
 }
 #rightcontrols {
     float:right;
@@ -310,7 +310,7 @@ p.jottext_editing {
 .mergetags_img {  /* temp  & silly - moves the add this jot button over */
     margin-left:10px;
     background-image: url(..\/images\/arrow-up20h-trans.png);
-    background-position:  2px 2px;
+    background-position:  2px 8px;
     background-repeat: no-repeat;
     width: 38px;
     height: 38px;
