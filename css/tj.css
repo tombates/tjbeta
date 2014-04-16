@@ -306,7 +306,8 @@ p.jottext_editing {
     background-color: #88a;
     cursor: pointer;
     outline: 0;
-}.mergetags_img {  /* temp  & silly - moves the add this jot button over */
+}
+.mergetags_img {  /* temp  & silly - moves the add this jot button over */
     margin-left:10px;
     background-image: url(..\/images\/arrow-up20h-trans.png);
     background-position:  2px 2px;
@@ -321,7 +322,8 @@ p.jottext_editing {
     background-color: #88a;
     cursor: pointer;
     outline: 0;
-}}.cleartags_img {  /* temp  & silly - moves the add this jot button over */
+}
+.cleartags_img {  /* temp  & silly - moves the add this jot button over */
     margin-left:10px;
     background-image: url(..\/images\/cleartags32-trans.png);
     background-position:  2px 2px;
