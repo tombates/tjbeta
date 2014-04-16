@@ -130,8 +130,15 @@ tj.indexedDB.addJot = function(jotText) {
         console.log("addJot: attempting store of real jot on Dropbox");
         //var now = Date().toString();
         //NimbusBase populates the id field (specified in nb.js) automatically, then we get it and put it in the iDB record
+        var tags = document.getElementById('add_tagsinput').value;
+        if(tags === "" || tags === undefined)
+            tags = "none";
+        var title = document.getElementById('add_titleinput').value;
+        if(title === "" || title === undefined)
+            title = "untitled";
+
         var nrow = {"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
-                    "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
+                    "title":title, "jot":htmlizedText, "tagList":tags, "extra":"none", "isTodo":false, "done":false};
         nbx.jotreal = nbx.Jots.create(nrow);
         nbID = nbx.jotreal.id;
         console.log("Nimbus instance count is now: " + nbx.Jots.count());
@@ -748,7 +755,6 @@ function toggleOrdering() {
 
 // place selected tags in Tags text field for jot being added
 function stageTags() {
-    console.log("stageTags() called");
     var tagSelector = document.getElementById('tagselector');
     var tags = [];
     var n = tagSelector.options.length;
@@ -759,12 +765,12 @@ function stageTags() {
     }
     var textfield = document.getElementById('add_tagsinput');
     textfield.value = tags.join(",");
-    console.log(tags.join(","));
 }
 
 // clear the Tags text field for jot being added
 function clearStagedTags() {
-    console.log("clearStagedTags() called");
+    var textfield = document.getElementById('add_tagsinput');
+    textfield.value = "";
 }
 
 // remove or add tags in Tags text field into the Tag Selector list
