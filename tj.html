@@ -77,7 +77,7 @@
             <input type="button" id="enddate_btn" value="" title="Choose end date">
             <input type="text" id="enddate" placeholder="end date" maxlength="12"><br><br>
             <input type="checkbox" value="filter" title="Use the Tag Selector to choose the filter tags."/>By Selected Tags<br><br>
-            <input type="button" value="Filter" title="Apply the selected filters."/>
+            <span class="span_centered"><input type="button" value="Filter" title="Apply the selected filters."/></span>
         </div>
         <div id="tagselector_div"><span class="span_centered">Tag&nbsp;Selector</span><select multiple id="tagselector">
                                                   <!--option value="tagA">tagA</option>
@@ -93,7 +93,7 @@
   <div class="jotaddbtn"><input type="submit" class="addjot_img" value="" title="Add this jot" />&nbsp;&nbsp;Title:
                          <input type="text" id="add_titleinput" placeholder="untitled" maxlength="200"/>&nbsp;&nbsp;Tags:
                          <input type="text" id="add_tagsinput" placeholder="none" maxlength="200" title="Separate tags with commas"/>
-                         <input type="button" onClick="mergeStagedTags(); return false;" class="mergetags_img" value="" title="Add/subtract tags to/from the selector list above." />
+                         <input type="button" onClick="mergeStagedTags(); return false;" class="mergetags_img" value="" title="Add or subtract tags from the selector list above.\nTags preceeded with '-' (minus) will be removed." />
                          <input type="button" onClick="clearStagedTags(); return false;" class="cleartags_img" value="" title="Clear tags to be applied to next jot" />
   </div>
 </form>
