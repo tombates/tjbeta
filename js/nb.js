@@ -56,7 +56,7 @@ nbx.open = function() {
 	        // commonKeyTS, id, time, modTime, title, jot, tagList, extra, isTodo, done
         //OLDnbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
         nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra", "isTodo", "done"]);
-        nbx.Tags = Nimbus.Model.setup("Tags", ["id", "tagList", "extra"]);
+        //nbx.Tags = Nimbus.Model.setup("Tags", ["id", "tagList", "extra"]);
         nbx.Jots.sync_all(function() {
             console.log("nbx.Jots.sync_all() callback called.");
             console.log("Nimbus instance count is now: " + nbx.Jots.count());
@@ -65,6 +65,11 @@ nbx.open = function() {
             }
             else {
                 tj.indexedDB.showAllJots();
+                nbx.Tags = Nimbus.Model.setup("Tags", ["id", "tagList", "extra"]);
+                nbx.Tags.sync_all(function() {
+                    console.log("nbx.Tags.sync_all() callback called.");
+                    tagManager_init();
+                });
             }
         });
         //nbx.Tags.sync_all(function() {
