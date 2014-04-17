@@ -913,7 +913,7 @@ function tagManagerPopulateSelector(fromList) {
     var selector = document.getElementById('tagselector');
     if(fromList === undefined) {   // meaning pull from remote
         var tagContainer = nbx.Tags.all();    // should be one or zero items, we need the inner array
-        if(tagContainer === undefined || tagContainer === null || tagContainer.length === 0 || tagContainer[0].tagList.length === 0)
+        if(tagContainer === undefined || tagContainer === null || tagContainer.length === 0)
             return null;
         tagList = tagContainer[0].tagList;
     }
