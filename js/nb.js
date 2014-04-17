@@ -67,10 +67,10 @@ nbx.open = function() {
                 tj.indexedDB.showAllJots();
             }
         });
-        nbx.Tags.sync_all(function() {
-            console.log("nbx.Tags.sync_all() callback called.");
-            tagManager_init();
-        });
+        //nbx.Tags.sync_all(function() {
+        //    console.log("nbx.Tags.sync_all() callback called.");
+        //    tagManager_init();
+        //});
     }
 	    //Nimbus.Auth.setup(sync_string);
     //DUDE you need to be calling authorize() first, but before that set a callback funtion authorized_callback = function...
