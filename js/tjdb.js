@@ -819,6 +819,7 @@ tj.indexedDB.emptyDB = function() {
 
 /* Sets up the initial state of the Tag Selector UI list */
 function tagManager_init() {
+    console.log("tagManager_init()");
     tagManagerPopulateSelector();
 }
 
