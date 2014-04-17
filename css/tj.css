@@ -57,6 +57,13 @@ h1.thetitle {
     margin:10px;
     background-color: #efe;
 }
+#startdate{
+    width:80px;
+}
+#endtdate{
+    width:80px;
+}
+
 #tagselector_div {
     float:right;
     height:205px;
