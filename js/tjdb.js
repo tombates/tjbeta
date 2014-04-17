@@ -904,9 +904,8 @@ function tagManagerMerge(mergeList) {
 /*
 * Populates the Tag Selector list select element on the page with the tags stored on the remote.
 *
-* fromList - optional argument. If present fromList should be the definitive tags list as a comma
-*            separated string of strings, equivalent to what is one the remote. If fromList is
-*            undefined we will populate using the remote list.
+* fromList - optional argument. If present fromList should be the definitive tags list as an
+*            array of strings. If fromList is undefined we will populate using the remote list.
 */
 function tagManagerPopulateSelector(fromList) {
     var allTags = [];
@@ -916,11 +915,13 @@ function tagManagerPopulateSelector(fromList) {
         var tagContainer = nbx.Tags.all();    // should be one or zero items, we need the inner array
         if(tagContainer === undefined || tagContainer === null || tagContainer.length === 0)
             return null;
-        tagList = tagContainer[0].tagList;
+        allTags = tagContainer[0].tagListsplit(",");
     }
-    // need to add a bunch of these: <option value="tagA">tagA</option>
+    else
+        allTags = fromList.split(",");
+    // now add however many of these: <option value="tagX">tagX</option>
+    //allTags = tagList.split(",");
     selector.innerHTML = "";
-    allTags = tagList.split(",");
     for(var i = 0; i < allTags.length; i++) {
         var newItem = document.createElement("option");
         newItem.setAttribute("value", allTags[i]);
