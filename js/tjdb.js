@@ -908,24 +908,24 @@ function tagManagerMerge(mergeList) {
 *            array of strings. If fromList is undefined we will populate using the remote list.
 */
 function tagManagerPopulateSelector(fromList) {
-    var allTags = [];
+    //var allTags = [];
     //var tagList = fromList;
     var selector = document.getElementById('tagselector');
     if(fromList === undefined) {   // meaning pull from remote
         var tagContainer = nbx.Tags.all();    // should be one or zero items, we need the inner array
         if(tagContainer === undefined || tagContainer === null || tagContainer.length === 0)
             return null;
-        allTags = tagContainer[0].tagList.split(",");
+        fromList = tagContainer[0].tagList.split(",");
     }
-    else
-        allTags = fromList.split(",");
-    // now add however many of these: <option value="tagX">tagX</option>
+    //else
+    //    allTags = fromList.split(",");
     //allTags = tagList.split(",");
+    // now add however many of these: <option value="tagX">tagX</option>
     selector.innerHTML = "";
-    for(var i = 0; i < allTags.length; i++) {
+    for(var i = 0; i < fromList.length; i++) {
         var newItem = document.createElement("option");
-        newItem.setAttribute("value", allTags[i]);
-        newItem.innerHTML = allTags[i];
+        newItem.setAttribute("value", fromList[i]);
+        newItem.innerHTML = fromList[i];
         selector.appendChild(newItem);
     }
 }
