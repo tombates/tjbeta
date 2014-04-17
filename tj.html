@@ -71,12 +71,13 @@
       <div id="rightcontrols">
         <div id="filterby_div">
             <span class="span_centered">Filter&nbsp;Options</span>
-            <input type="submit" value="Select date range" title="Show only jots in a specified date range."/>
+            <input type="checkbox" value="filter"/>By Date Range<br>
             <input type="button" id="startdate_btn" value="" title="Choose start date">
             <input type="text" id="startdate" placeholder="beginning date" maxlength="12">
             <input type="button" id="enddate_btn" value="" title="Choose end date">
             <input type="text" id="enddate" placeholder="ending date" maxlength="12">
-            <input type="submit" value="Select by tags" title="Show only jots with certain tags."/>
+            <input type="checkbox" value="filter"/>By Tags<br>
+            <input type="button" value="Filter" title="Apply the selected filters."/>
         </div>
         <div id="tagselector_div"><span class="span_centered">Tag&nbsp;Selector</span><select multiple id="tagselector">
                                                   <!--option value="tagA">tagA</option>
