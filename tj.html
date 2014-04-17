@@ -69,7 +69,15 @@
   <div class="jottextarea">
       <textarea class="jot" id="jot_composer" placeholder="Type a New Jot"></textarea>
       <div id="rightcontrols">
-        <div id="filterby_div"><span class="span_centered">Filter&nbsp;Options</span></div>
+        <div id="filterby_div">
+            <span class="span_centered">Filter&nbsp;Options</span>
+            <input type="submit" value="Select date range" title="Show only jots in a specified date range."/>
+            <input type="button" id="startdate_btn" value="" title="Choose start date">
+            <input type="text" id="startdate" placeholder="beginning date" maxlength="12">
+            <input type="button" id="enddate_btn" value="" title="Choose end date">
+            <input type="text" id="enddate" placeholder="ending date" maxlength="12">
+            <input type="submit" value="Select by tags" title="Show only jots with certain tags."/>
+        </div>
         <div id="tagselector_div"><span class="span_centered">Tag&nbsp;Selector</span><select multiple id="tagselector">
                                                   <!--option value="tagA">tagA</option>
                                                   <option value="tagB">tagB</option>
@@ -83,7 +91,7 @@
   </div>
   <div class="jotaddbtn"><input type="submit" class="addjot_img" value="" title="Add this jot" />&nbsp;&nbsp;Title:
                          <input type="text" id="add_titleinput" placeholder="untitled" maxlength="200"/>&nbsp;&nbsp;Tags:
-                         <input type="text" id="add_tagsinput" placeholder="no tags" maxlength="200" title="Separate tags with commas"/>
+                         <input type="text" id="add_tagsinput" placeholder="none" maxlength="200" title="Separate tags with commas"/>
                          <input type="button" onClick="mergeStagedTags(); return false;" class="mergetags_img" value="" title="Add/subtract tags to/from the selector list above." />
                          <input type="button" onClick="clearStagedTags(); return false;" class="cleartags_img" value="" title="Clear tags to be applied to next jot" />
   </div>
@@ -91,8 +99,6 @@
 
 <div id="jotcontrols">
   <input type="submit" id="toggleOrder" onClick="toggleOrdering(); return false;" value="Showing newest first" title="Press to show oldest jots first."/>
-  <input type="submit" value="Select date range" title="Show only jots in a specified date range."/>
-  <input type="submit" value="Select by tags" title="Show only jots with certain tags."/>
   <input type="submit" value="New Jot Jar" title="Your jots can be organized by Jars, as well as tags."/>
   <input type="submit" onClick = "removeAll(); return false;" value="Delete all jots" title="Be very careful! This will delete all your jots locally and remotely!" />
 </div>
