@@ -880,7 +880,8 @@ function tagManagerMerge(mergeList) {
     }
     // now additions and sort
     for(var i = 0; i < mergeAdd.length; i++) {
-        existingMinusRemoved.push(mergeAdd[i]);
+        if(existingMinusRemoved.indexOf(mergeAdd[i]) == -1)
+            existingMinusRemoved.push(mergeAdd[i]);
     }
     existingMinusRemoved.sort();
 
