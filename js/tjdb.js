@@ -307,7 +307,7 @@ function containsTags(jot, filterTags) {
         return false;
     }
 
-    var tagsInJot = jot.tagList.split(",");
+    var tagsInJot = jot.tagList.split(/,\s*/);
     for(var i = 0; i < filterTags.length; i++) {
         if(tagsInJot.indexOf(filterTags[i]) == -1)
             return false;
