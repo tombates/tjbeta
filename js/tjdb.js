@@ -891,7 +891,7 @@ function applyFilters() {
         tj.filterObject.filterMode |= tj.FILTERMODE_DATE;        
     }
     tj.indexedDB.showAllJots(tj.filterObject);
-    tj.filterObject.filterMode = FILTERMODE_NONE;
+    tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 }
 
 /*
