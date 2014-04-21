@@ -227,7 +227,7 @@ tj.indexedDB.showAllJots = function(filterTags) {
     }
 }
 
-function pageRenderer() {
+function pageRenderer(filterTags) {
     var r = getSortedRemoteJots(filterTags);
     var l = {};
     var nextJotDiv;
