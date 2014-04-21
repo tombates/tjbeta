@@ -857,7 +857,7 @@ function tagManager_init() {
 
 function applyFilters() {
     var filterTags = getSelectedTags();
-    showAllJots(filterTags);
+    tj.indexedDB.showAllJots(filterTags);
 }
 
 /*
