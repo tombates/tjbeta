@@ -323,6 +323,8 @@ function containsTags(jot, filterObject) {
         if((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
             if(present != -1)
                 return true;
+            if(i == filterObject.filterTags.length - 1)
+                return false;
         }
         else if((filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND) {
             if(present == -1)
