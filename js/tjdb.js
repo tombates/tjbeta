@@ -68,10 +68,11 @@ tj.indexedDB.order = "prev";   // default to showing newest jots at top
 
 tj.filterObject = {};
 tj.filterObject.filterTags = null;
-tj.filterObject.filterMode = 0;
+tj.FILTERMODE_NONE = 0;
 tj.FILTERMODE_TAGS_OR = 1;
 tj.FILTERMODE_TAGS_AND = 2;
 tj.FILTERMODE_DATE = 4;
+tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 
 tj.indexedDB.onerror = function (e){
     console.log(e);
@@ -290,7 +291,7 @@ function getSortedRemoteJots(filterObject) {
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
 
 
-    if(filterObject != undefined) {
+    if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
         var filteredJots = [];
         for(var i = 0; i < remoteJots.length; i++) {
             if(containsTags(remoteJots[i], filterObject)) {
@@ -890,6 +891,7 @@ function applyFilters() {
         tj.filterObject.filterMode |= tj.FILTERMODE_DATE;        
     }
     tj.indexedDB.showAllJots(tj.filterObject);
+    tj.filterObject.filterMode = FILTERMODE_NONE;
 }
 
 /*
