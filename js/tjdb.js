@@ -856,8 +856,12 @@ function tagManager_init() {
 }
 
 function applyFilters() {
-    var filterTags = getSelectedTags();
-    tj.indexedDB.showAllJots(filterTags);
+    if(document.getElementById("filter_by_tags").checked) {
+        var filterTags = getSelectedTags();
+        tj.indexedDB.showAllJots(filterTags);
+    }
+    else
+        tj.indexedDB.showAllJots();
 }
 
 /*
