@@ -217,18 +217,18 @@ tj.indexedDB.addJot = function(jotText) {
 //  WHAT'S MORE this isn't even sending to remote any jots that are only local, it is only gathering them up but in a
 //  function scope var and then nothing is ever really done with that list (badly named pushToRemote). We should
 //  push to remote at "we know we are connected" time and not so much here.
-tj.indexedDB.showAllJots = function() {
+tj.indexedDB.showAllJots = function(filterTags) {
 	console.log("in showAllJots");
     if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
         syncAllJots(pageRenderer);
     }
     else {
-        pageRenderer();
+        pageRenderer(filterTags);
     }
 }
 
 function pageRenderer() {
-    var r = getSortedRemoteJots();
+    var r = getSortedRemoteJots(filterTags);
     var l = {};
     var nextJotDiv;
     //MUST convert from result.value to remote object -> local style
@@ -272,11 +272,27 @@ function updateRemote(localNotOnRemote) {
     }
 }
 
-function getSortedRemoteJots() {
+/*
+* Returns an array of jots in the correct newest/oldest order, and possibly restricted to a certain set of tags.
+*
+* filterTags - an optional array of tags
+*/
+function getSortedRemoteJots(filterTags) {
     // get all the remote jots and sort them
     var remoteJots = nbx.Jots.all();
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
-    //PROBLEM how is this sorting on the commonKey? It's not.
+
+
+    if(filterTags != undefined) {
+        var filteredJots = [];
+        for(var i = 0; i < remoteJots.length; i++) {
+            if(containsTags(remoteJots[i]), filterTags) {
+                filteredJots.push(remoteJots[i])
+            }
+        }
+        remoteJots = filteredJots;
+    }
+
     if(remoteJots.length > 0) {
     	remoteJots.sort(function(a,b) {
             return flip * (a.commonKeyTS - b.commonKeyTS);
@@ -284,6 +300,19 @@ function getSortedRemoteJots() {
     }
 
     return remoteJots;
+}
+
+function containsTags(jot, filterTags) {
+    if(jot.tagList == undefined || jot.tagList === null || jot.tagList == "none") {
+        return false;
+    }
+
+    var tagsInJot = jot.tagList.split(",");
+    for(var i = 0; i < filterTags.length; i++) {
+        if(tagsInJot.indexOf(filterTags[i]) == -1)
+            return false;
+    }
+    return true;
 }
 
 function syncAllJots(pageRenderer) {
@@ -755,6 +784,11 @@ function toggleOrdering() {
 
 // place selected tags in Tags text field for jot being added
 function stageTags() {
+    var textfield = document.getElementById('add_tagsinput');
+    textfield.value = getSelectedTags.join(",");
+}
+
+function getSelectedTags() {
     var tagSelector = document.getElementById('tagselector');
     var tags = [];
     var n = tagSelector.options.length;
@@ -763,10 +797,8 @@ function stageTags() {
             tags.push(tagSelector.options[i].value)
         }
     }
-    var textfield = document.getElementById('add_tagsinput');
-    textfield.value = tags.join(",");
+    return tags;
 }
-
 // clear the Tags text field for jot being added
 function clearStagedTags() {
     var textfield = document.getElementById('add_tagsinput');
@@ -821,6 +853,11 @@ tj.indexedDB.emptyDB = function() {
 function tagManager_init() {
     console.log("tagManager_init()");
     tagManagerPopulateSelector();
+}
+
+function applyFilters() {
+    var filterTags = getSelectedTags();
+    showAllJots(filterTags);
 }
 
 /*
