@@ -66,6 +66,13 @@ tj.indexedDB.db = null;
 tj.indexedDB.IDB_SCHEMA_VERSION = 7;
 tj.indexedDB.order = "prev";   // default to showing newest jots at top
 
+tj.filterObject = {};
+tj.filterObject.filterTags = null;
+tj.filterObject.filterMode = 0;
+tj.FILTERMODE_TAGS_OR = 1;
+tj.FILTERMODE_TAGS_AND = 2;
+tj.FILTERMODE_DATE = 4;
+
 tj.indexedDB.onerror = function (e){
     console.log(e);
 };
@@ -217,18 +224,18 @@ tj.indexedDB.addJot = function(jotText) {
 //  WHAT'S MORE this isn't even sending to remote any jots that are only local, it is only gathering them up but in a
 //  function scope var and then nothing is ever really done with that list (badly named pushToRemote). We should
 //  push to remote at "we know we are connected" time and not so much here.
-tj.indexedDB.showAllJots = function(filterTags) {
+tj.indexedDB.showAllJots = function(filterObject) {
 	console.log("in showAllJots");
     if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
         syncAllJots(pageRenderer);
     }
     else {
-        pageRenderer(filterTags);
+        pageRenderer(tj.filterObject);
     }
 }
 
-function pageRenderer(filterTags) {
-    var r = getSortedRemoteJots(filterTags);
+function pageRenderer(filterObject) {
+    var r = getSortedRemoteJots(filterObject);
     var l = {};
     var nextJotDiv;
     //MUST convert from result.value to remote object -> local style
@@ -275,18 +282,18 @@ function updateRemote(localNotOnRemote) {
 /*
 * Returns an array of jots in the correct newest/oldest order, and possibly restricted to a certain set of tags.
 *
-* filterTags - an optional array of tags
+* filterObject - An optional object containing an array of tags, filterMode, and date range information.
 */
-function getSortedRemoteJots(filterTags) {
+function getSortedRemoteJots(filterObject) {
     // get all the remote jots and sort them
     var remoteJots = nbx.Jots.all();
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
 
 
-    if(filterTags != undefined) {
+    if(filterObject != undefined) {
         var filteredJots = [];
         for(var i = 0; i < remoteJots.length; i++) {
-            if(containsTags(remoteJots[i], filterTags)) {
+            if(containsTags(remoteJots[i], filterObject)) {
                 filteredJots.push(remoteJots[i])
             }
         }
@@ -302,15 +309,24 @@ function getSortedRemoteJots(filterTags) {
     return remoteJots;
 }
 
-function containsTags(jot, filterTags) {
+function containsTags(jot, filterObject) {
     if(jot.tagList == undefined || jot.tagList === null || jot.tagList == "none") {
         return false;
     }
 
     var tagsInJot = jot.tagList.split(/,\s*/);
-    for(var i = 0; i < filterTags.length; i++) {
-        if(tagsInJot.indexOf(filterTags[i]) == -1)
-            return false;
+    var present = -1;
+    for(var i = 0; i < filterObject.filterTags.length; i++) {
+
+        present = tagsInJot.indexOf(filterObject.filterTags[i]);
+        if((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
+            if(present != -1)
+                return true;
+        }
+        else if((filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND) {
+            if(present == -1)
+                return false;
+        }
     }
     return true;
 }
@@ -856,12 +872,24 @@ function tagManager_init() {
 }
 
 function applyFilters() {
-    if(document.getElementById("filter_by_tags").checked) {
-        var filterTags = getSelectedTags();
-        tj.indexedDB.showAllJots(filterTags);
-    }
-    else
+    tj.filterObject.filterTags = getSelectedTags();
+    // if no filtering show everything
+    if(!(document.getElementById("filter_by_tags_or").checked
+        || document.getElementById("filter_by_tags_and").checked || document.getElementById("filter_by_date").checked) {
         tj.indexedDB.showAllJots();
+    }
+
+    if(document.getElementById("filter_by_tags_or").checked) {
+        tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
+    }
+    else if(document.getElementById("filter_by_tags_and").checked) {
+        tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
+    }
+    if(document.getElementById("filter_by_date").checked) {
+        //TODO put date info into filterObject
+        tj.filterObject.filterMode |= tj.FILTERMODE_DATE;        
+    }
+    tj.indexedDB.showAllJots(tj.filterObject);
 }
 
 /*
