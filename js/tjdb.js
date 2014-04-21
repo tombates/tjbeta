@@ -127,14 +127,14 @@ tj.indexedDB.addJot = function(jotText) {
 	if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
         //nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra", "isTodo", "done"]);
         //OLD nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
-        console.log("addJot: attempting store of real jot on Dropbox");
+        console.log("addJot: storing jot on Dropbox");
         //var now = Date().toString();
         //NimbusBase populates the id field (specified in nb.js) automatically, then we get it and put it in the iDB record
         var tags = document.getElementById('add_tagsinput').value;
-        if(tags === "" || tags === undefined)
+        if(tags === undefined || tags === "")
             tags = "none";
         var title = document.getElementById('add_titleinput').value;
-        if(title === "" || title === undefined)
+        if(title === undefined || title === "")
             title = "untitled";
 
         var nrow = {"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
@@ -863,6 +863,9 @@ function tagManagerMerge(mergeList) {
         else
             mergeAdd.push(trimmed);
     }
+    //BUG/ISSUE due to removals being case-insensitive but adds, because it uses .indexOf, doesn't check
+    //          case insensitively before adding. Thus we can add mX and MX but either -mX or -MX will
+    //          remove both of them.
     // do removals first
     var existingMinusRemoved = [];
     if(existing.length != 0) {    // if no existing tags then there's nothing to remove
