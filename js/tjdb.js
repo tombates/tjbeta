@@ -875,7 +875,7 @@ function applyFilters() {
     tj.filterObject.filterTags = getSelectedTags();
     // if no filtering show everything
     if(!(document.getElementById("filter_by_tags_or").checked
-        || document.getElementById("filter_by_tags_and").checked || document.getElementById("filter_by_date").checked) {
+        || document.getElementById("filter_by_tags_and").checked || document.getElementById("filter_by_date").checked)) {
         tj.indexedDB.showAllJots();
     }
 
