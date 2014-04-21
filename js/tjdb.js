@@ -286,7 +286,7 @@ function getSortedRemoteJots(filterTags) {
     if(filterTags != undefined) {
         var filteredJots = [];
         for(var i = 0; i < remoteJots.length; i++) {
-            if(containsTags(remoteJots[i]), filterTags) {
+            if(containsTags(remoteJots[i], filterTags)) {
                 filteredJots.push(remoteJots[i])
             }
         }
