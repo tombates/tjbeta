@@ -52,8 +52,8 @@ h1.thetitle {
 }
 #filterby_div {
     float:left;
-    height:205px;
-    width:150px;
+    height:225px;
+    width:165px;
     margin:0px;
     margin-right:5px;
     background-color: #efe;
@@ -67,7 +67,7 @@ h1.thetitle {
 
 #tagselector_div {
     float:right;
-    height:205px;
+    height:225px;
     width:150px;
     margin:0px;
     background-color: #fee;
