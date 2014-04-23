@@ -1,3 +1,6 @@
+//MAJOR TODO speed up by getting rid of too much DOM manipulation
+// see http://www.nczonline.net/blog/2009/02/03/speed-up-your-javascript-part-4/
+// this Nicholas Zakas is the guy, another up there with Crockford
 /*
 * Core Thought Jot functionality file. The model and controller code really, mediating between the
 * user actions in the html presentation view and the logic of persiting to local/remote stores.
