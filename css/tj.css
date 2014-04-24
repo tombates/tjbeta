@@ -58,10 +58,13 @@ h1.thetitle {
 }
 #filterby_div {
     float:left;
-    height:185px;
+    height:195px;
     width:180px;
     margin:0px;
     background-color: #efe;
+}
+#filter_tag_div {
+    margin-top: 5px;
 }
 #startdate{
     width:90px;
@@ -71,7 +74,7 @@ h1.thetitle {
 }
 #filterbtn_div {
 
-    height:40px;
+    height:30px;
     width:165px;
 }
 #applyfilters_btn {
