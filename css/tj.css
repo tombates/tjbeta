@@ -73,6 +73,7 @@ h1.thetitle {
 #filterbtn_div {
     float:left;
     height:25px;
+    width:165px;
 }
 #applyfilters_btn {
     width:95px;
