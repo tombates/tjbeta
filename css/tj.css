@@ -39,6 +39,12 @@ h1.thetitle {
 #add_tagsinput {
     width:270px;
 }
+.display_block {
+    display:block;
+}
+.display_none {
+    display:none;
+}
 #rightcontrols {
     float:right;
     width:330px;
