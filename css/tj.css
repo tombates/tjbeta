@@ -91,7 +91,7 @@ h1.thetitle {
 }
 #tagselector{
     height:165px;
-    width:140px;
+    width:145px;
     margin:0px;
     margin-top:5px;
     margin-bottom:10px;
@@ -99,7 +99,7 @@ h1.thetitle {
 }
 #stagetags_btn {
     width: 100px;
-    margin-left:205px;
+    margin-left:200px;
 /*    background-image: url(..\/images\/arrow-down20h-trans.png);
     background-position:  58px 2px;
     background-repeat: no-repeat;
