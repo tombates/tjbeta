@@ -64,16 +64,16 @@ h1.thetitle {
     background-color: #efe;
 }
 #filter_by_date {
-    margin-left: 12px;
+    margin-left: 15px;
 }#filter_by_tags {
-    margin-left: 12px;
+    margin-left: 15px;
 }
 #filter_date_div {
-    padding-left: 15px;
+    padding-left: 22px;
     margin-bottom:10px;
 }
 #filter_tag_div {
-    padding-left: 15px;
+    padding-left: 22px;
 }
 #startdate{
     width:90px;
