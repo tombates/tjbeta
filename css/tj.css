@@ -63,8 +63,8 @@ h1.thetitle {
     margin:0px;
     background-color: #efe;
 }
-#filter_tag_div {
-    margin-top: 10px;
+#filter_date_div {
+    margin-bottom:10px;
 }
 #startdate{
     width:90px;
