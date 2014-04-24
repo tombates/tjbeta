@@ -71,7 +71,7 @@ h1.thetitle {
     width:90px;
 }
 #applyfilters_btn {
-    margin-bottom: 5px;
+    position: absolute; bottom: -5px;
 }
 #tagselector_div {
     float:right;
