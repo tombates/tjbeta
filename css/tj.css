@@ -70,7 +70,9 @@ h1.thetitle {
 #enddate{
     width:90px;
 }
-
+#applyfilters_btn {
+    margin-bottom: -5px;
+}
 #tagselector_div {
     float:right;
     height:225px;
