@@ -49,7 +49,8 @@ h1.thetitle {
     float:right;
     width:330px;
     height:225px;
-    background-color: #eef;    
+    /*background-color: #eef;    */
+    background-color: #fff;    
 }
 .span_centered {
     display:block;
@@ -61,7 +62,8 @@ h1.thetitle {
     height:195px;
     width:180px;
     margin:0px;
-    background-color: #efe;
+    /*background-color: #efe;*/
+    background-color: #fff;
 }
 #filter_by_date {
     margin-left: 15px;
@@ -96,7 +98,8 @@ h1.thetitle {
     height:195px;
     width:150px;
     margin:0px;
-    background-color: #fee;
+    /*background-color: #fee;*/
+    background-color: #fff;
 }
 #tagselector{
     height:165px;
