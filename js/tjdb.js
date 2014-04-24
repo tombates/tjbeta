@@ -881,18 +881,18 @@ function toggleDateFilter() {
     console.log("toggleDateFilter");
     var filterDateDiv = document.getElementById("filter_date_div");
     if(filterDateDiv.className == "display_block")
-        filterDateDiv.className == "display_none";
+        filterDateDiv.className = "display_none";
     else
-        filterDateDiv.className == "display_block";
+        filterDateDiv.className = "display_block";
 }
 
 function toggleTagFilter() {
     console.log("toggleTagFilter");
     var filterTagDiv = document.getElementById("filter_tag_div");
     if(filterTagDiv.className == "display_block")
-        filterTagDiv.className == "display_none";
+        filterTagDiv.className = "display_none";
     else
-        filterTagDiv.className == "display_block";
+        filterTagDiv.className = "display_block";
 
 }
 
