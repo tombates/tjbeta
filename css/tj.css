@@ -89,11 +89,11 @@ h1.thetitle {
     background-color: #fee;
 }
 #tagselector{
-    height:175px;
+    height:165px;
     width:148px;
     margin:0px;
     margin-top:5px;
-    margin-bottom:2px;
+    margin-bottom:10px;
     border-radius:5px;
 }
 #stagetags_btn {
