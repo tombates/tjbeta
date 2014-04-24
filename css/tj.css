@@ -53,7 +53,7 @@ h1.thetitle {
 }
 .span_centered {
     display:block;
-    width:75%;
+    width:50%;
     margin:0px auto;
 }
 #filterby_div {
