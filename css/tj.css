@@ -46,7 +46,7 @@ h1.thetitle {
     display:none;
 }
 #rightcontrols {
-    float:left;
+    float:right;
     width:330px;
     height:225px;
     background-color: #eef;    
