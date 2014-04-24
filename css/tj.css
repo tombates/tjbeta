@@ -57,7 +57,7 @@ h1.thetitle {
     margin:0px auto;
 }
 #filterby_div {
-
+    float:left;
     height:185px;
     width:165px;
     margin:0px;
