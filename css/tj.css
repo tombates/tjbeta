@@ -46,7 +46,7 @@ h1.thetitle {
     display:none;
 }
 #rightcontrols {
-    float:right;
+    float:left;
     width:330px;
     height:225px;
     background-color: #eef;    
@@ -57,7 +57,7 @@ h1.thetitle {
     margin:0px auto;
 }
 #filterby_div {
-    float:left;
+    float:right;
     height:195px;
     width:180px;
     margin:0px;
@@ -79,10 +79,10 @@ h1.thetitle {
 }
 #applyfilters_btn {
     width:95px;
-    margin-left:35px;
+    margin-left:180px;
 }
 #tagselector_div {
-    float:right;
+    float:left;
     /*height:225px;*/
     height:195px;
     width:150px;
@@ -99,7 +99,7 @@ h1.thetitle {
 }
 #stagetags_btn {
     width: 100px;
-    margin-left:200px;
+    margin-left:25px;
 /*    background-image: url(..\/images\/arrow-down20h-trans.png);
     background-position:  58px 2px;
     background-repeat: no-repeat;
