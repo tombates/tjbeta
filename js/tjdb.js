@@ -878,6 +878,7 @@ function tagManager_init() {
 }
 
 function toggleDateFilter() {
+    console.log("toggleDateFilter");
     var filterDateDiv = document.getElementById("filter_date_div");
     if(filterDateDiv.className == "display_block")
         filterDateDiv.className == "display_none";
@@ -886,11 +887,12 @@ function toggleDateFilter() {
 }
 
 function toggleTagFilter() {
-    var filterDateDiv = document.getElementById("filter_tag_div");
-    if(filterDateDiv.className == "display_block")
-        filterDateDiv.className == "display_none";
+    console.log("toggleTagFilter");
+    var filterTagDiv = document.getElementById("filter_tag_div");
+    if(filterTagDiv.className == "display_block")
+        filterTagDiv.className == "display_none";
     else
-        filterDateDiv.className == "display_block";
+        filterTagDiv.className == "display_block";
 
 }
 
