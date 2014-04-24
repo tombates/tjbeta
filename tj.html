@@ -72,14 +72,14 @@
         <div id="filterby_div">
             <span class="span_centered">Filter&nbsp;Options</span><br>
             <input type="checkbox" onClick="toggleDateFilter(); return false;" id="filter_by_date" value="filter"/>By Date Range<br>
-            <div id="display_block">
+            <div id="filter_date_div" class="display_none">
               &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="startdate_btn" value="" title="Choose start date">
               <input type="text" id="startdate" placeholder="start date" maxlength="12"><br>
               &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="enddate_btn" value="" title="Choose end date">
               <input type="text" id="enddate" placeholder="end date" maxlength="12"><br><br>
             </div>
             <input type="checkbox" onClick="toggleTagFilter(); return false;" id="filter_by_tags" value="filter"/>By Tags<br>
-            <div class="display_none">
+            <div id="filter_tag_div" class="display_none">
               &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="tagfilter" id="filter_by_tags_or" value="filter" title="Use the Tag Selector to choose the filter tags."/>
               Any Selected Tag<br>
               &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="tagfilter" id="filter_by_tags_and" value="filter" title="Use the Tag Selector to choose the filter tags."/>

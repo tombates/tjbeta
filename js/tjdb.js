@@ -877,6 +877,23 @@ function tagManager_init() {
     tagManagerPopulateSelector();
 }
 
+function toggleDateFilter() {
+    var filterDateDiv = document.getElementById("filter_date_div");
+    if(filterDateDiv.className == "display_block")
+        filterDateDiv.className == "display_none";
+    else
+        filterDateDiv.className == "display_block";
+}
+
+function toggleTagFilter() {
+    var filterDateDiv = document.getElementById("filter_tag_div");
+    if(filterDateDiv.className == "display_block")
+        filterDateDiv.className == "display_none";
+    else
+        filterDateDiv.className == "display_block";
+
+}
+
 function applyFilters() {
     tj.filterObject.filterTags = getSelectedTags();
     // if no filtering show everything
