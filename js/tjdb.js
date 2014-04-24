@@ -807,7 +807,7 @@ function toggleOrdering() {
 // place selected tags in Tags text field for jot being added
 function stageTags() {
     var textfield = document.getElementById('add_tagsinput');
-    textfield.value = getSelectedTags.join(",");
+    textfield.value = getSelectedTags().join(",");
 }
 
 function getSelectedTags() {
