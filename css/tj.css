@@ -49,6 +49,12 @@ h1.thetitle {
     float:right;
     width:330px;
     height:225px;
+    border-width:1px;
+    border-style:solid;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
     /*background-color: #eef;    */
     background-color: #fff;    
 }
