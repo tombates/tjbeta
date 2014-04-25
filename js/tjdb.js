@@ -500,7 +500,7 @@ function renderJot(row) {
 	dellink.title = "Delete this jot"
 	//dellink.textContent = " [Delete]";
 	var delimage = document.createElement("img");
-	delimage.src = ".\/images\/bin32.png"
+	delimage.src = ".\/images\/delete-20h.png"
 
 	var editlink = document.createElement("a");
 	editlink.className = "edit";
