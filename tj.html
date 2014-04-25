@@ -77,7 +77,7 @@
             <input type="checkbox" onClick="toggleDateFilter(); return true;" id="filter_by_date" value="filter"/>By Date Range<br>
             <div id="filter_date_div" class="display_none">
               <input type="button" id="startdate_btn" value="" title="Choose start date">
-              <input type="text" id="startdate" onClick="raiseCalendar(); return false;" placeholder="start date" maxlength="12"><br>
+              <input type="text" id="startdate" onClick="raiseCalendar(this.id); return false;" placeholder="start date" maxlength="12"><br>
               <input type="button" id="enddate_btn" value="" title="Choose end date">
               <input type="text" id="enddate" placeholder="end date" maxlength="12"><br>
             </div>

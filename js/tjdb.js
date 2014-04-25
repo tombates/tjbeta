@@ -804,8 +804,7 @@ function toggleOrdering() {
 	tj.indexedDB.showAllJots(); 
 }
 
-function raiseCalendar() {
-    var which = this.id;
+function raiseCalendar(elementID) {
     $("#startdate").datepicker();
 }
 
