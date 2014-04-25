@@ -805,7 +805,8 @@ function toggleOrdering() {
 }
 
 function raiseCalendar(elementID) {
-    $("#startdate").datepicker();
+    var which = "#" + elementID;
+    $(which).datepicker();
 }
 
 // place selected tags in Tags text field for jot being added
