@@ -805,6 +805,7 @@ function toggleOrdering() {
 }
 
 function raiseCalendar() {
+    var which = this.id;
     $("#startdate").datepicker();
 }
 
