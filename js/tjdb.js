@@ -507,7 +507,7 @@ function renderJot(row) {
 	editlink.title = "Edit this jot"
 	//editlink.textContent = " [Edit]";
 	var editimage = document.createElement("img");
-	editimage.src = ".\/images\/pen32.png"
+	editimage.src = ".\/images\/pen-20h.png"
 	//var ts = toString(row.timeStamp);
 
     // THIS is the place to save the edit/save link <-> jot text containing element relationship for toggling editability
@@ -624,7 +624,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tag
 
     if(editLink.title == "Edit this jot") {
         editLink.title = "Save the edit";
-        editimg.src = ".\/images\/tick32.png";
+        editimg.src = ".\/images\/editdone-20h.png";
 	    jotElement.setAttribute("contenteditable", true);
 	    jotElement.className = "jottext_editing";
 	    //titlespan.setAttribute("contenteditable", true);
