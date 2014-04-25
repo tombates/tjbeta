@@ -5,7 +5,10 @@
 <title>ThoughtJot</title>
 <link href="css/tj.css" rel="stylesheet" type="text/css" />
 <script src="http://nimbusbase.com/static/nimbus.min.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <script src="./js/jquery-1.11.0.min.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="./js/nb.js"></script>
 <script src="./js/tjdb.js"></script>
 <!-- thanks to http://adamwhitcroft.com/batch/ for icon images -->
@@ -74,7 +77,7 @@
             <input type="checkbox" onClick="toggleDateFilter(); return true;" id="filter_by_date" value="filter"/>By Date Range<br>
             <div id="filter_date_div" class="display_none">
               <input type="button" id="startdate_btn" value="" title="Choose start date">
-              <input type="text" id="startdate" placeholder="start date" maxlength="12"><br>
+              <input type="text" id="startdate" onClick="raiseCalendar(); return false;" placeholder="start date" maxlength="12"><br>
               <input type="button" id="enddate_btn" value="" title="Choose end date">
               <input type="text" id="enddate" placeholder="end date" maxlength="12"><br>
             </div>

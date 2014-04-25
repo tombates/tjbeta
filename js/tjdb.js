@@ -804,6 +804,10 @@ function toggleOrdering() {
 	tj.indexedDB.showAllJots(); 
 }
 
+function raiseCalendar() {
+    $("#startdate").datepicker();
+}
+
 // place selected tags in Tags text field for jot being added
 function stageTags() {
     var textfield = document.getElementById('add_tagsinput');
