@@ -693,7 +693,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tag
         //TODO should we move this into the requestUpdate.onsuccess?
         //AND if there was an indexedDB error we should probably revert the page text...?
         editLink.title = "Edit this jot";
-        editimg.src = ".\/images\/pen32.png";
+        editimg.src = ".\/images\/pen-20h.png";
 	    jotElement.setAttribute("contenteditable", false);
         jotElement.className = "jottext";
 	    //titlespan.setAttribute("contenteditable", false);
