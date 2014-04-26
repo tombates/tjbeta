@@ -277,11 +277,11 @@ a.delete {
 }
 
 .timestamp {
+    height:14px;
     background-color:#88a;
     color:#eee;
     font-size:12px;
-    margin-right:10px;
-    margin-left:10px;
+    margin-left:15px;
     /*float:right;*/
 }
 .tagsspan {
