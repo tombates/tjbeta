@@ -293,7 +293,7 @@ a.delete {
     height:16px;
     margin-top:2px;
     /*padding-left:15px;*/
-    width:770px;
+    width:250px;
     float:right;
 }
 .tagsinput {
@@ -314,7 +314,7 @@ a.delete {
     margin:0px;
     padding:0px;
     /*margin-right:15px;*/
-    width:500px;
+    width:250px;
     margin-left:10px;
     border:solid 1px #000;
 }
