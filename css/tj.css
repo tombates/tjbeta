@@ -65,7 +65,7 @@ h1.thetitle {
     border-top-left-radius:6px;
     border-top-right-radius:6px;
     color: #ccc;
-    background-color: #aaa;
+    background-color: #88a;
 }
 
 .span_centered {
@@ -91,9 +91,9 @@ h1.thetitle {
     background-color: #fff;
 }
 #filter_by_date {
-    margin-left: 15px;
+    margin-left: 25px;
 }#filter_by_tags {
-    margin-left: 15px;
+    margin-left: 25px;
 }
 #filter_date_div {
     padding-left: 22px;
@@ -104,9 +104,11 @@ h1.thetitle {
 }
 #startdate{
     width:90px;
+    margin-left: 10px;
 }
 #enddate{
     width:90px;
+    margin-left: 10px;
 }
 #filterbtn_div {
     color:#fef;
