@@ -588,11 +588,13 @@ function renderJot(row) {
 	
 	title_leftdiv.appendChild(editlink);
 	titlediv.appendChild(title_leftdiv)
+    
     titlespan.appendChild(titleinput);
 	title_centerdiv.appendChild(titlespan);
-	title_centerdiv.appendChild(timespan);
     tagsspan.appendChild(tagsinput);
     title_centerdiv.appendChild(tagsspan);
+	title_centerdiv.appendChild(timespan);
+
 	titlediv.appendChild(title_centerdiv);
 	title_rightdiv.appendChild(dellink);
 	titlediv.appendChild(title_rightdiv);
