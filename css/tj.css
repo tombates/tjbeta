@@ -281,6 +281,7 @@ a.delete {
     background-color:#88a;
     color:#eee;
     font-size:12px;
+    margin-top: 16px;
     margin-left:15px;
     /*float:right;*/
 }
