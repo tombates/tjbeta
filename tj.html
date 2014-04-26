@@ -72,9 +72,9 @@
   <div class="jottextarea">
       <textarea class="jot" id="jot_composer" placeholder="Type a New Jot"></textarea>
       <div id="rightcontrols">
-        <div id="rightcontrols_header"></div>
+        <div id="rightcontrols_header"><span id="rctls_hdr_text">Tag&nbsp;Selector&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Filter&nbsp;Options</span>
+        </div>
         <div id="filterby_div">
-            <span class="span_centered">Filter&nbsp;Options</span><br>
             <input type="checkbox" onClick="toggleDateFilter(); return true;" id="filter_by_date" value="filter"/>By Date Range<br>
             <div id="filter_date_div" class="display_none">
               <!--input type="button" id="startdate_btn" value="" title="Choose start date"-->
@@ -90,7 +90,7 @@
               All Selected Tags<br>
             </div>
         </div>
-        <div id="tagselector_div"><span class="span_centered">Tag&nbsp;Selector</span><select multiple id="tagselector">
+        <div id="tagselector_div"><select multiple id="tagselector">
                                                   <!--option value="tagA">tagA</option>
                                                   <option value="tagB">tagB</option>
                                                   <option value="tagC">tagC</option>
@@ -107,7 +107,7 @@
   <div class="jotaddbtn"><input type="submit" class="addjot_img" value="" title="Add this jot" />&nbsp;&nbsp;Title:
                          <input type="text" id="add_titleinput" placeholder="untitled" maxlength="200"/>&nbsp;&nbsp;Tags:
                          <input type="text" id="add_tagsinput" placeholder="none" maxlength="200" title="Separate tags with commas"/>
-                         <input type="button" onClick="mergeStagedTags(); return false;" class="mergetags_img" value="Merge tags" title="Add tags to or subtract tags from the selector list above.\nTags preceeded with '-' (minus) will be removed." />
+                         <input type="button" onClick="mergeStagedTags(); return false;" class="mergetags_img" value="Merge" title="Add tags to or subtract tags from the selector list above.\nTags preceeded with '-' (minus) will be removed." />
                          <!--input type="button" onClick="clearStagedTags(); return false;" class="cleartags_img" value="" title="Clear tags to be applied to next jot" /-->
   </div>
 </form>

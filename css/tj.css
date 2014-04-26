@@ -73,6 +73,9 @@ h1.thetitle {
     width:60%;
     margin:0px auto;
 }
+#rctls_hdr_text {
+    margin-left: 40px;
+}
 #filterby_div {
     float:right;
     height:195px;
