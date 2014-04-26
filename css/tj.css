@@ -62,6 +62,8 @@ h1.thetitle {
     display:block;
     width:60%;
     margin:0px auto;
+    border-top-left-radius:6px;
+    background-color: #aaa;
 }
 #filterby_div {
     float:right;
