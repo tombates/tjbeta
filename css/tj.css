@@ -197,7 +197,7 @@ a.delete {
 }
 
 .titlediv {
-    height:45px;
+    height:40px;
     background-color:#8aa;
     border-top-left-radius:10px;
     border-top-right-radius:10px;
@@ -206,7 +206,7 @@ a.delete {
     padding:0px;
 }
 .titleleftdiv {
-    height:45px;
+    height:40px;
     width:50px;
     background-color:#88a;
     border-top-left-radius:10px;
@@ -215,7 +215,7 @@ a.delete {
     float:left;
 }
 .titlecenterdiv {
-    height:45px;
+    height:40px;
     width:786px;
     background-color:#88a;
     margin:0px;
@@ -223,7 +223,7 @@ a.delete {
     float:left;
 }
 .titlerightdiv {
-    height:45px;
+    height:40px;
     width:50px;
     background-color:#88a;
     border-top-right-radius:10px;
