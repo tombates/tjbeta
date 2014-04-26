@@ -76,6 +76,10 @@ h1.thetitle {
 #rctls_hdr_text {
     margin-left: 35px;
 }
+#space {
+    display: inline-block;
+    width:50px;
+}
 #filterby_div {
     float:right;
     height:175px;
