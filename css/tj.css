@@ -105,11 +105,11 @@ h1.thetitle {
 }
 #startdate{
     width:90px;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 #enddate{
     width:90px;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 #filterbtn_div {
     color:#fef;
@@ -168,7 +168,7 @@ form {
 /* this is the jot composition area */
 textarea.jot {
 	width:500px;
-	height:220px;
+	height:215px;
 	min-height:100px;
 	max-height:400px;
 	max-width:500px;
