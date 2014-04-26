@@ -81,6 +81,7 @@ h1.thetitle {
     height:195px;
     width:180px;
     margin:0px;
+    padding-top: 10px;
     /*background-color: #efe;*/
     background-color: #fff;
 }
@@ -110,6 +111,7 @@ h1.thetitle {
 #applyfilters_btn {
     width:95px;
     margin-left:190px;
+    margin-bottom: 10px;
 }
 #tagselector_div {
     float:left;
@@ -117,6 +119,7 @@ h1.thetitle {
     height:195px;
     width:150px;
     margin:0px;
+    padding-top: 10px;
     /*background-color: #fee;*/
     background-color: #fff;
 }
@@ -132,6 +135,7 @@ h1.thetitle {
 #stagetags_btn {
     width: 100px;
     margin-left:25px;
+    margin-bottom: 10px;
 /*    background-image: url(..\/images\/arrow-down20h-trans.png);
     background-position:  58px 2px;
     background-repeat: no-repeat;
