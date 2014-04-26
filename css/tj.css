@@ -125,11 +125,11 @@ h1.thetitle {
     background-color: #fff;
 }
 #tagselector{
-    height:150px;
+    height:160px;
     width:145px;
     margin:0px;
     margin-top:5px;
-    margin-bottom:10px;
+    margin-bottom:5px;
     margin-left: 4px;
     border-radius:5px;
 }
