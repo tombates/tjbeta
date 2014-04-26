@@ -29,6 +29,7 @@ h1.thetitle {
 
 .jottextarea {
 	padding:10px;
+    padding-bottom: 0px;
 }
 .jotaddbtn {
     clear: both;
@@ -164,9 +165,10 @@ form {
 	border:solid 2px #bb0;
 }
 
+/* this is the jot composition area */
 textarea.jot {
 	width:500px;
-	height:200px;
+	height:220px;
 	min-height:100px;
 	max-height:400px;
 	max-width:500px;

@@ -293,11 +293,20 @@ function getSortedRemoteJots(filterObject) {
     var remoteJots = nbx.Jots.all();
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
 
+    
+    var tagChecking = (((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) || 
+                        ((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR));
+    var dateChecking = ((filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE);
 
     if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
         var filteredJots = [];
+
+
         for(var i = 0; i < remoteJots.length; i++) {
-            if(containsTags(remoteJots[i], filterObject)) {
+            if(tagChecking && containsTags(remoteJots[i], filterObject)) {
+                filteredJots.push(remoteJots[i])
+            }
+            if(dateChecking && filteredJots.indexOf(remoteJots[i] == -1) && inDateRange()) {
                 filteredJots.push(remoteJots[i])
             }
         }
@@ -311,6 +320,11 @@ function getSortedRemoteJots(filterObject) {
     }
 
     return remoteJots;
+}
+
+function inDateRange(jot, filterObject) {
+
+    return false;
 }
 
 function containsTags(jot, filterObject) {
