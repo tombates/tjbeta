@@ -305,13 +305,20 @@ function getSortedRemoteJots(filterObject) {
     if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
         var filteredJots = [];
 
-
+        // if the user is filtering on both tags and date range we take this as an AND operation: a displayed
+        // jot must be in the date range AND must be tagged with the tags (Which might be AND or OR mode). But
+        // we don't want to go through all the jots twice.
         for(var i = 0; i < remoteJots.length; i++) {
-            if(tagChecking && containsTags(remoteJots[i], filterObject)) {
-                filteredJots.push(remoteJots[i])
+            var jot = remoteJots[i];
+            if(dateChecking && inDateRange(jot, filterObject)) {
+                if(tagChecking && containsTags(jot, filterObject)) {
+                    filteredJots.push(jot)    // date and tag filtering
+                }
+                else    // only date filtering
+                    filteredJots.push(jot)
             }
-            if(dateChecking && filteredJots.indexOf(remoteJots[i] == -1) && inDateRange(remoteJots[i], filterObject)) {
-                filteredJots.push(remoteJots[i])
+            else if(tagChecking && containsTags(jot, filterObject)) {
+                filteredJots.push(jot)    // only tag filtering
             }
         }
         remoteJots = filteredJots;
