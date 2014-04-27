@@ -306,7 +306,7 @@ function getSortedRemoteJots(filterObject) {
             if(tagChecking && containsTags(remoteJots[i], filterObject)) {
                 filteredJots.push(remoteJots[i])
             }
-            if(dateChecking && filteredJots.indexOf(remoteJots[i] == -1) && inDateRange()) {
+            if(dateChecking && filteredJots.indexOf(remoteJots[i] == -1) && inDateRange(remoteJots[i], filterObject)) {
                 filteredJots.push(remoteJots[i])
             }
         }
