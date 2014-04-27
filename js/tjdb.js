@@ -299,7 +299,7 @@ function getSortedRemoteJots(filterObject) {
 
     
     var tagChecking = (((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) || 
-                        ((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR));
+                        ((filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND));
     var dateChecking = ((filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE);
 
     if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
@@ -948,11 +948,13 @@ function applyFilters() {
         return;
     }
 
-    if(document.getElementById("filter_by_tags_or").checked) {
-        tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
-    }
-    else if(document.getElementById("filter_by_tags_and").checked) {
-        tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
+    if(document.getElementById("filter_by_tags").checked) {
+        if(document.getElementById("filter_by_tags_or").checked) {
+            tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
+        }
+        else if(document.getElementById("filter_by_tags_and").checked) {
+            tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
+        }
     }
     if(document.getElementById("filter_by_date").checked) {
         //TODO put date info into filterObject
