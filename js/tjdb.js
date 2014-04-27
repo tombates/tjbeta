@@ -310,14 +310,16 @@ function getSortedRemoteJots(filterObject) {
         // we don't want to go through all the jots twice.
         for(var i = 0; i < remoteJots.length; i++) {
             var jot = remoteJots[i];
-            if(dateChecking && inDateRange(jot, filterObject)) {
-                if(tagChecking) {
-                    if(containsTags(jot, filterObject)) {
-                        filteredJots.push(jot);   // date and tag filtering
+            if(dateChecking) {
+                if(inDateRange(jot, filterObject)) {
+                    if(tagChecking) {
+                        if(containsTags(jot, filterObject)) {
+                            filteredJots.push(jot);   // date and tag filtering
+                        }
                     }
+                    else    // only date filtering
+                        filteredJots.push(jot);
                 }
-                else    // only date filtering
-                    filteredJots.push(jot);
             }
             else if(tagChecking && containsTags(jot, filterObject)) {
                 filteredJots.push(jot);    // only tag filtering
