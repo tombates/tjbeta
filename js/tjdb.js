@@ -328,7 +328,11 @@ function inDateRange(jot, filterObject) {
     var end = document.getElementById("enddate").value;
     start = (new Date(start).getTime());
     end = (new Date(end).getTime());
-    return false;
+    target = jot.commonKeyTS;
+    if((target >= start) && (target <= end))
+        return true;
+    else
+        return false;
 }
 
 function containsTags(jot, filterObject) {
