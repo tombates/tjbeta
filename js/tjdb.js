@@ -324,11 +324,11 @@ function getSortedRemoteJots(filterObject) {
 
 function inDateRange(jot, filterObject) {
     // we need to translate from the timestamp in the jot to the date strings we have from the filter options UI
+    var target = jot.commonKeyTS;
     var start = document.getElementById("startdate").value;
     var end = document.getElementById("enddate").value;
     start = (new Date(start).getTime());
     end = (new Date(end).getTime());
-    target = jot.commonKeyTS;
     if((target >= start) && (target <= end))
         return true;
     else
