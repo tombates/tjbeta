@@ -323,7 +323,11 @@ function getSortedRemoteJots(filterObject) {
 }
 
 function inDateRange(jot, filterObject) {
-
+    // we need to translate from the timestamp in the jot to the date strings we have from the filter options UI
+    var start = document.getElementById("startdate").value;
+    var end = document.getElementById("enddate").value;
+    start = (new Date(start).getTime());
+    end = (new Date(end).getTime());
     return false;
 }
 
@@ -588,7 +592,7 @@ function renderJot(row) {
 	
 	title_leftdiv.appendChild(editlink);
 	titlediv.appendChild(title_leftdiv)
-    
+
     titlespan.appendChild(titleinput);
 	title_centerdiv.appendChild(titlespan);
     tagsspan.appendChild(tagsinput);
@@ -923,6 +927,7 @@ function applyFilters() {
     if(!(document.getElementById("filter_by_tags_or").checked
         || document.getElementById("filter_by_tags_and").checked || document.getElementById("filter_by_date").checked)) {
         tj.indexedDB.showAllJots();
+        return;
     }
 
     if(document.getElementById("filter_by_tags_or").checked) {
