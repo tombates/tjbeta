@@ -60,6 +60,10 @@ tj.STORE_IDB = 1;
 tj.STORE_DROPBOX = 2;
 tj.STORE_GDRIVE = 4;
 tj.STORE_BITTORRENT_SYNC = 8;
+
+//The value returned by the getTime method is the number of milliseconds since 1 January 1970 00:00:00 UTC.
+tj.MS_ONE_DAY = 86400000;    // milliseconds in one day = 24 * 60 * 60 * 1000
+
 //tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // Original but problematic mode
 tj.STORE_MASK = tj.STORE_DROPBOX;   // TODO make user controlled
 
@@ -328,7 +332,8 @@ function inDateRange(jot, filterObject) {
     var start = document.getElementById("startdate").value;
     var end = document.getElementById("enddate").value;
     start = (new Date(start).getTime());
-    end = (new Date(end).getTime());
+    end = (new Date(end).getTime()) + (tj.MS_ONE_DAY - 1);  // adjust to get the whole day for the end date
+
     if((target >= start) && (target <= end))
         return true;
     else
