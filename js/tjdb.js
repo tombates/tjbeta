@@ -301,7 +301,7 @@ function getStatusReport() {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
         // create string rep of date and tag filters
         var filterText = "Filtered";
-        if((filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE)
+        if((tj.filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE)
             filterText += " by date range: "
         if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
             filterText += " By OR'd tags: ";
