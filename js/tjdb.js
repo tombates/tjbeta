@@ -262,7 +262,7 @@ function pageRenderer(filterObject) {
     // PERFORMANCE change to using Fragment in order to minimize touching the live DOM for each jotdiv
     // let's gather some timing info to see if this noticeably improves things
 
-    var start_time = new Date().getTime();
+    start_time = new Date().getTime();
     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
     for(i = 0; i < r.length; i++) {
         l = convertNimbusRowToIDBRow(r[i]);
