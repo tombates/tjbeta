@@ -273,7 +273,7 @@ function pageRenderer(filterObject) {
         //jotsContainer.appendChild(nextJotDiv);      
         fragment.appendChild(nextJotDiv);      
     }
-    jotsContainer.appendChild(nextJotDiv);      
+    jotsContainer.appendChild(fragment);      
     end_time = new Date().getTime();
     duration = end_time - start_time;
     console.log("pageRender jots render and append took:" + duration + "milliseconds")
