@@ -1026,7 +1026,7 @@ function applyFilters() {
         tj.filterObject.filterMode |= tj.FILTERMODE_DATE;        
     }
     tj.indexedDB.showAllJots(tj.filterObject);
-    tj.filterObject.filterMode = tj.FILTERMODE_NONE;
+    // what was the reason for this? tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 }
 
 /*
