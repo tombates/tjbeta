@@ -243,7 +243,12 @@ tj.indexedDB.showAllJots = function(filterObject) {
 }
 
 function pageRenderer(filterObject) {
+    var start_time = new Date().getTime();
     var r = getSortedRemoteJots(filterObject);
+    var end_time = new Date().getTime();
+    var duration = end_time - start_time;
+    console.log("pageRender getSortedRemoteJots took:" + duration + "milliseconds")
+
     var l = {};
     var nextJotDiv;
     //MUST convert from result.value to remote object -> local style
@@ -266,9 +271,9 @@ function pageRenderer(filterObject) {
  	    nextJotDiv = renderJot(l);    // result.value is a basically a local store table row
 	    jotsContainer.appendChild(nextJotDiv);   	
     }
-    var end_time = new Date().getTime();
-    var duration = end_time - start_time;
-    console.log("pageRender render jots took:" + duration + "milliseconds")
+    end_time = new Date().getTime();
+    duration = end_time - start_time;
+    console.log("pageRender jots render and append took:" + duration + "milliseconds")
 };
 
 //TODO remove once we are solid on the new scheme of mostly remote only
