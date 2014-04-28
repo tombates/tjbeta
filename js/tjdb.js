@@ -264,13 +264,16 @@ function pageRenderer(filterObject) {
 
     start_time = new Date().getTime();
     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
+    var fragment = document.createDocumentFragment();
     for(i = 0; i < r.length; i++) {
         l = convertNimbusRowToIDBRow(r[i]);
     	//l = {"commonKeyTS":r[i].commonKeyTS, "nimbusID":r[i].id, "nimbusTime":r[i].time, "modTime":r[i].modTime,
         //     "title":r[i].title, "jot":r[i].jot, "tagList":r[i].tagList, "extra":r[i].extra, "idTodo":r[i].isTodo, "done":r[i].done};
  	    nextJotDiv = renderJot(l);    // result.value is a basically a local store table row
-	    jotsContainer.appendChild(nextJotDiv);   	
+        //jotsContainer.appendChild(nextJotDiv);      
+        fragment.appendChild(nextJotDiv);      
     }
+    jotsContainer.appendChild(nextJotDiv);      
     end_time = new Date().getTime();
     duration = end_time - start_time;
     console.log("pageRender jots render and append took:" + duration + "milliseconds")
