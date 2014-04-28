@@ -166,7 +166,9 @@ h1.thetitle {
     width:600px;
 }
 form {
-	border:solid 2px #bb0;
+	/*border:solid 2px #bb0;*/
+    border:solid 1px #000;
+    border-radius:5px;
 }
 
 /* this is the jot composition area */
