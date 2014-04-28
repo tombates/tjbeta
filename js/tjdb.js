@@ -91,6 +91,8 @@ tj.FILTERMODE_TAGS_OR = 1;
 tj.FILTERMODE_TAGS_AND = 2;
 tj.FILTERMODE_DATE = 4;
 tj.filterObject.filterMode = tj.FILTERMODE_NONE;
+tj.filterObject.startDate = "";
+tj.filterObject.endDate = "";
 
 tj.indexedDB.onerror = function (e){
     console.log(e);
@@ -297,6 +299,14 @@ function getStatusReport() {
         tj.status.which = "all jots (" + tj.status.total.toString() + ")";
     else {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
+        // create string rep of date and tag filters
+        var filterText = "Filtered";
+        if((filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE)
+            filterText += " by date range: "
+        if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
+            filterText += " By OR'd tags: ";
+        else if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)
+            filterText += " By AND'd tags: ";
     }
     return tj.status.prefix + tj.status.which;
 }
@@ -380,7 +390,9 @@ function inDateRange(jot, filterObject) {
     // we need to translate from the timestamp in the jot to the date strings we have from the filter options UI
     var target = jot.commonKeyTS;
     var start = document.getElementById("startdate").value;
+    tj.filterObject.startDate = start;
     var end = document.getElementById("enddate").value;
+    tj.filterObject.endDate = end;
     start = (new Date(start).getTime());
     end = (new Date(end).getTime()) + (tj.MS_ONE_DAY - 1);  // adjust to get the whole day for the end date
 
