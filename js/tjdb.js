@@ -76,7 +76,8 @@ tj.indexedDB.order = "prev";   // default to showing newest jots at top
 tj.filterObject = {};
 
 tj.status = {};   // holds the status area information
-tj.status.which = "All jots ";
+tj.status.prefix = "Showing ";
+tj.status.which = "";
 tj.status.total = 0;
 tj.status.subset = 0;
 tj.status.filterDatesPrefix = "";
@@ -293,11 +294,11 @@ function pageRenderer(filterObject) {
 
 function getStatusReport() {
     if(tj.status.total == tj.status.subset)
-        tj.status.which = "All Jots";
+        tj.status.which = "all jots";
     else {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
     }
-    return tj.status.which;
+    return tj.status.prefix + tj.status.which;
 }
 
 //TODO remove once we are solid on the new scheme of mostly remote only
