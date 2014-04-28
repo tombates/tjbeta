@@ -295,18 +295,28 @@ function pageRenderer(filterObject) {
 };
 
 function getStatusReport() {
+    var filterText = "";
+    var tagText = "";
+
     if(tj.status.total == tj.status.subset)
         tj.status.which = "all jots (" + tj.status.total.toString() + ")";
     else {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
         // create string rep of date and tag filters
-        var filterText = " Filtered";
-        if((tj.filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE)
-            filterText += " by date range: "
+        filterText = ", filtered by ";
+        if((tj.filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE) {}
+            filterText += "date range: "
+
+        }
         if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
-            filterText += " By OR'd tags: ";
+            tagText += "tags (OR'd): ";
         else if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)
-            filterText += " By AND'd tags: ";
+            tagText += "tags (AND'd): ";
+
+        if(filterText.indexOf("date") == -1)
+            filterText += tagText;
+        else if(tagText != "")
+            filterText += " and by " + tagText;
     }
     return tj.status.prefix + tj.status.which + filterText;
 }
