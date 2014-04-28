@@ -848,12 +848,12 @@ function indexedDB_init() {
 function toggleOrdering() {
 	var toggle = document.getElementById('toggleOrder');
 	if(tj.indexedDB.order === "prev") {
-		toggle.value = "Showing oldest first";
+		//toggle.value = "Showing oldest first";
 		toggle.title = "Press to show newest jots first.";
 		tj.indexedDB.order = "next";
 	}
 	else {
-		toggle.value = "Showing newest first";
+		//toggle.value = "Showing newest first";
 		toggle.title = "Press to show oldest jots first.";
 		tj.indexedDB.order = "prev";
 	}
