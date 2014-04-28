@@ -311,6 +311,9 @@ function getStatusReport() {
             tagText += "tags (OR'd): ";
         else if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)
             tagText += "tags (AND'd): ";
+        
+        if(tagText != "")
+            tagText += tj.filterObject.filterTags.join();
 
         if(filterText.indexOf("date") == -1)
             filterText += tagText;
