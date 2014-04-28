@@ -74,6 +74,16 @@ tj.indexedDB.IDB_SCHEMA_VERSION = 7;
 tj.indexedDB.order = "prev";   // default to showing newest jots at top
 
 tj.filterObject = {};
+
+tj.status = {};   // holds the status area information
+tj.status.which = "All jots ";
+tj.status.total = 0;
+tj.status.subset = 0;
+tj.status.filterDatesPrefix = "";
+tj.status.filterDatesText = "";
+tj.status.filterTagsPrefix = "";
+tj.status.filterTagsText = "";
+
 tj.filterObject.filterTags = null;
 tj.FILTERMODE_NONE = 0;
 tj.FILTERMODE_TAGS_OR = 1;
@@ -256,7 +266,9 @@ function pageRenderer(filterObject) {
     // Currenly renderJot expects a local (indexedDB) style 'row' so we have to convert from the remote names
     // nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra",
     //                               "isTodo", "done"]);
-
+    var statusReport = getStatusReport();
+    var status = document.getElementById("statusarea");
+    status.innerHTML = statusReport;
     var jotsContainer = document.getElementById("jotItems");
 
     // PERFORMANCE change to using Fragment in order to minimize touching the live DOM for each jotdiv
@@ -278,6 +290,15 @@ function pageRenderer(filterObject) {
     duration = end_time - start_time;
     console.log("pageRender jots render and append took:" + duration + "milliseconds")
 };
+
+function getStatusReport() {
+    if(tj.status.total == tj.status.subset)
+        tj.status.which = "All Jots";
+    else {
+        tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
+    }
+    return tj.status.which;
+}
 
 //TODO remove once we are solid on the new scheme of mostly remote only
 function convertNimbusRowToIDBRow(nrow) {
@@ -311,6 +332,7 @@ function updateRemote(localNotOnRemote) {
 function getSortedRemoteJots(filterObject) {
     // get all the remote jots and sort them
     var remoteJots = nbx.Jots.all();
+    tj.status.total = remoteJots.length;
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
 
     
@@ -349,7 +371,7 @@ function getSortedRemoteJots(filterObject) {
             return flip * (a.commonKeyTS - b.commonKeyTS);
     	});
     }
-
+    tj.status.subset = remoteJots.length;
     return remoteJots;
 }
 

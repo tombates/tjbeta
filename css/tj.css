@@ -160,7 +160,9 @@ h1.thetitle {
 	height:25px;
 	padding:5px;
 }
-
+#statusarea {
+    width:600px;
+}
 form {
 	border:solid 2px #bb0;
 }
