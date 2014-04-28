@@ -253,7 +253,12 @@ function pageRenderer(filterObject) {
     //                               "isTodo", "done"]);
 
     var jotsContainer = document.getElementById("jotItems");
-     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
+
+    // PERFORMANCE change to using Fragment in order to minimize touching the live DOM for each jotdiv
+    // let's gather some timing info to see if this noticeably improves things
+
+    var start_time = new Date().getTime();
+    jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
     for(i = 0; i < r.length; i++) {
         l = convertNimbusRowToIDBRow(r[i]);
     	//l = {"commonKeyTS":r[i].commonKeyTS, "nimbusID":r[i].id, "nimbusTime":r[i].time, "modTime":r[i].modTime,
@@ -261,7 +266,10 @@ function pageRenderer(filterObject) {
  	    nextJotDiv = renderJot(l);    // result.value is a basically a local store table row
 	    jotsContainer.appendChild(nextJotDiv);   	
     }
-}
+    var end_time = new Date().getTime();
+    var duration = end_time - start_time;
+    console.log("pageRender render jots took:" + duration + "milliseconds")
+};
 
 //TODO remove once we are solid on the new scheme of mostly remote only
 function convertNimbusRowToIDBRow(nrow) {
