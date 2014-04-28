@@ -300,7 +300,7 @@ function getStatusReport() {
     else {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
         // create string rep of date and tag filters
-        var filterText = "Filtered";
+        var filterText = " Filtered";
         if((tj.filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE)
             filterText += " by date range: "
         if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
@@ -308,7 +308,7 @@ function getStatusReport() {
         else if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)
             filterText += " By AND'd tags: ";
     }
-    return tj.status.prefix + tj.status.which;
+    return tj.status.prefix + tj.status.which + filterText;
 }
 
 //TODO remove once we are solid on the new scheme of mostly remote only
