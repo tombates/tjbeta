@@ -305,8 +305,7 @@ function getStatusReport() {
         // create string rep of date and tag filters
         filterText = ", filtered by ";
         if((tj.filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE) {
-            filterText += "date range: "
-
+            filterText += "date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate;
         }
         if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
             tagText += "tags (OR'd): ";
