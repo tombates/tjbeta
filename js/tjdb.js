@@ -294,7 +294,7 @@ function pageRenderer(filterObject) {
 
 function getStatusReport() {
     if(tj.status.total == tj.status.subset)
-        tj.status.which = "all jots (" + tj.status.total.toString(); + ")";
+        tj.status.which = "all jots (" + tj.status.total.toString() + ")";
     else {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
     }
