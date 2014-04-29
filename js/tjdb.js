@@ -919,7 +919,8 @@ function toggleOrdering() {
 		toggle.title = "Press to show oldest jots first.";
 		tj.indexedDB.order = "prev";
 	}
-	tj.indexedDB.showAllJots(tj.filterObject); 
+    //tj.indexedDB.showAllJots(tj.filterObject); 
+    applyFilters();   // calls showAllJots
 }
 
 function raiseCalendar(elementID) {
