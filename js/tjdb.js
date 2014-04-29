@@ -369,10 +369,14 @@ function getSortedRemoteJots(filterObject) {
         // if the user is filtering on both tags and date range we take this as an AND operation: a displayed
         // jot must be in the date range AND must be tagged with the tags (Which might be AND or OR mode). But
         // we don't want to go through all the jots twice.
+        var dateHit;
         for(var i = 0; i < remoteJots.length; i++) {
             var jot = remoteJots[i];
             if(dateChecking) {
-                if(inDateRange(jot, filterObject)) {
+                dateHit = inDateRange(jot, filterObject);
+                if(dateHit === undefined)   // bogus date string(s) so default to showing all
+                    return remoteJots;
+                if(dateHit) {
                     if(tagChecking) {
                         if(containsTags(jot, filterObject)) {
                             filteredJots.push(jot);   // date and tag filtering
@@ -408,6 +412,17 @@ function inDateRange(jot, filterObject) {
     start = (new Date(start).getTime());
     end = (new Date(end).getTime()) + (tj.MS_ONE_DAY - 1);  // adjust to get the whole day for the end date
 
+    // deal with bogus or missing dates
+    if(start === NaN && end === NaN) {
+        alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
+        return undefined;
+    }
+    if(start === NaN)
+        start = end - (tj.MS_ONE_DAY - 1);
+    else if(end === NaN)
+        end = start + (tj.MS_ONE_DAY - 1);
+
+    // finally, the real test
     if((target >= start) && (target <= end))
         return true;
     else
