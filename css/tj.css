@@ -161,7 +161,7 @@ h1.thetitle {
     position:relative;
 	padding-top:5px;
     padding-bottom:5px;
-    overflow: auto;
+    /*overflow: auto;*/
 }
 #toggleOrder {
     margin-left:10px;
