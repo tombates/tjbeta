@@ -987,10 +987,12 @@ function filterManager_init() {
 }
 
 function filterSetup() {
-     // for some reason firefox remembers checkbox states across reloads, but not the rest
-     // so we explicitly clear them before getting the saved filter settings
+     // for some reason firefox remembers checkbox and radio states across reloads -- weird
+     // so we explicitly clear them before getting the saved filter settings, as ugly as that is
      document.getElementById("filter_by_date").checked = false;
      document.getElementById("filter_by_tags").checked = false;
+     // now load any saved settings or clear all the dates and radios also
+
 }
 
 function toggleDateFilter() {
@@ -1015,8 +1017,9 @@ function toggleTagFilter() {
 function applyFilters() {
     tj.filterObject.filterTags = getSelectedTags();
     // if no filtering show everything
-    if(!(document.getElementById("filter_by_tags_or").checked
-        || document.getElementById("filter_by_tags_and").checked || document.getElementById("filter_by_date").checked)) {
+    //if(!(document.getElementById("filter_by_tags_or").checked
+    //    || document.getElementById("filter_by_tags_and").checked || document.getElementById("filter_by_date").checked)) {
+    if(!(document.getElementById("filter_by_tags_or").checked || document.getElementById("filter_by_tags").checked)) {
         tj.indexedDB.showAllJots();
         return;
     }
@@ -1028,11 +1031,18 @@ function applyFilters() {
         else if(document.getElementById("filter_by_tags_and").checked) {
             tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
         }
+        else {
+            tj.filterObject.filterMode &= !(tj.FILTERMODE_TAGS_OR | tj.FILTERMODE_TAGS_AND);
+        }
     }
     if(document.getElementById("filter_by_date").checked) {
         //TODO put date info into filterObject
         tj.filterObject.filterMode |= tj.FILTERMODE_DATE;        
     }
+    else {
+        tj.filterObject.filterMode &= !(tj.FILTERMODE_DATE);
+    }
+    
     tj.indexedDB.showAllJots(tj.filterObject);
     // what was the reason for this? tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 }
