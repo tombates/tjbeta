@@ -251,7 +251,7 @@ tj.indexedDB.showAllJots = function(filterObject) {
         syncAllJots(pageRenderer);
     }
     else {
-        pageRenderer(tj.filterObject);
+        pageRenderer(filterObject);
     }
 }
 
