@@ -164,7 +164,9 @@ h1.thetitle {
 }
 #statusarea {
     margin-left: 15px;
-    width:600px;
+    margin-right: 15px;
+    /*width:600px;*/
+    float:right;
 }
 form {
 	/*border:solid 2px #bb0;*/
