@@ -989,6 +989,8 @@ function filterManager_init() {
 function filterSetup() {
      // for some reason firefox remembers checkbox states across reloads, but not the rest
      // so we explicitly clear them before getting the saved filter settings
+     document.getElementById("filter_by_date").checked = false;
+     document.getElementById("filter_by_tags").checked = false;
 }
 
 function toggleDateFilter() {
