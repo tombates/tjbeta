@@ -1032,7 +1032,7 @@ function applyFilters() {
             tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
         }
         else {
-            tj.filterObject.filterMode &= !(tj.FILTERMODE_TAGS_OR | tj.FILTERMODE_TAGS_AND);
+            tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_OR | tj.FILTERMODE_TAGS_AND);
         }
     }
     if(document.getElementById("filter_by_date").checked) {
@@ -1040,9 +1040,9 @@ function applyFilters() {
         tj.filterObject.filterMode |= tj.FILTERMODE_DATE;        
     }
     else {
-        tj.filterObject.filterMode &= !(tj.FILTERMODE_DATE);
+        tj.filterObject.filterMode &= ~(tj.FILTERMODE_DATE);
     }
-    
+
     tj.indexedDB.showAllJots(tj.filterObject);
     // what was the reason for this? tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 }
