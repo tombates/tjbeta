@@ -157,9 +157,10 @@ h1.thetitle {
     outline: 0;*/
 }
 #jotcontrols {
-	height:25px;
+	/*height:25px;*/
 	padding-top:5px;
     padding-bottom:5px;
+    overflow: auto;
 }
 #statusarea {
     margin-left: 15px;
