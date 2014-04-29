@@ -162,6 +162,23 @@ h1.thetitle {
     padding-bottom:5px;
     overflow: auto;
 }
+#toggleOrder {
+    margin-left:10px;
+    float:left;
+    background-image: url(..\/images\/reorder-20h.png);
+    background-position:  1px 1px;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+    border: solid 1px #000;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    background-color: buttonface;
+    cursor: pointer;
+    outline: 0;
+}
 #statusarea {
     margin-left: 15px;
     margin-right: 15px;
@@ -386,22 +403,7 @@ p.jottext_editing {
     cursor: pointer;
     outline: 0;
 }
-#toggleOrder {
-    margin-left:10px;
-    background-image: url(..\/images\/reorder-20h.png);
-    background-position:  1px 1px;
-    background-repeat: no-repeat;
-    width: 24px;
-    height: 24px;
-    border: solid 1px #000;
-    border-top-left-radius:5px;
-    border-top-right-radius:5px;
-    border-bottom-left-radius:5px;
-    border-bottom-right-radius:5px;
-    background-color: buttonface;
-    cursor: pointer;
-    outline: 0;
-}
+
 .mergetags_img {  /* temp  & silly - moves the add this jot button over */
     margin-left:10px;
     background-color: buttonface;
