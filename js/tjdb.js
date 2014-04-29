@@ -980,9 +980,15 @@ tj.indexedDB.emptyDB = function() {
 };
 
 /* Sets up the initial state of the Tag Selector UI list */
-function tagManager_init() {
-    console.log("tagManager_init()");
+function filterManager_init() {
+    console.log("filterManager_init()");
+    filterSetup();
     tagManagerPopulateSelector();
+}
+
+function filterSetup() {
+     // for some reason firefox remembers checkbox states across reloads, but not the rest
+     // so we explicitly clear them before getting the saved filter settings
 }
 
 function toggleDateFilter() {

@@ -68,7 +68,7 @@ nbx.open = function() {
                 nbx.Tags = Nimbus.Model.setup("Tags", ["id", "tagList", "extra"]);
                 nbx.Tags.sync_all(function() {
                     console.log("nbx.Tags.sync_all() callback called.");
-                    tagManager_init();
+                    filterManager_init();
                 });
             }
         });
