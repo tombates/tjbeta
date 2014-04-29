@@ -359,12 +359,12 @@ function getSortedRemoteJots(filterObject) {
     var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
 
     
-    var tagChecking = (((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) || 
-                        ((filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND));
-    var dateChecking = ((filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE);
 
     if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
         var filteredJots = [];
+        var tagChecking = (((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) || 
+                            ((filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND));
+        var dateChecking = ((filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE);
 
         // if the user is filtering on both tags and date range we take this as an AND operation: a displayed
         // jot must be in the date range AND must be tagged with the tags (Which might be AND or OR mode). But
