@@ -417,7 +417,7 @@ function inDateRange(jot, filterObject) {
         alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
         return undefined;
     }
-    if(ifNaN(start))
+    if(isNaN(start))
         start = end - (tj.MS_ONE_DAY - 1);
     else if(isNaN(end))
         end = start + (tj.MS_ONE_DAY - 1);
