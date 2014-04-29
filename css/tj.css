@@ -166,7 +166,7 @@ h1.thetitle {
     margin-left: 15px;
     margin-right: 15px;
     /*width:600px;*/
-    float:right;
+    float:left;
 }
 form {
 	/*border:solid 2px #bb0;*/
