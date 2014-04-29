@@ -164,6 +164,7 @@ h1.thetitle {
     overflow: auto;
 }
 #toggleOrder {
+    margin-top: 5px;
     margin-left:10px;
     float:left;
     background-image: url(..\/images\/reorder-20h.png);
