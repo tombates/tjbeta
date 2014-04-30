@@ -241,7 +241,7 @@ a.delete {
 .titleleftdiv {
     height:40px;
     width:50px;
-    background-color:#88a;
+    background-color:#77d;
     border-top-left-radius:10px;
     margin:0px;
     padding:0px;
@@ -250,7 +250,7 @@ a.delete {
 .titlecenterdiv {
     height:40px;
     width:786px;
-    background-color:#88a;
+    background-color:#77d;
     margin:0px;
     padding:0px;
     float:left;
@@ -258,7 +258,7 @@ a.delete {
 .titlerightdiv {
     height:40px;
     width:50px;
-    background-color:#88a;
+    background-color:#77d;
     border-top-right-radius:10px;
     margin:0px;
     padding:0px;
@@ -266,7 +266,7 @@ a.delete {
 }
 
 .title {
-    background-color:#88a;
+    background-color:#77d;
     color:#ccc;
     font-size:14px;
     margin:0px;
@@ -283,7 +283,7 @@ a.delete {
     margin-right:15px;
 }*/
 .titleinput {
-    background-color:#88a;
+    background-color:#77d;
     color:#ccc;
     font-size:14px;
     margin:0px;
@@ -311,7 +311,7 @@ a.delete {
 
 .timestamp {
     height:14px;
-    background-color:#88a;
+    background-color:#77d;
     color:#eee;
     font-size:12px;
     margin-top: 16px;
@@ -319,7 +319,7 @@ a.delete {
     /*float:right;*/
 }
 .tagsspan {
-    background-color:#88a;
+    background-color:#77d;
     color:#ccc;
     font-size:14px;
     margin:0px;
@@ -331,7 +331,8 @@ a.delete {
     /*float:right;*/
 }
 .tagsinput {
-    background-color:#88a;
+    /*background-color:#88a;*/
+    background-color:#77d;
     color:#ccc;
     font-size:14px;
     margin:0px;
