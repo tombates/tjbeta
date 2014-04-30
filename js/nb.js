@@ -64,11 +64,11 @@ nbx.open = function() {
                 indexedDB_init();
             }
             else {
+                filterManager_init();
                 tj.indexedDB.showAllJots();
                 nbx.Tags = Nimbus.Model.setup("Tags", ["id", "tagList", "extra"]);
                 nbx.Tags.sync_all(function() {
                     console.log("nbx.Tags.sync_all() callback called.");
-                    filterManager_init();
                 });
             }
         });
