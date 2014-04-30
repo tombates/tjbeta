@@ -923,6 +923,10 @@ function toggleOrdering() {
     applyFilters();   // calls showAllJots
 }
 
+function paginator(direction) {
+    console.log("paginator() with direction " + direction);
+}
+
 function raiseCalendar(elementID) {
     var which = "#" + elementID;
     $(which).datepicker();

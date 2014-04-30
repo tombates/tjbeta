@@ -158,12 +158,47 @@ h1.thetitle {
 }
 #jotcontrols {
 	height:35px;
-    position:relative;
+    position:relative;    /* must be positioned so that statusarea position absolute works */
 	padding-top:5px;
     padding-bottom:5px;
     overflow: auto;
 }
 #toggleOrder {
+    margin-top: 5px;
+    margin-left:10px;
+    float:left;
+    background-image: url(..\/images\/reorder-20h.png);
+    background-position:  1px 1px;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+    border: solid 1px #000;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    background-color: buttonface;
+    cursor: pointer;
+    outline: 0;
+}
+#paginate_prev {
+    margin-top: 5px;
+    margin-left:10px;
+    float:left;
+    background-image: url(..\/images\/reorder-20h.png);
+    background-position:  1px 1px;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+    border: solid 1px #000;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    background-color: buttonface;
+    cursor: pointer;
+    outline: 0;
+}#paginate_next {
     margin-top: 5px;
     margin-left:10px;
     float:left;
