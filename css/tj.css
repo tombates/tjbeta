@@ -185,7 +185,7 @@ h1.thetitle {
     margin-top: 5px;
     margin-left:10px;
     float:left;
-    background-image: url(..\/images\/reorder-20h.png);
+    background-image: url(..\/images\/back-a-page-20h.png);
     background-position:  1px 1px;
     background-repeat: no-repeat;
     width: 24px;
@@ -202,7 +202,7 @@ h1.thetitle {
     margin-top: 5px;
     margin-left:10px;
     float:left;
-    background-image: url(..\/images\/reorder-20h.png);
+    background-image: url(..\/images\/next-page-20h.png);
     background-position:  1px 1px;
     background-repeat: no-repeat;
     width: 24px;
