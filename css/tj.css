@@ -14,7 +14,7 @@ body a {
     width: 70px;
     height: 55px;
     background-image: url(..\/images\/swcloudcity.png);
-    background-position:  58px 2px;
+    background-position:  2px 1px;
     background-repeat: no-repeat;
     border: solid 1px #000;
     border-top-left-radius:5px;
@@ -24,7 +24,6 @@ body a {
     background-color: #88a;
     cursor: pointer;
     outline: 0;
-
     float: left;
 }
 #helpButton {
