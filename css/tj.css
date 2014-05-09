@@ -255,6 +255,7 @@ h1.thetitle {
 }
 form {
 	/*border:solid 2px #bb0;*/
+    clear: both;
     border:solid 1px #000;
     border-radius:5px;
 }
