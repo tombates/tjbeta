@@ -46,7 +46,7 @@ nbx.open = function() {
     }
     console.log("in nbx.open, calling Nimbus.Auth.setup(nbx.sync_object");
 
-    nbx.linkDropbox = document.getElementById("connectDropbox");
+    nbx.linkDropbox = document.getElementById("cloudButton");
 
     Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
