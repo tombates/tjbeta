@@ -256,11 +256,11 @@ tj.indexedDB.showAllJots = function(filterObject) {
 }
 
 function pageRenderer(filterObject) {
-    var start_time = new Date().getTime();
+    //var start_time = new Date().getTime();
     var r = getSortedRemoteJots(filterObject);
-    var end_time = new Date().getTime();
-    var duration = end_time - start_time;
-    console.log("pageRender getSortedRemoteJots took:" + duration + "milliseconds")
+    //var end_time = new Date().getTime();
+    //var duration = end_time - start_time;
+    //console.log("pageRender getSortedRemoteJots took:" + duration + "milliseconds")
 
     var l = {};
     var nextJotDiv;
@@ -277,8 +277,14 @@ function pageRenderer(filterObject) {
     // PERFORMANCE change to using Fragment in order to minimize touching the live DOM for each jotdiv
     // let's gather some timing info to see if this noticeably improves things
 
-    start_time = new Date().getTime();
+    //start_time = new Date().getTime();
     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
+
+    // just started pagination, which is complicated by not begin able to much useful with the remote store
+    // except all(). weird this is first and last but no range or finer getbyattribute methods in NimbusBase
+    // makes it hard to make anything very scalable...
+    //var startat = 0;
+    //var stopat = r.length > startat + 10 ? startat + 10 : r.length;
     var fragment = document.createDocumentFragment();
     for(i = 0; i < r.length; i++) {
         l = convertNimbusRowToIDBRow(r[i]);
@@ -289,9 +295,9 @@ function pageRenderer(filterObject) {
         fragment.appendChild(nextJotDiv);      
     }
     jotsContainer.appendChild(fragment);      
-    end_time = new Date().getTime();
-    duration = end_time - start_time;
-    console.log("pageRender jots render and append took:" + duration + "milliseconds")
+    //end_time = new Date().getTime();
+    //duration = end_time - start_time;
+    //console.log("pageRender jots render and append took:" + duration + "milliseconds")
 };
 
 function getStatusReport() {
