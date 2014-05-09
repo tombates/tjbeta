@@ -10,6 +10,30 @@ body a {
   text-decoration: none;
 }
 
+#cloudButton {
+    width: 70px;
+    height: 55px;
+    background-image: url(..\/images\/swcloudcity.png);
+    background-position:  58px 2px;
+    background-repeat: no-repeat;
+    border: solid 1px #000;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+    background-color: #88a;
+    cursor: pointer;
+    outline: 0;
+
+    float: left;
+}
+#helpButton {
+    float: right;
+}
+#prefsButton {
+    float: right;
+}
+
 a#connectDropbox {color:#0C6;}
 
 h1.thetitle {
@@ -24,7 +48,8 @@ h1.thetitle {
 	width:900px;
 	margin-left:auto;
 	margin-right:auto;
-	border: 1px dotted #000;
+	/*border: 1px dotted #000;*/
+    border: ridge;
 }
 
 .jottextarea {
