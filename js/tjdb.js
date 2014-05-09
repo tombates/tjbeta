@@ -95,7 +95,7 @@ tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
 
 window.onbeforeunload = function() {
-    alert("Window is unloading.");
+    console.log("Window is unloading.");
 };
 
 tj.indexedDB.onerror = function (e){
