@@ -17,10 +17,6 @@
 <!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
 <body>
 <!--a id="connectDropbox" onClick="Nimbus.Auth.authorize('Dropbox');">Connect to Dropbox - link initial state</a-->
-<header>
-  <input type="button" id="cloudButton" onClick="nbx.userConnectRequest('Dropbox'); return false;" value="Connect" title=""/>
-  <h1 class="thetitle">Thought Jot</h1>
-</header>
 
 <!--script>
     var linkDropbox;
@@ -68,6 +64,10 @@
 	Tasks.destroyAll();
 </script-->
 <div id="container">
+<header>
+  <input type="button" id="cloudButton" onClick="nbx.userConnectRequest('Dropbox'); return false;" value="Connect" title=""/>
+  <h1 class="thetitle">Thought Jot</h1>
+</header>
 
 <!--img src="images/me-photo-cropped.png" width="100px" height="100px"-->
 
