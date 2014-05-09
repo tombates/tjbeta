@@ -51,7 +51,8 @@ nbx.open = function() {
     Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
 	if(nbx.auth == true) { // change link text to connected
-		nbx.linkDropbox.value = "Connected to Dropbox";
+		nbx.linkDropbox.value = "Connected";
+        nbx.linkDropbox.style.backgroundImage = "url('..\/images\/dropboxbtn_connected.png')";
 	        // NimbusBase new schema 3-22-2014:
 	        // commonKeyTS, id, time, modTime, title, jot, tagList, extra, isTodo, done
         //OLDnbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
