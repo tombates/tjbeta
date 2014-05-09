@@ -94,6 +94,10 @@ tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
 
+window.onbeforeunload = function() {
+    alert("Window is unloading.");
+};
+
 tj.indexedDB.onerror = function (e){
     console.log(e);
 };
