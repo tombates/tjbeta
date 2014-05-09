@@ -13,6 +13,8 @@ body a {
 #cloudButton {
     width: 70px;
     height: 55px;
+    margin-top: 2px;
+    margin-left:2px;
     background-image: url(..\/images\/swcloudcity.png);
     background-position:  2px 1px;
     background-repeat: no-repeat;
