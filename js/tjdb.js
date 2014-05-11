@@ -171,7 +171,7 @@ tj.indexedDB.open = function() {
 
         // restore the saved session filter data, if any
 
-        var trans = db.transaction(["SessionState"]);
+        var trans = tj.indexedDB.db.transaction(["SessionState"]);
         trans.oncomplete = function(e) {
             console.log("retrieving filter state: trans.oncomplete() called");
         }
