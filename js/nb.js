@@ -66,6 +66,7 @@ nbx.open = function() {
                 indexedDB_init();
             }
             else {
+                indexedDB_init();
                 tj.indexedDB.showAllJots();
                 nbx.Tags = Nimbus.Model.setup("Tags", ["id", "tagList", "extra"]);
                 nbx.Tags.sync_all(function() {

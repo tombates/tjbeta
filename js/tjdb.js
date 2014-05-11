@@ -70,7 +70,7 @@ tj.STORE_MASK = tj.STORE_DROPBOX;   // TODO make user controlled
 tj.jots = [];
 tj.indexedDB = {};
 tj.indexedDB.db = null;
-tj.indexedDB.IDB_SCHEMA_VERSION = 7;
+tj.indexedDB.IDB_SCHEMA_VERSION = 8;
 tj.indexedDB.order = "prev";   // default to showing newest jots at top
 
 tj.filterObject = {};
@@ -94,8 +94,43 @@ tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
 
+/* Save session state data locally so that tag selection and filtering can be restored to their previous
+*  state. Because this uses indexedDB it is per browser brand and per device, meaning one could have different
+*  filters going on the same Jot remote storage data, which is kind of cool. 
+*/
 window.onbeforeunload = function() {
     console.log("Window is unloading.");
+    // gather user's currently selected and staged tags, and any filter state
+
+    // persist it for the next session using this browser on this device
+
+        var db = tj.indexedDB.db;
+        var trans = db.transaction(["SessionState"], "readwrite");
+        trans.oncomplete = function(e) {
+            console.log("storing session state trans.oncomplete() called");
+        }
+        trans.onerror = function(e) {
+            console.log("storing session state trans.onerror() called");
+            console.log(trans.error);
+        }
+        // IndexedDB on client side new schema 3-22-2014:
+        // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
+        var store = trans.objectStore("SessionState");
+        var row = {"name":"filterState", "filterMode":tj.filterObject.filterMode,
+                   "filterTags":tj.filterObject.filterTags,
+                   "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate};
+        var request = store.add(row);
+                
+        request.onsuccess = function(e) {
+            console.log("storing session state request.onsuccess");
+            //var jotDiv = renderJot(row);
+            //var jotsContainer = document.getElementById("jotItems");
+        };
+        
+        request.onerror = function(e) {
+            console.log(e.value);
+        };
+
 };
 
 tj.indexedDB.onerror = function (e){
@@ -116,28 +151,62 @@ tj.indexedDB.open = function() {
     //TODO Get user's initial preferences for local and remote storage
     //TODO Get user's access info for their prefered remote storage locations - currently hard coded to my keys
 
-    var request = indexedDB.open("todos", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
+    var request = indexedDB.open("ThoughtJot", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
 	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
     request.onupgradeneeded = function(e) {
 		var db = e.target.result;
 		console.log("tj.indexedDB.open: in request.onupgradeneeded() callback");
 		// A versionchange transaction is started automatically.
 		e.target.transaction.onerror = tj.indexedDB.onerror;
-		//TODO remove delete "todo" store once we are cooking with the new schema
-		if(db.objectStoreNames.contains("todo")) {
-			db.deleteObjectStore("todo");
+		if(db.objectStoreNames.contains("SessionState")) {
+			db.deleteObjectStore("SessionState");
 		}		
-		if(db.objectStoreNames.contains("Jots")) {
-			db.deleteObjectStore("Jots");
-		}		
-		var store = db.createObjectStore("Jots", {keyPath: "commonKeyTS"});
+		var store = db.createObjectStore("SessionState", {keyPath: "name"});
 	};
 	
+    // onsuccess populate the filterObject with the saved filter state
 	request.onsuccess = function(e) {
-		console.log("tj.indexedDB.open: in request.onsuccess() callback");
+		console.log("retrieving filter state: in request.onsuccess() callback");
 		tj.indexedDB.db = e.target.result;
-		// update the DOM with all the jots we got
-		tj.indexedDB.showAllJots();
+
+        // restore the saved session filter data, if any
+
+        var trans = db.transaction(["SessionState"]);
+        trans.oncomplete = function(e) {
+            console.log("retrieving filter state: trans.oncomplete() called");
+        }
+        trans.onerror = function(e) {
+            console.log("retrieving filter state: trans.onerror() called");
+            console.log(trans.error);
+        }
+        // IndexedDB on client side new schema 3-22-2014:
+        // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
+        var store = trans.objectStore("SessionState");
+        //var row = {"name":"filterState", "filterMode":tj.filterObject.filterMode,
+        //           "filterTags":tj.filterObject.filterTags,
+        //           "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate};
+        var request = store.get("filterState");
+                
+        request.onsuccess = function(e) {
+            console.log("tj.indexedDB.open retrieving filter state in: request.onsuccess() called");
+            if(request.result == undefined) {
+                tj.filterObject.filterMode = tj.FILTERMODE_NONE;
+                tj.filterObject.filterTags = null;
+                tj.filterObject.startDate = "";
+                tj.filterObject.endDate = "";
+            }
+            else {
+                tj.filterObject.filterMode = request.result.filterMode;
+                tj.filterObject.filterTags = request.result.filterTags;
+                tj.filterObject.startDate = request.result.startDate;
+                tj.filterObject.endDate = request.result.endDate;
+            }
+            //TODO now make sure the page controls reflect the save info
+        };
+        
+        request.onerror = function(e) {
+            console.log(e.value);
+        };
 	};
 	
 	request.onerror = tj.indexedDB.onerror;
