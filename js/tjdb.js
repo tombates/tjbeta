@@ -1120,7 +1120,7 @@ function toggleTagFilter() {
 function setFilterControlsState() {
     var tagSelector = document.getElementById('tagselector');
     if( ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
-      || ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)) {
+      || ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)) {
         document.getElementById("filter_by_tags").checked = true;
         toggleTagFilter();
         if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
@@ -1135,6 +1135,9 @@ function setFilterControlsState() {
         document.getElementById("filter_by_tags").checked = false;
         //TODO really need a forceopen option which can be true or false for toogleTagFilter
         //for calling from her and directly above
+        // and we must persist which mode even if by tags is off or on and restore properly too
+
+        // TODO doing all but final filtering!!!
     }
     // select the tags in the tag selector list
     tagManagerSelectTags(tj.filterObject.filterTags);
