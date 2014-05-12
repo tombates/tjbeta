@@ -188,14 +188,15 @@ tj.indexedDB.open = function() {
         var request = store.get("filterState");
                 
         request.onsuccess = function(e) {
-            console.log("tj.indexedDB.open retrieving filter state in: request.onsuccess() called");
             if(request.result == undefined) {
+                console.log("undefined retrieved filterObject state in: request.onsuccess() called");
                 tj.filterObject.filterMode = tj.FILTERMODE_NONE;
                 tj.filterObject.filterTags = null;
                 tj.filterObject.startDate = "";
                 tj.filterObject.endDate = "";
             }
             else {
+                console.log("defined retrieved filterObject state in: request.onsuccess() called");
                 tj.filterObject.filterMode = request.result.filterMode;
                 tj.filterObject.filterTags = request.result.filterTags;
                 tj.filterObject.startDate = request.result.startDate;
