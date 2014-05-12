@@ -1118,6 +1118,10 @@ function toggleTagFilter() {
 
 /* Sets the state of tj.filterObject into the UI controls, typically at page load time. */
 function setFilterControlsState() {
+    // select the tags that were selected in the tag selector list
+    tagManagerSelectTags(tj.filterObject.filterTags);
+
+    // now set the state if any of the by tags mode controls
     var tagSelector = document.getElementById('tagselector');
     if( ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
       || ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)) {
@@ -1137,10 +1141,10 @@ function setFilterControlsState() {
         //for calling from her and directly above
         // and we must persist which mode even if by tags is off or on and restore properly too
 
-        // TODO doing all but final filtering!!!
     }
-    // select the tags in the tag selector list
-    tagManagerSelectTags(tj.filterObject.filterTags);
+
+    // do the filtering!
+    applyFilters();
 }
 
 /* Handler for user clicking on Filter button. Sets the state of tj.filterObject accordingly. */
@@ -1266,7 +1270,7 @@ function tagManagerMerge(mergeList) {
 
 /* Selects tags in the tag selector list. Used primarily at page load for restoring session filter state. */
 function tagManagerSelectTags(fromList) {
-    if(fromList != undefined) {
+    if((fromList != undefined) && (fromList != null) {
         var selector = document.getElementById('tagselector');
         var opts = selector.options;
         for(var i = 0; i < opts.length; i++) {
