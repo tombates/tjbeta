@@ -202,6 +202,7 @@ tj.indexedDB.open = function() {
                 tj.filterObject.endDate = request.result.endDate;
             }
             //TODO now make sure the page controls reflect the save info
+            setFilterControlsState(tj.filterObject.filterTags);
         };
         
         request.onerror = function(e) {
@@ -1081,11 +1082,11 @@ tj.indexedDB.emptyDB = function() {
 /* Sets up the initial state of the Tag Selector UI list */
 function filterManager_init() {
     console.log("filterManager_init()");
-    filterSetup();
+    filtersClear();
     tagManagerPopulateSelector();
 }
 
-function filterSetup() {
+function filtersClear() {
      // for some reason firefox remembers checkbox and radio states across reloads -- weird
      // so we explicitly clear them before getting the saved filter settings, as ugly as that is
      document.getElementById("filter_by_date").checked = false;
@@ -1113,6 +1114,24 @@ function toggleTagFilter() {
 
 }
 
+/* Sets the state of tj.filterObject into the UI controls, typically at page load time. */
+function setFilterControlsState() {
+    var tagSelector = document.getElementById('tagselector');
+    if( ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
+        || ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)) {
+        document.getElementById("filter_by_tags").checked = true;
+        if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
+            document.getElementById("filter_by_tags_or").checked = true;
+        }
+        else {
+            document.getElementById("filter_by_tags_and").checked = true;
+        }
+        // select the tags in the tag selector list
+        tagManagerSelectTags(tj.filterObject.filterTags);
+    }
+}
+
+/* Handler for user clicking on Filter button. Sets the state of tj.filterObject accordingly. */
 function applyFilters() {
     tj.filterObject.filterTags = getSelectedTags();
     // if no filtering show everything
@@ -1230,6 +1249,17 @@ function tagManagerMerge(mergeList) {
     tagManagerPopulateSelector(existingMinusRemoved);
 }
 
+/* Selects tags in the tag selector list. Used primarily at page load for restoring session filter state. */
+function tagManagerSelectTags(fromList) {
+    if(fromList != undefined) {
+        var selector = document.getElementById('tagselector');
+        var opts = selector.options;
+        for(var i = 0; i < opts.length; i++) {
+            if(fromList.indexOf(opts.[i].value) != -1)
+                opts.[i].selected = true;
+        }
+    }
+}
 /*
 * Populates the Tag Selector list select element on the page with the tags stored on the remote.
 *
@@ -1253,6 +1283,7 @@ function tagManagerPopulateSelector(fromList) {
     selector.innerHTML = "";
     for(var i = 0; i < fromList.length; i++) {
         var newItem = document.createElement("option");
+        newItem.setAttribute("id", fromList[i]);
         newItem.setAttribute("value", fromList[i]);
         newItem.innerHTML = fromList[i];
         selector.appendChild(newItem);
