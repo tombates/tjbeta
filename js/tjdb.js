@@ -120,7 +120,7 @@ tj.indexedDB.persistFilterObjects = function() {
         var row = {"name":"filterState", "filterMode":tj.filterObject.filterMode,
                    "filterTags":tj.filterObject.filterTags,
                    "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate};
-        var request = store.add(row);
+        var request = store.put(row);  // for now at least there is only one persisted filterObject
                 
         request.onsuccess = function(e) {
             console.log("storing session state request.onsuccess");
