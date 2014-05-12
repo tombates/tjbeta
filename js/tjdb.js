@@ -203,7 +203,7 @@ tj.indexedDB.open = function() {
                 tj.filterObject.startDate = request.result.startDate;
                 tj.filterObject.endDate = request.result.endDate;
             }
-            //TODO now make sure the page controls reflect the save info
+            //TODO now make sure the page controls reflect the saved info
             setFilterControlsState(tj.filterObject.filterTags);
         };
         
@@ -1120,8 +1120,9 @@ function toggleTagFilter() {
 function setFilterControlsState() {
     var tagSelector = document.getElementById('tagselector');
     if( ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
-        || ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)) {
-        document.getElementById("filter_by_tags").checked = true;
+      || ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)) {
+        //document.getElementById("filter_by_tags").checked = true;
+        toggleTagFilter();
         if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
             document.getElementById("filter_by_tags_or").checked = true;
         }
