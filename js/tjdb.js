@@ -98,7 +98,8 @@ tj.filterObject.endDate = "";
 *  state. Because this uses indexedDB it is per browser brand and per device, meaning one could have different
 *  filters going on the same Jot remote storage data, which is kind of cool. 
 */
-window.onbeforeunload = function() {
+//window.onbeforeunload = function() {
+tj.indexedDB.persistFilterObjects = function() {
     console.log("Window is unloading.");
     // gather user's currently selected and staged tags, and any filter state
 
@@ -1166,6 +1167,9 @@ function applyFilters() {
     }
 
     tj.indexedDB.showAllJots(tj.filterObject);
+
+    // finally, persist the filter incase the user closes
+    tj.indexedDB.persistFilterObjects();
     // what was the reason for this? tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 }
 
