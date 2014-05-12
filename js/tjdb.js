@@ -1270,7 +1270,7 @@ function tagManagerMerge(mergeList) {
 
 /* Selects tags in the tag selector list. Used primarily at page load for restoring session filter state. */
 function tagManagerSelectTags(fromList) {
-    if((fromList != undefined) && (fromList != null) {
+    if((fromList != undefined) && (fromList != null)) {
         var selector = document.getElementById('tagselector');
         var opts = selector.options;
         for(var i = 0; i < opts.length; i++) {
