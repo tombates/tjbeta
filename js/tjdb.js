@@ -100,7 +100,7 @@ tj.filterObject.endDate = "";
 */
 //window.onbeforeunload = function() {
 tj.indexedDB.persistFilterObjects = function() {
-    console.log("Window is unloading.");
+    console.log("persistFilterObjects");
     // gather user's currently selected and staged tags, and any filter state
 
     // persist it for the next session using this browser on this device
@@ -129,7 +129,7 @@ tj.indexedDB.persistFilterObjects = function() {
         };
         
         request.onerror = function(e) {
-            console.log(e.value);
+            console.log(e);
         };
 
 };
