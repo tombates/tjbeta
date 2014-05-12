@@ -1256,7 +1256,7 @@ function tagManagerSelectTags(fromList) {
         var opts = selector.options;
         for(var i = 0; i < opts.length; i++) {
             if(fromList.indexOf(opts[i].value) != -1)
-                opts.[i].selected = true;
+                opts[i].selected = true;
         }
     }
 }
