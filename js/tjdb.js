@@ -86,6 +86,7 @@ tj.status.filterTagsPrefix = "";
 tj.status.filterTagsText = "";
 
 tj.filterObject.filterTags = null;
+//TODO for cleaner code: the filtermode flags stuff should be replaced with booleans directly reflecting the controls state
 tj.FILTERMODE_NONE = 0;
 tj.FILTERMODE_TAGS_OR = 1;  // radio button state
 tj.FILTERMODE_TAGS_AND = 2; // radio button state
@@ -99,7 +100,6 @@ tj.filterObject.endDate = "";
 *  state. Because this uses indexedDB it is per browser brand and per device, meaning one could have different
 *  filters going on the same Jot remote storage data, which is kind of cool. 
 */
-//window.onbeforeunload = function() {
 tj.indexedDB.persistFilterObjects = function() {
     console.log("persistFilterObjects");
     // gather user's currently selected and staged tags, and any filter state
@@ -132,7 +132,6 @@ tj.indexedDB.persistFilterObjects = function() {
         request.onerror = function(e) {
             console.log(e);
         };
-
 };
 
 tj.indexedDB.onerror = function (e){
@@ -445,8 +444,7 @@ function getSortedRemoteJots(filterObject) {
 
     if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
         var filteredJots = [];
-        var tagChecking = (((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) || 
-                            ((filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND));
+        var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
         var dateChecking = ((filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE);
 
         // if the user is filtering on both tags and date range we take this as an AND operation: a displayed
@@ -1100,21 +1098,22 @@ function filtersClear() {
 
 function toggleDateFilter() {
     console.log("toggleDateFilter");
+    var dateCheckbox = document.getElementById("filter_by_date").checked;
     var filterDateDiv = document.getElementById("filter_date_div");
-    if(filterDateDiv.className == "display_block")
-        filterDateDiv.className = "display_none";
-    else
+    if(dateCheckbox)
         filterDateDiv.className = "display_block";
+    else
+        filterDateDiv.className = "display_none";
 }
 
 function toggleTagFilter() {
     console.log("toggleTagFilter");
     var tagCheckbox = document.getElementById("filter_by_tags").checked;
     var filterTagDiv = document.getElementById("filter_tag_div");
-    if(filterTagDiv.className == "display_block")
-        filterTagDiv.className = "display_none";
-    else
+    if(tagCheckbox)
         filterTagDiv.className = "display_block";
+    else
+        filterTagDiv.className = "display_none";
 
 }
 
@@ -1125,25 +1124,35 @@ function setFilterControlsState() {
 
     // now set the state if any of the by tags mode controls
     var tagSelector = document.getElementById('tagselector');
-    if( ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
-      || ((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)) {
+    if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS) {
         document.getElementById("filter_by_tags").checked = true;
         toggleTagFilter();
-        if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
-            document.getElementById("filter_by_tags_or").checked = true;
-        }
-        else {
-            document.getElementById("filter_by_tags_and").checked = true;
-        }
-        // select the tags in the tag selector list
     }
     else {
         document.getElementById("filter_by_tags").checked = false;
+    }
+
+    if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
+        document.getElementById("filter_by_tags_or").checked = true;
+    }
+    else {
+        document.getElementById("filter_by_tags_or").checked = false;
+    }
+
+    if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND) {
+        document.getElementById("filter_by_tags_and").checked = true;
+    }
+    else {
+        document.getElementById("filter_by_tags_and").checked = false;
+    }
+
+
+        // select the tags in the tag selector list
+
         //TODO really need a forceopen option which can be true or false for toogleTagFilter
         //for calling from her and directly above
         // and we must persist which mode even if by tags is off or on and restore properly too
 
-    }
     // TODO not persisting no filtering state because it doesn't really do anything in the filter code
     // do the filtering!
     applyFilters();
@@ -1162,16 +1171,33 @@ function applyFilters() {
 
     // set tag filtering mode
     if(document.getElementById("filter_by_tags").checked) {
-        if(document.getElementById("filter_by_tags_or").checked) {
-            tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
-        }
-        else if(document.getElementById("filter_by_tags_and").checked) {
-            tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
-        }
+        tj.filterObject.filterMode |= tj.FILTERMODE_TAGS;
+        // if(document.getElementById("filter_by_tags_or").checked) {
+        //     tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
+        // }
+        // else if(document.getElementById("filter_by_tags_and").checked) {
+        //     tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
+        // }
     }
     else {
-        tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_OR | tj.FILTERMODE_TAGS_AND);
+        tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS);
+        //tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS | tj.FILTERMODE_TAGS_OR | tj.FILTERMODE_TAGS_AND);
     }
+
+    // record radio buttons state separately so user can turn tag filter on/off while keeping or/and state
+    if(document.getElementById("filter_by_tags_or").checked) {
+        tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
+    }
+    else {
+        tj.filterObject.filterMode = &= ~(tj.FILTERMODE_TAGS_OR);       
+    }
+    if(document.getElementById("filter_by_tags_and").checked) {
+        tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
+    }
+    else {
+        tj.filterObject.filterMode = &= ~(tj.FILTERMODE_TAGS_AND);       
+    }
+
 
     // set date filtering mode
     if(document.getElementById("filter_by_date").checked) {
