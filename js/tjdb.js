@@ -87,9 +87,10 @@ tj.status.filterTagsText = "";
 
 tj.filterObject.filterTags = null;
 tj.FILTERMODE_NONE = 0;
-tj.FILTERMODE_TAGS_OR = 1;
-tj.FILTERMODE_TAGS_AND = 2;
-tj.FILTERMODE_DATE = 4;
+tj.FILTERMODE_TAGS_OR = 1;  // radio button state
+tj.FILTERMODE_TAGS_AND = 2; // radio button state
+tj.FILTERMODE_DATE = 4;     // the checkbox state
+tj.FILTERMODE_TAGS = 8;     // the checkbox state
 tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
@@ -1108,6 +1109,7 @@ function toggleDateFilter() {
 
 function toggleTagFilter() {
     console.log("toggleTagFilter");
+    var tagCheckbox = document.getElementById("filter_by_tags").checked;
     var filterTagDiv = document.getElementById("filter_tag_div");
     if(filterTagDiv.className == "display_block")
         filterTagDiv.className = "display_none";
@@ -1142,7 +1144,7 @@ function setFilterControlsState() {
         // and we must persist which mode even if by tags is off or on and restore properly too
 
     }
-
+    // TODO not persisting no filtering state because it doesn't really do anything in the filter code
     // do the filtering!
     applyFilters();
 }
