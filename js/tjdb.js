@@ -202,6 +202,10 @@ tj.indexedDB.open = function() {
                 tj.filterObject.filterTags = null;
                 tj.filterObject.startDate = "";
                 tj.filterObject.endDate = "";
+                tj.filterObject.filterOnTags = false;
+                tj.filterObject.filterOnTagsOr = false;
+                tj.filterObject.filterOnTagsAnd = false;
+                tj.filterObject.filterOnDate = false;
             }
             else {
                 console.log("defined retrieved filterObject state in: request.onsuccess() called");
@@ -209,8 +213,11 @@ tj.indexedDB.open = function() {
                 tj.filterObject.filterTags = request.result.filterTags;
                 tj.filterObject.startDate = request.result.startDate;
                 tj.filterObject.endDate = request.result.endDate;
+                tj.filterObject.filterOnTags = request.result.filterOnTags;
+                tj.filterObject.filterOnTagsOr = request.result.filterOnTagsOr;
+                tj.filterObject.filterOnTagsAnd = request.result.filterOnTagsAnd;
+                tj.filterObject.filterOnDate = request.result.filterOnDate;
             }
-            //TODO now make sure the page controls reflect the saved info
             setFilterControlsState(tj.filterObject.filterTags);
         };
         
@@ -1131,6 +1138,7 @@ function toggleTagFilter() {
 }
 
 /* Sets the state of tj.filterObject into the UI controls, typically at page load time. */
+//TODO all this checking and unchecking should be done in a fragment to minimize reflow
 function setFilterControlsState() {
     // select the tags that were selected in the tag selector list
     tagManagerSelectTags(tj.filterObject.filterTags);
@@ -1139,11 +1147,11 @@ function setFilterControlsState() {
     var tagSelector = document.getElementById('tagselector');
     if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS) {
         document.getElementById("filter_by_tags").checked = true;
-        toggleTagFilter();
     }
     else {
         document.getElementById("filter_by_tags").checked = false;
     }
+    toggleTagFilter();
 
     if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
         document.getElementById("filter_by_tags_or").checked = true;
@@ -1158,6 +1166,14 @@ function setFilterControlsState() {
     else {
         document.getElementById("filter_by_tags_and").checked = false;
     }
+
+    if(tj.filterObject.filterOnDate)
+        document.getElementById("filter_by_date").checked = true;
+    else
+        document.getElementById("filter_by_date").checked = false;
+    document.getElementById("startdate").value = tj.filterObject.startDate;
+    document.getElementById("enddate").value = tj.filterObject.endDate;
+    toggleDateFilter();
 
     applyFilters();
 }
