@@ -70,7 +70,7 @@ tj.STORE_MASK = tj.STORE_DROPBOX;   // TODO make user controlled
 tj.jots = [];
 tj.indexedDB = {};
 tj.indexedDB.db = null;
-tj.indexedDB.IDB_SCHEMA_VERSION = 8;
+tj.indexedDB.IDB_SCHEMA_VERSION = 9;
 tj.indexedDB.order = "prev";   // default to showing newest jots at top
 
 tj.filterObject = {};
@@ -90,10 +90,12 @@ tj.filterObject.filterTags = null;
   tj.FILTERMODE_NONE = 0;
   tj.FILTERMODE_TAGS_OR = 1;  // radio button state
   tj.FILTERMODE_TAGS_AND = 2; // radio button state
-  tj.FILTERMODE_DATE = 4;     // the checkbox state
   tj.FILTERMODE_TAGS = 8;     // the checkbox state
 tj.filterObject.filterMode = tj.FILTERMODE_NONE;
-tj.filterObject.filterModeDate = false;
+tj.filterObject.filterOnTags = false;     // the checkbox state
+tj.filterObject.filterOnTagsOr = false;   // radio btn state
+tj.filterObject.filterOnTagsAnd = false;  // radio btn state
+tj.filterObject.filterOnDate = false;     // the checkbox state
 tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
 
@@ -120,7 +122,11 @@ tj.indexedDB.persistFilterObjects = function() {
         // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
         var store = trans.objectStore("SessionState");
         var row = {"name":"filterState", "filterMode":tj.filterObject.filterMode,
+                   "filterOnTags":tj.filterObject.filterOnTags,
+                   "filterOnTagsOr":tj.filterObject.filterOnTagsOr,
+                   "filterOnTagsAnd":tj.filterObject.filterOnTagsAnd,
                    "filterTags":tj.filterObject.filterTags,
+                   "filterOnDate":tj.filterObject.filterOnDate,
                    "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate};
         var request = store.put(row);  // for now at least there is only one persisted filterObject
                 
@@ -387,7 +393,7 @@ function getStatusReport() {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
         // create string rep of date and tag filters
         filterText = ", filtered by ";
-        if(tj.filterObject.filterModeDate) {
+        if(tj.filterObject.filterOnDate) {
             filterText += "date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate;
         }
         if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
@@ -446,7 +452,7 @@ function getSortedRemoteJots(filterObject) {
     if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
         var filteredJots = [];
         var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
-        var dateChecking = filterObject.filterModeDate;
+        var dateChecking = filterObject.filterOnDate;
 
         // if the user is filtering on both tags and date range we take this as an AND operation: a displayed
         // jot must be in the date range AND must be tagged with the tags (Which might be AND or OR mode). But
@@ -1107,7 +1113,7 @@ function toggleDateFilter() {
     else {
         filterDateDiv.className = "display_none";
     }
-    tj.filterObject.filterModeDate = dateCheckbox;
+    tj.filterObject.filterOnDate = dateCheckbox;
 }
 
 function toggleTagFilter() {
