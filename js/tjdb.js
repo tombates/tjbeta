@@ -387,7 +387,7 @@ function getStatusReport() {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
         // create string rep of date and tag filters
         filterText = ", filtered by ";
-        if((tj.filterObject.filterModeDate) {
+        if(tj.filterObject.filterModeDate) {
             filterText += "date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate;
         }
         if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
