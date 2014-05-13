@@ -1177,29 +1177,29 @@ function applyFilters() {
     }
 
     // set tag filtering mode
-    if(document.getElementById("filter_by_tags").checked) {
-        tj.filterObject.filterMode |= tj.FILTERMODE_TAGS;
-        // if(document.getElementById("filter_by_tags_or").checked) {
-        //     tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
-        // }
-        // else if(document.getElementById("filter_by_tags_and").checked) {
-        //     tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
-        // }
-    }
-    else {
-        tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS);
-        //tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS | tj.FILTERMODE_TAGS_OR | tj.FILTERMODE_TAGS_AND);
-    }
+    // if(document.getElementById("filter_by_tags").checked) {
+    //     tj.filterObject.filterMode |= tj.FILTERMODE_TAGS;
+    //     // if(document.getElementById("filter_by_tags_or").checked) {
+    //     //     tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
+    //     // }
+    //     // else if(document.getElementById("filter_by_tags_and").checked) {
+    //     //     tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
+    //     // }
+    // }
+    // else {
+    //     tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS);
+    //     //tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS | tj.FILTERMODE_TAGS_OR | tj.FILTERMODE_TAGS_AND);
+    // }
 
     // record radio buttons state separately so user can turn tag filter on/off while keeping or/and state
     if(document.getElementById("filter_by_tags_or").checked) {
-        tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
+        tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
     }
     else {
         tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_OR);       
     }
     if(document.getElementById("filter_by_tags_and").checked) {
-        tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
+        tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_AND;       
     }
     else {
         tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_AND);       
@@ -1207,13 +1207,13 @@ function applyFilters() {
 
 
     // set date filtering mode
-    if(document.getElementById("filter_by_date").checked) {
-        //TODO put date info into filterObject
-        tj.filterObject.filterMode |= tj.FILTERMODE_DATE;        
-    }
-    else {
-        tj.filterObject.filterMode &= ~(tj.FILTERMODE_DATE);
-    }
+    // if(document.getElementById("filter_by_date").checked) {
+    //     //TODO put date info into filterObject
+    //     tj.filterObject.filterMode |= tj.FILTERMODE_DATE;        
+    // }
+    // else {
+    //     tj.filterObject.filterMode &= ~(tj.FILTERMODE_DATE);
+    // }
 
     tj.indexedDB.showAllJots(tj.filterObject);
 
