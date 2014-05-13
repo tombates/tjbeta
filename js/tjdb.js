@@ -87,12 +87,13 @@ tj.status.filterTagsText = "";
 
 tj.filterObject.filterTags = null;
 //TODO for cleaner code: the filtermode flags stuff should be replaced with booleans directly reflecting the controls state
-tj.FILTERMODE_NONE = 0;
-tj.FILTERMODE_TAGS_OR = 1;  // radio button state
-tj.FILTERMODE_TAGS_AND = 2; // radio button state
-tj.FILTERMODE_DATE = 4;     // the checkbox state
-tj.FILTERMODE_TAGS = 8;     // the checkbox state
+  tj.FILTERMODE_NONE = 0;
+  tj.FILTERMODE_TAGS_OR = 1;  // radio button state
+  tj.FILTERMODE_TAGS_AND = 2; // radio button state
+  tj.FILTERMODE_DATE = 4;     // the checkbox state
+  tj.FILTERMODE_TAGS = 8;     // the checkbox state
 tj.filterObject.filterMode = tj.FILTERMODE_NONE;
+tj.filterObject.filterModeDate = false;
 tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
 
@@ -386,7 +387,7 @@ function getStatusReport() {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
         // create string rep of date and tag filters
         filterText = ", filtered by ";
-        if((tj.filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE) {
+        if((tj.filterObject.filterModeDate) {
             filterText += "date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate;
         }
         if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
@@ -445,7 +446,7 @@ function getSortedRemoteJots(filterObject) {
     if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
         var filteredJots = [];
         var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
-        var dateChecking = ((filterObject.filterMode & tj.FILTERMODE_DATE) == tj.FILTERMODE_DATE);
+        var dateChecking = filterObject.filterModeDate;
 
         // if the user is filtering on both tags and date range we take this as an AND operation: a displayed
         // jot must be in the date range AND must be tagged with the tags (Which might be AND or OR mode). But
@@ -1102,12 +1103,11 @@ function toggleDateFilter() {
     var filterDateDiv = document.getElementById("filter_date_div");
     if(dateCheckbox) {
         filterDateDiv.className = "display_block";
-        tj.filterObject.filterMode |= tj.FILTERMODE_DATE;
     }
     else {
         filterDateDiv.className = "display_none";
-        tj.filterObject.filterMode &= ~(tj.FILTERMODE_DATE);
     }
+    tj.filterObject.filterModeDate = dateCheckbox;
 }
 
 function toggleTagFilter() {
@@ -1153,15 +1153,6 @@ function setFilterControlsState() {
         document.getElementById("filter_by_tags_and").checked = false;
     }
 
-
-        // select the tags in the tag selector list
-
-        //TODO really need a forceopen option which can be true or false for toogleTagFilter
-        //for calling from her and directly above
-        // and we must persist which mode even if by tags is off or on and restore properly too
-
-    // TODO not persisting no filtering state because it doesn't really do anything in the filter code
-    // do the filtering!
     applyFilters();
 }
 
@@ -1174,8 +1165,7 @@ function applyFilters() {
     if(!(document.getElementById("filter_by_date").checked || document.getElementById("filter_by_tags").checked)) {
         tj.indexedDB.showAllJots();
     }
-    else {
-        // record radio buttons state separately so user can turn tag filter on/off while keeping or/and state
+    else {  // record radio buttons state separately so user can turn tag filter on/off while keeping or/and state
         if(document.getElementById("filter_by_tags_or").checked) {
             tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
         }
@@ -1193,7 +1183,6 @@ function applyFilters() {
 
     // finally, persist the filter incase the user closes
     tj.indexedDB.persistFilterObjects();
-    // what was the reason for this? tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 }
 
 /*
