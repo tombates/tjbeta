@@ -1189,13 +1189,13 @@ function applyFilters() {
         tj.filterObject.filterMode = tj.FILTERMODE_TAGS_OR;       
     }
     else {
-        tj.filterObject.filterMode = &= ~(tj.FILTERMODE_TAGS_OR);       
+        tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_OR);       
     }
     if(document.getElementById("filter_by_tags_and").checked) {
         tj.filterObject.filterMode = tj.FILTERMODE_TAGS_AND;       
     }
     else {
-        tj.filterObject.filterMode = &= ~(tj.FILTERMODE_TAGS_AND);       
+        tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_AND);       
     }
 
 
