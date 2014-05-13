@@ -1100,21 +1100,28 @@ function toggleDateFilter() {
     console.log("toggleDateFilter");
     var dateCheckbox = document.getElementById("filter_by_date").checked;
     var filterDateDiv = document.getElementById("filter_date_div");
-    if(dateCheckbox)
+    if(dateCheckbox) {
         filterDateDiv.className = "display_block";
-    else
+        tj.filterObject.filterMode |= tj.FILTERMODE_DATE;
+    }
+    else {
         filterDateDiv.className = "display_none";
+        tj.filterObject.filterMode &= ~(tj.FILTERMODE_DATE);
+    }
 }
 
 function toggleTagFilter() {
     console.log("toggleTagFilter");
     var tagCheckbox = document.getElementById("filter_by_tags").checked;
     var filterTagDiv = document.getElementById("filter_tag_div");
-    if(tagCheckbox)
+    if(tagCheckbox) {
         filterTagDiv.className = "display_block";
-    else
+        tj.filterObject.filterMode |= tj.FILTERMODE_TAGS;
+    }
+    else {
         filterTagDiv.className = "display_none";
-
+        tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS);
+    }
 }
 
 /* Sets the state of tj.filterObject into the UI controls, typically at page load time. */
