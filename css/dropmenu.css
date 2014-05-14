@@ -21,7 +21,7 @@ header div.header_right_wordspage{
     font-size: 14px;
     height: 20px;
     max-height: 20px;
-    width: 200px;
+    width: 130px;
     background: #fff;
     cursor: pointer;
 	border:none;
@@ -42,7 +42,8 @@ header div.header_right_wordspage{
 
 .sub-menu {
     display: none;
-    width: 200px;
+    width: 130px;
+    z-index: 1000;
     background: #fff;
     padding: 10px 10px;
     margin-left: -11px;
