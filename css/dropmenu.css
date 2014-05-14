@@ -16,15 +16,15 @@ header div.header_right_wordspage{
     display: inline-block;
     background-color: #fff;
     background-image: url(..\/images\/settings.png);
-    background-position:  1px 4px;
+    background-position:  2px 4px;
     background-repeat: no-repeat;
     float:right;
 	margin-top: 5px;
     margin-left: 90px;
     margin-right: 10px;
     font-size: 14px;
-    height: 34px;
-    max-height: 34px;
+    height: 40px;
+    max-height: 40px;
     width: 40px;
     cursor: pointer;
     border: 1px solid #666;
