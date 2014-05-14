@@ -40,7 +40,7 @@ header div.header_right_wordspage{
 .drop-menu:hover .sub-menu {
     display: inline-block;
     position: relative;
-    left: -100px;
+    left: -50px;
     z-index: 1000;
 }
 
