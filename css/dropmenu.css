@@ -34,11 +34,7 @@ header div.header_right_wordspage{
 }
 
 .drop-menu:hover {
-	border-top: 1px solid #666;
-	border-right: 1px solid #666;
-	border-left: 1px solid #666;
-	-moz-border-radius: 5px;
-    border-radius: 5px;
+	border:none;
 }
 
 .drop-menu:hover .sub-menu {
@@ -51,7 +47,7 @@ header div.header_right_wordspage{
     z-index: 1000;
     background: #fff;
     padding: 10px 10px;
-    margin-left: -11px;
+    margin-left: -100px;
     margin-top: 0px;
     border-right: 1px solid #666;
     border-bottom: 1px solid #666;
