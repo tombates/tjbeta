@@ -50,6 +50,8 @@ nbx.open = function() {
 
     Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
+
+    //TODO shouldn't this block really be inside Nimbus.Auth.authorized_callback...
 	if(nbx.auth == true) { // change link text to connected
 		//nbx.linkDropbox.value = "Connected";
         nbx.linkDropbox.style.backgroundImage = "url('images/dropboxbtn_connected.png')";
@@ -94,7 +96,10 @@ nbx.open = function() {
 		if(nbx.auth) { // change link text to connected
 			nbx.linkDropbox.innerHTML = "set by callback: Connected to Dropbox!";
 		} else {
-			nbx.linkDropbox.innerHTML = "set by callback: not connected to Dropbox";
+            //nbx.linkDropbox.innerHTML = "set by callback: not connected to Dropbox";
+            nbx.linkDropbox.style.backgroundImage = "url('images/dropboxbtn_notconnected.png')";
+            nbx.linkDropbox.title = "You are NOT connected to cloud storage.";
+
 		}
     };
 
