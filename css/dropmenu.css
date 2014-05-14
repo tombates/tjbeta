@@ -19,8 +19,8 @@ header div.header_right_wordspage{
     background-position:  2px 4px;
     background-repeat: no-repeat;
     float:right;
-	margin-top: 5px;
-    margin-left: 90px;
+	margin-top: 10px;
+    /*margin-left: 90px;*/
     margin-right: 10px;
     font-size: 14px;
     height: 40px;
