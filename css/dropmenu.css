@@ -33,14 +33,14 @@ header div.header_right_wordspage{
     /*border: 1px solid #666;*/
 }
 
-/*.drop-menu:hover {
+.drop-menu:hover {
 	border:none;
-}*/
+}
 
 .drop-menu:hover .sub-menu {
     display: inline-block;
     position: relative;
-    left: -20px;
+    left: -10px;
     z-index: 1000;
 }
 
