@@ -14,6 +14,7 @@ header div.header_right_wordspage{
 
 .drop-menu {
     display: inline-block;
+    background-color: #fff;
     background-image: url(..\/images\/settings.png);
     background-position:  1px 1px;
     background-repeat: no-repeat;
@@ -25,7 +26,6 @@ header div.header_right_wordspage{
     height: 20px;
     max-height: 20px;
     width: 130px;
-    background: #fff;
     cursor: pointer;
 	border:none;
     /*border: 1px solid #666;*/
