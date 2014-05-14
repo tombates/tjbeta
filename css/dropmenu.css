@@ -33,9 +33,9 @@ header div.header_right_wordspage{
     /*border: 1px solid #666;*/
 }
 
-.drop-menu:hover {
+/*.drop-menu:hover {
 	border:none;
-}
+}*/
 
 .drop-menu:hover .sub-menu {
     display: inline-block;
@@ -51,9 +51,7 @@ header div.header_right_wordspage{
     padding: 10px 10px;
     margin-left: -100px;
     margin-top: 0px;
-    border-right: 1px solid #666;
-    border-bottom: 1px solid #666;
-    border-left: 1px solid #666;
+    border: 1px solid #666;
     -webkit-box-shadow: 0px 13px 25px rgba(0,0,0, 0.2);
     -moz-box-shadow: 0px 13px 25px rgba(0,0,0, 0.2);
     box-shadow: 0px 13px 25px rgba(0,0,0, 0.2);
@@ -64,9 +62,9 @@ header div.header_right_wordspage{
 .sub-menu li {
         list-style-type: none;
         display: block;
-        border-bottom: 1px dotted #eaeaea;
+        border-bottom: 1px dotted #666;
         font-size: 14px;
-        height: 22px;
+        height: 20px;
         padding: 4px 0;
     }
 	
