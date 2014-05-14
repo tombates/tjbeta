@@ -39,12 +39,14 @@ header div.header_right_wordspage{
 
 .drop-menu:hover .sub-menu {
     display: inline-block;
+    position: relative;
+    left: -100px;
+    z-index: 1000;
 }
 
 .sub-menu {
     display: none;
     width: 130px;
-    z-index: 1000;
     background: #fff;
     padding: 10px 10px;
     margin-left: -100px;
