@@ -686,7 +686,7 @@ function renderJot(row) {
 	// spans for stuff in the title_centerdiv
 	var titlespan = document.createElement("span");
 	titlespan.className = "title";
-    titlespan.innerHTML = "Title:";
+    titlespan.innerHTML = "Title: ";
     var titleinput = document.createElement("input");
     titleinput.setAttribute("type", "text");
     titleinput.setAttribute("maxlength", "150");
