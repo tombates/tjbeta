@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 body {
-    background-color: #ccf;
+    background-color: #fff;
   color: #222;
   font: 14px Arial;
 }
@@ -53,12 +53,12 @@ h1.thetitle {
 }
 
 #container {
-    background-color: #999;
+    background-color: #fff;
 	width:900px;
 	margin-left:auto;
 	margin-right:auto;
 	/*border: 1px dotted #000;*/
-    border:solid 1px #000;
+    border:solid 1px #fff;
     border-radius:5px;
 }
 
@@ -452,7 +452,7 @@ a.delete {
 
 #jotItems {
     padding-top: 5px;
-    background-color: #99f;
+    background-color: #fff;
 }
 
 p.jottext {
