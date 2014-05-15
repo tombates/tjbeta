@@ -58,8 +58,9 @@ h1.thetitle {
 	margin-left:auto;
 	margin-right:auto;
 	/*border: 1px dotted #000;*/
-    border:solid 1px #fff;
+    border:solid 1px #000;
     border-radius:5px;
+    box-shadow: 2px 2px 2px #888;
 }
 
 .jottextarea {
