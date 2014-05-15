@@ -271,6 +271,7 @@ form {
     clear: both;
     border:solid 1px #000;
     border-radius:5px;
+    box-shadow: 2px 2px 2px #888;
 }
 
 /* this is the jot composition area */
@@ -282,7 +283,7 @@ textarea.jot {
 	max-width:500px;
 	padding:10px 10px 5px 10px;
 	border:solid 1px #000;
-	border-radius:5px;
+	border-radius:6px;
 }
 
 a.edit {
