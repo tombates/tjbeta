@@ -294,7 +294,7 @@ a.delete {
   margin-right:10px;
 }
 .jotdiv {
-    background-color:#FFF;
+    background-color:#fff;
     border: solid 1px #999;
     border-radius:10px;
     margin:0px 5px 2px 5px;
@@ -447,6 +447,10 @@ a.delete {
     margin-left:50px;
     white-space:nowrap;
 }*/
+
+#jotItems {
+    background-color: #99f;
+}
 
 p.jottext {
     background-color:#fff;
