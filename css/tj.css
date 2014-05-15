@@ -302,7 +302,7 @@ a.delete {
 }
 .jotdiv {
     background-color:#fff;
-    border: dotted 1px #444;
+    border: solid 1px #444;
     border-radius:10px;
     box-shadow: 2px 2px 2px #888;
     margin:0px 5px 5px 5px;
