@@ -64,10 +64,10 @@ h1.thetitle {
 }
 
 .jottextarea {
-    margin: 5px;
+    /*margin: 5px;
     margin-top: 0px;
 	padding:5px;
-    padding-bottom: 0px;
+    padding-bottom: 0px;*/
 }
 .jotaddbtn {
     clear: both;
@@ -267,6 +267,7 @@ h1.thetitle {
 }
 form {
 	/*border:solid 2px #bb0;*/
+    margin: 5px;
     clear: both;
     border:solid 1px #000;
     border-radius:5px;
