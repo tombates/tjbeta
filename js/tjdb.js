@@ -1412,3 +1412,12 @@ function htmlizeText(text) {
 	//alert(htmlized);
 	return(htmlized);
 }
+
+function aboutScreen() {
+    console.log("aboutScreen()");
+    
+}
+
+function preferencesScreen() {
+    console.log("preferencesScreen");
+}
