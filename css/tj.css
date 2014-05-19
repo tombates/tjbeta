@@ -53,13 +53,18 @@ h1.thetitle {
 }
 
 h1.usage {
-  float: left;
-  margin-left: 150px;
+  margin-left: 15px;
   padding-top:10px;
   padding-bottom:10px;
   color:#000;
   text-align:center;
   font: 16px Verdana, Geneva, sans-serif
+}p.usage {
+  margin-left: 15px;
+  padding-bottom:10px;
+  color:#000;
+  text-align:center;
+  font: 14px Verdana, Geneva, sans-serif
 }
 
 #container {
