@@ -13,6 +13,25 @@
 <script src="./js/nb.js"></script>
 <script src="./js/tjdb.js"></script>
 <!-- thanks to http://adamwhitcroft.com/batch/ for icon images -->
+  <script>
+  $(function() {
+    $( "#dialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
+    });
+ 
+    $( "#helpOpen" ).click(function() {
+      $( "#dialog" ).dialog( "open" );
+    });
+  });
+  </script>
 </head>
 
 <!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
@@ -73,7 +92,7 @@
     <!--span class="plus">&#9674;</span-->
         <ul class="sub-menu">
             <li ><a class="topic" onClick="preferencesScreen(); return false; "href = "prefs.html">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;Preferences</a></li>
-            <li ><a class="topic" onClick="aboutScreen(); return false;" href = "abouttj.html">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;About</a></li>
+            <li ><a id="helpOpen" class="topic" href = "abouttj.html">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;About</a></li>
          </ul>
   </div>
 </header>
@@ -142,5 +161,8 @@
 
 
 </div>  <!-- end container div -->
+<div id="dialog" title="Basic dialog">
+  <p>This is an animated dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
 </body>
 </html>
