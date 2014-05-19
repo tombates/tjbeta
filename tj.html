@@ -29,6 +29,7 @@
  
     $( "#helpOpen" ).click(function() {
       console.log("in helpOpen click handler");
+      $( "#dialog" ).dialog( "option", "width", 800 );
       $( "#dialog" ).dialog( "open" );
     });
   });
