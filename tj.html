@@ -28,6 +28,7 @@
     });
  
     $( "#helpOpen" ).click(function() {
+      console.log("in helpOpen click handler");
       $( "#dialog" ).dialog( "open" );
     });
   });
@@ -92,7 +93,7 @@
     <!--span class="plus">&#9674;</span-->
         <ul class="sub-menu">
             <li ><a class="topic" onClick="preferencesScreen(); return false; "href = "prefs.html">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;Preferences</a></li>
-            <li ><a id="helpOpen" class="topic" href = "abouttj.html">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;About</a></li>
+            <li ><a id="helpOpen" class="topic">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;About</a></li>
          </ul>
   </div>
 </header>
