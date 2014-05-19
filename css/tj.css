@@ -52,6 +52,16 @@ h1.thetitle {
   font: 16px Verdana, Geneva, sans-serif
 }
 
+h1.usage {
+  float: left;
+  margin-left: 150px;
+  padding-top:10px;
+  padding-bottom:10px;
+  color:#000;
+  text-align:center;
+  font: 16px Verdana, Geneva, sans-serif
+}
+
 #container {
     background-color: #fff;
 	width:900px;
