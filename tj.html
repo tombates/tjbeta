@@ -18,11 +18,11 @@
     $( "#dialog" ).dialog({
       autoOpen: false,
       show: {
-        effect: "blind",
+        effect: "fold",
         duration: 1000
       },
       hide: {
-        effect: "explode",
+        effect: "fold",
         duration: 1000
       }
     });
@@ -174,7 +174,7 @@ different devices.</p>
 
 <p class="usage">Thought Jot has a simple interface that supports jots with
 text, links, and images. Each jot can have a title and tags attached to it,
-along with its content. You can filter restrict or filter the jots you see using jot titles,
+along with its content. You can restrict or filter the jots you see using jot titles,
 tags, and creation dates.</p>
 
 <h1 class="usage">First Things First - telling Thought Jot where to store your jots.</h1>
@@ -201,9 +201,9 @@ the title for it before you add it using the "Title:" field just below the jot e
 </p>
 
 <h1 class="usage">Editing, Collapsing and Deleting Jots</h1>
-<p class="usageindented">Any visible jot's content, title, and tags can all be edited. To put a jot into editing mode just
+<p class="usageindented">Any visible jot's content, title, and tags can be edited. To put a jot into editing mode just
 click on the little pencil on the left of the blue header of the jot. This will make the pencil turn into a check mark and
-the editable areas will turn pink. When you are done editing click the check mark.</p>
+the editable areas will turn pink. When you are done editing click the check mark. Only one jot can be edited at a time.</p>
 <p class="usageindented">You can collapse a jot to show only its blue header. You do this by clicking somewhere in the
 blue header that is not directly on the title, tags, or datestamp regions. The same operation will expand a collapsed jot.</p>
 <p class="usageindented">You can delete a jot by clicking the X on the right side of the blue jot header. You will be asked
@@ -213,7 +213,7 @@ to confirm the deletion. Currently, deleting a jot is not undoable.</p>
 <h1 class="usage">Tagging</h1>
 <p class="usageindented">You can attach tags to jots, either when you first make a new jot or later. Tagging jots makes it
 very easy to restrict your view of jots to just the ones that have certain tags. There are two ways to attach one or more
-tags to a jot. You can select them in the Tag Selector list (click for one tag, the ctrl-click to select more) and then
+tags to a jot. You can select them in the Tag Selector list (click for one tag, then ctrl-click to select more) and then
 click the Stage Tags button. The selected tags will be added to the Tags: text field below the Stage Tags button.
 Alternatively you can just type tags into the Tags: text field. Tags can contain spaces but not commas and cannot start
 with a dash or minus character (-). Multiple tags must be separated by commas.</p>
@@ -224,17 +224,22 @@ storage, not just locally. It will not affect jots previously tagged with the de
 add it back by typing it in again and clicking the Merge button.</p>
 
 <h1 class="usage">Filtering</h1>
-<p class="usage"></p>
+<p class="usageindented">You can filter or restrict the jots that are displayed to subsets of all your jots. You can filter
+based on title (OK that's not there yet), tags, or date ranges.</p>
+<p class="usageindented">To filter by tags...</p>
+<p class="usageindented">To filter by date ranges...</p>
+<p class="usageindented">To filter by title...</p>
 
 <h1 class="usage">Understanding where jots, tags and filters are stored.</h1>
   <p class="usageindented">Jots are stored remotely, using either a Dropbox or Google Drive account. They might also be stored locally
   if the remote storage service is not available and will be pushed to it when it becomes available. Assuming you are connected
   though they will be stored or deleted in more or less real time.</p>
-  <p class="usageindented">Your tags are also stored remotely. This means that all your tags are available regardless of what device or browswer your currently using to use Thought Jot.</p>
-  <p class="usageindented">Your filter settings are stored locally, specific to the device you are on and the browser brand you are using. When you end a Thought Jot session the state of your filters are stored and when you come back to the same device and using the same browswer, the filter state will be restored to what it was previously. This means you could be working on one subset of jots your jots on one device (or browswer) and another subset of you jots on another device or browser. But all the jots are discoveable on either device or browswer just by turning all filtering off.</p>
+  <p class="usageindented">Your tags are also stored remotely. This means that all your tags are available regardless of what device or browswer you are currently using Thought Jot on.</p>
+  <p class="usageindented">Your filter settings are stored locally, specific to the device you are on and the browser brand you are using. When you end a Thought Jot session the state of your filters are stored locally and when you come back to the same device and using the same browswer, the filter state will be restored to what it was previously. This means you could be working on one subset of jots your jots on one device (or browswer) and another subset of you jots on another device or browser. But all the jots are discoveable on either device or browswer just by turning all filtering off.</p>
 
 <h1 class="usage">How Thought Jot works</h1>
-<p class="usage"></p>
+<p class="usageindented">Thought Jot uses HTML5 IndexedDB for its local storage and the NimbusBase library to facilitate storage
+and retrieval of jots and tags from your remote storage provider.</p>
 
 </div>
 <!-- end of about / help content -->
