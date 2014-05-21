@@ -70,8 +70,8 @@ tj.STORE_MASK = tj.STORE_DROPBOX;   // TODO make user controlled
 tj.jots = [];
 tj.indexedDB = {};
 tj.indexedDB.db = null;
-tj.indexedDB.IDB_SCHEMA_VERSION = 9;
-tj.indexedDB.order = "prev";   // default to showing newest jots at top
+tj.indexedDB.IDB_SCHEMA_VERSION = 10;
+tj.indexedDB.order = "newfirst";   // default to showing newest jots at top
 
 tj.filterObject = {};
 
@@ -98,6 +98,7 @@ tj.filterObject.filterOnTagsAnd = false;  // radio btn state
 tj.filterObject.filterOnDate = false;     // the checkbox state
 tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
+tj.filterObject.filterOrder = "newfirst";
 
 /* Save session state data locally so that tag selection and filtering can be restored to their previous
 *  state. Because this uses indexedDB it is per browser brand and per device, meaning one could have different
@@ -127,7 +128,8 @@ tj.indexedDB.persistFilterObjects = function() {
                    "filterOnTagsAnd":tj.filterObject.filterOnTagsAnd,
                    "filterTags":tj.filterObject.filterTags,
                    "filterOnDate":tj.filterObject.filterOnDate,
-                   "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate};
+                   "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate,
+                   "filterOrder":tj.filterObject.filterOrder};
         var request = store.put(row);  // for now at least there is only one persisted filterObject
                 
         request.onsuccess = function(e) {
@@ -206,6 +208,7 @@ tj.indexedDB.open = function() {
                 tj.filterObject.filterOnTagsOr = false;
                 tj.filterObject.filterOnTagsAnd = false;
                 tj.filterObject.filterOnDate = false;
+                tj.filterObject.filterOrder = "newfirst";
             }
             else {
                 console.log("defined retrieved filterObject state in: request.onsuccess() called");
@@ -217,8 +220,10 @@ tj.indexedDB.open = function() {
                 tj.filterObject.filterOnTagsOr = request.result.filterOnTagsOr;
                 tj.filterObject.filterOnTagsAnd = request.result.filterOnTagsAnd;
                 tj.filterObject.filterOnDate = request.result.filterOnDate;
+                tj.filterObject.filterOrder = request.result.filterOrder;
             }
-            setFilterControlsState(tj.filterObject.filterTags);
+            resetFilterControlsState(tj.filterObject.filterTags);
+            applyFilters();    // calls showAllJots()
         };
         
         request.onerror = function(e) {
@@ -266,7 +271,7 @@ tj.indexedDB.addJot = function(jotText) {
         var idbRow = convertNimbusRowToIDBRow(nrow);
         var jotDiv = renderJot(idbRow);
         var jotsContainer = document.getElementById("jotItems");
-        if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
+        if(tj.indexedDB.order === "newfirst")  {   // newest are currently shown first
             var first = jotsContainer.firstChild;
             jotsContainer.insertBefore(jotDiv, jotsContainer.firstChild);
         }
@@ -298,7 +303,7 @@ tj.indexedDB.addJot = function(jotText) {
 		    var jotDiv = renderJot(row);
 		    var jotsContainer = document.getElementById("jotItems");
 
-	        if(tj.indexedDB.order === "prev")  {   // newest are currently shown first
+	        if(tj.indexedDB.order === "newfirst")  {   // newest are currently shown first
 	        	var first = jotsContainer.firstChild;
 	            jotsContainer.insertBefore(jotDiv, jotsContainer.firstChild);
 	        }
@@ -452,7 +457,7 @@ function getSortedRemoteJots(filterObject) {
     // get all the remote jots and sort them
     var remoteJots = nbx.Jots.all();
     tj.status.total = remoteJots.length;
-    var flip = (tj.indexedDB.order === "prev") ? -1 : 1;
+    var flip = (tj.indexedDB.order === "newfirst") ? -1 : 1;
 
     
 
@@ -567,7 +572,8 @@ function syncAllJots(pageRenderer) {
 
 	var store = trans.objectStore("Jots");	
 	var keyRange = IDBKeyRange.lowerBound(0);
-	var cursorRequest = store.openCursor(keyRange, tj.indexedDB.order);
+    var direction = (tj.indexedDB.order === "newfirst") ? "prev" : "next";
+	var cursorRequest = store.openCursor(keyRange, direction);
 	
 	cursorRequest.onsuccess = function(e) {
 		console.log("showAllJots in cursorRequest.onsuccess()")
@@ -1004,15 +1010,15 @@ function indexedDB_init() {
 // toogle sort order of displayed jots
 function toggleOrdering() {
 	var toggle = document.getElementById('toggleOrder');
-	if(tj.indexedDB.order === "prev") {
+	if(tj.indexedDB.order === "newfirst") {
 		//toggle.value = "Showing oldest first";
 		toggle.title = "Press to show newest jots first.";
-		tj.indexedDB.order = "next";
+		tj.indexedDB.order = "oldfirst";
 	}
 	else {
 		//toggle.value = "Showing newest first";
 		toggle.title = "Press to show oldest jots first.";
-		tj.indexedDB.order = "prev";
+		tj.indexedDB.order = "newfirst";
 	}
     //tj.indexedDB.showAllJots(tj.filterObject); 
     applyFilters();   // calls showAllJots
@@ -1139,12 +1145,12 @@ function toggleTagFilter() {
 
 /* Sets the state of tj.filterObject into the UI controls, typically at page load time. */
 //TODO all this checking and unchecking should be done in a fragment to minimize reflow
-function setFilterControlsState() {
+function resetFilterControlsState() {
     // select the tags that were selected in the tag selector list
     tagManagerSelectTags(tj.filterObject.filterTags);
 
     // now set the state if any of the by tags mode controls
-    var tagSelector = document.getElementById('tagselector');
+    //var tagSelector = document.getElementById('tagselector');
     if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS) {
         document.getElementById("filter_by_tags").checked = true;
     }
@@ -1174,8 +1180,6 @@ function setFilterControlsState() {
     document.getElementById("startdate").value = tj.filterObject.startDate;
     document.getElementById("enddate").value = tj.filterObject.endDate;
     toggleDateFilter();
-
-    applyFilters();
 }
 
 /* Handler for user clicking on Filter button. Sets the state of tj.filterObject accordingly. */
@@ -1415,7 +1419,7 @@ function htmlizeText(text) {
 
 function aboutScreen() {
     console.log("aboutScreen()");
-    
+
 }
 
 function preferencesScreen() {
