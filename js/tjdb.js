@@ -71,7 +71,7 @@ tj.jots = [];
 tj.indexedDB = {};
 tj.indexedDB.db = null;
 tj.indexedDB.IDB_SCHEMA_VERSION = 10;
-tj.indexedDB.order = "newfirst";   // default to showing newest jots at top
+//tj.indexedDB.order = "newfirst";   // default to showing newest jots at top
 
 tj.filterObject = {};
 
@@ -271,7 +271,7 @@ tj.indexedDB.addJot = function(jotText) {
         var idbRow = convertNimbusRowToIDBRow(nrow);
         var jotDiv = renderJot(idbRow);
         var jotsContainer = document.getElementById("jotItems");
-        if(tj.indexedDB.order === "newfirst")  {   // newest are currently shown first
+        if(tj.filterObject.filterOrder === "newfirst")  {   // newest are currently shown first
             var first = jotsContainer.firstChild;
             jotsContainer.insertBefore(jotDiv, jotsContainer.firstChild);
         }
@@ -303,7 +303,7 @@ tj.indexedDB.addJot = function(jotText) {
 		    var jotDiv = renderJot(row);
 		    var jotsContainer = document.getElementById("jotItems");
 
-	        if(tj.indexedDB.order === "newfirst")  {   // newest are currently shown first
+	        if(tj.filterObject.filterOrder === "newfirst")  {   // newest are currently shown first
 	        	var first = jotsContainer.firstChild;
 	            jotsContainer.insertBefore(jotDiv, jotsContainer.firstChild);
 	        }
@@ -457,7 +457,7 @@ function getSortedRemoteJots(filterObject) {
     // get all the remote jots and sort them
     var remoteJots = nbx.Jots.all();
     tj.status.total = remoteJots.length;
-    var flip = (tj.indexedDB.order === "newfirst") ? -1 : 1;
+    var flip = (tj.filterObject.filterOrder === "newfirst") ? -1 : 1;
 
     
 
@@ -572,7 +572,7 @@ function syncAllJots(pageRenderer) {
 
 	var store = trans.objectStore("Jots");	
 	var keyRange = IDBKeyRange.lowerBound(0);
-    var direction = (tj.indexedDB.order === "newfirst") ? "prev" : "next";
+    var direction = (tj.filterObject.filterOrder === "newfirst") ? "prev" : "next";
 	var cursorRequest = store.openCursor(keyRange, direction);
 	
 	cursorRequest.onsuccess = function(e) {
@@ -1010,15 +1010,15 @@ function indexedDB_init() {
 // toogle sort order of displayed jots
 function toggleOrdering() {
 	var toggle = document.getElementById('toggleOrder');
-	if(tj.indexedDB.order === "newfirst") {
+	if(tj.filterObject.filterOrder === "newfirst") {
 		//toggle.value = "Showing oldest first";
 		toggle.title = "Press to show newest jots first.";
-		tj.indexedDB.order = "oldfirst";
+		tj.filterObject.filterOrder = "oldfirst";
 	}
 	else {
 		//toggle.value = "Showing newest first";
 		toggle.title = "Press to show oldest jots first.";
-		tj.indexedDB.order = "newfirst";
+		tj.filterObject.filterOrder = "newfirst";
 	}
     //tj.indexedDB.showAllJots(tj.filterObject); 
     applyFilters();   // calls showAllJots
