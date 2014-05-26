@@ -98,7 +98,7 @@ tj.filterObject.filterOnTagsAnd = false;  // radio btn state
 tj.filterObject.filterOnDate = false;     // the checkbox state
 tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
-tj.filterObject.filterOrder = "newfirst";
+tj.filterObject.filterOrder = "newfirst"; // default ordering
 
 /* Save session state data locally so that tag selection and filtering can be restored to their previous
 *  state. Because this uses indexedDB it is per browser brand and per device, meaning one could have different
@@ -462,6 +462,7 @@ function getSortedRemoteJots(filterObject) {
     
 
     if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
+        console.log("getSortedRemoteJots filterObject is DEFINED");
         var filteredJots = [];
         var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
         var dateChecking = filterObject.filterOnDate;
@@ -491,6 +492,9 @@ function getSortedRemoteJots(filterObject) {
             }
         }
         remoteJots = filteredJots;
+    }
+    else {
+        console.log("getSortedRemoteJots filterObject is UNDefined");        
     }
 
     if(remoteJots.length > 0) {

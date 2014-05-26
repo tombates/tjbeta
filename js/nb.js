@@ -72,9 +72,8 @@ nbx.open = function() {
                 nbx.Tags.sync_all(function() {
                     console.log("nbx.Tags.sync_all() callback called.");
                     filterManager_init();
-                indexedDB_init();
-                tj.indexedDB.showAllJots();
-                    //tj.indexedDB.showAllJots();
+                    indexedDB_init();
+                    tj.indexedDB.showAllJots();
                 });
            }
         });
