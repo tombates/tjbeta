@@ -408,9 +408,11 @@ function getStatusReport() {
         if(tj.filterObject.filterOnDate) {
             filterText += "date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate;
         }
-        if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
+        //if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
+        if((tj.filterObject.filterOnTagsOr)
             tagText += "tags (OR'd): ";
-        else if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)
+        //else if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)
+        else if((tj.filterObject.filterOnTagsAnd)
             tagText += "tags (AND'd): ";
         
         if(tagText != "")
@@ -464,7 +466,8 @@ function getSortedRemoteJots(filterObject) {
     if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
         console.log("getSortedRemoteJots filterObject is DEFINED");
         var filteredJots = [];
-        var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
+        //var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
+        var tagChecking = filterObject.filterOnTags;
         var dateChecking = filterObject.filterOnDate;
 
         // if the user is filtering on both tags and date range we take this as an AND operation: a displayed
@@ -543,13 +546,14 @@ function containsTags(jot, filterObject) {
     for(var i = 0; i < filterObject.filterTags.length; i++) {
 
         present = tagsInJot.indexOf(filterObject.filterTags[i]);
-        if((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
+        //if((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
+        if(filterObject.filterOnTagsOr) {
             if(present != -1)
                 return true;
             if(i == filterObject.filterTags.length - 1)
                 return false;
         }
-        else if((filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND) {
+        else if(filterObject.filterOnTagsAnd) {
             if(present == -1)
                 return false;
         }
@@ -1139,11 +1143,13 @@ function toggleTagFilter() {
     var filterTagDiv = document.getElementById("filter_tag_div");
     if(tagCheckbox) {
         filterTagDiv.className = "display_block";
-        tj.filterObject.filterMode |= tj.FILTERMODE_TAGS;
+        //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS;
+        tj.filterObject.filterOnTags = true;
     }
     else {
         filterTagDiv.className = "display_none";
-        tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS);
+        //tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS);
+        tj.filterObject.filterOnTags = false;
     }
 }
 
@@ -1155,7 +1161,8 @@ function resetFilterControlsState() {
 
     // now set the state if any of the by tags mode controls
     //var tagSelector = document.getElementById('tagselector');
-    if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS) {
+    //if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS) {
+    if(tj.filterObject.filterOnTags) {
         document.getElementById("filter_by_tags").checked = true;
     }
     else {
@@ -1163,14 +1170,16 @@ function resetFilterControlsState() {
     }
     toggleTagFilter();
 
-    if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
+    //if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
+    if(tj.filterObject.filterOnTagsOr) {
         document.getElementById("filter_by_tags_or").checked = true;
     }
     else {
         document.getElementById("filter_by_tags_or").checked = false;
     }
 
-    if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND) {
+    //if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND) {
+    if(tj.filterObject.filterOnTagsAnd) {
         document.getElementById("filter_by_tags_and").checked = true;
     }
     else {
@@ -1197,16 +1206,20 @@ function applyFilters() {
     }
     else {  // record radio buttons state separately so user can turn tag filter on/off while keeping or/and state
         if(document.getElementById("filter_by_tags_or").checked) {
-            tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
+            //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
+            tj.filterObject.filterOnTagsOr = true;     
         }
         else {
-            tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_OR);       
+            //tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_OR);       
+            tj.filterObject.filterOnTagsOr = false;       
         }
         if(document.getElementById("filter_by_tags_and").checked) {
-            tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_AND;       
+            //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_AND;       
+            tj.filterObject.filterOnTagsAnd = true;       
         }
         else {
-            tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_AND);       
+            //tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_AND);       
+            tj.filterObject.filterOnTagsAnd = false;       
         }
         tj.indexedDB.showAllJots(tj.filterObject);
     }

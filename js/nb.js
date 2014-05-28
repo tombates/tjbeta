@@ -73,7 +73,8 @@ nbx.open = function() {
                     console.log("nbx.Tags.sync_all() callback called.");
                     filterManager_init();
                     indexedDB_init();
-                    //tj.indexedDB.showAllJots();
+                    //tj.indexedDB.showAllJots();  // now gets called via applyFilters call in tj.indexedDB.open
+                                                   // so filterObject state is restored before showing any jots
                 });
            }
         });
