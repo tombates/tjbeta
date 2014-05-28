@@ -409,10 +409,10 @@ function getStatusReport() {
             filterText += "date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate;
         }
         //if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
-        if((tj.filterObject.filterOnTagsOr)
+        if(tj.filterObject.filterOnTagsOr)
             tagText += "tags (OR'd): ";
         //else if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)
-        else if((tj.filterObject.filterOnTagsAnd)
+        else if(tj.filterObject.filterOnTagsAnd)
             tagText += "tags (AND'd): ";
         
         if(tagText != "")
