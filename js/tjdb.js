@@ -1039,7 +1039,7 @@ function paginator(direction) {
 function raiseCalendar(elementID) {
     console.log("raiseCalendar called");
     var which = "#" + elementID;
-    $(which).datepicker( "option", "showOn", "both" );
+    $(which).datepicker();
 }
 
 // place selected tags in Tags text field for jot being added
