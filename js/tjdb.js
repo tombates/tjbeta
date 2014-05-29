@@ -155,8 +155,8 @@ tj.indexedDB.open = function() {
     "use strict";
 
     $("#startdate").datepicker();
-    $("enddate").datepicker();
-    
+    $("#enddate").datepicker();
+
     // Warn user that we do not support early versions of indexedDB
     if(!window.indexedDB) {    
     	window.alert("Your browser doesn't support a stable version of IndexedDB, which Thought Jot uses.\nSome features might not be available or might not work correctly.");
