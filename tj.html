@@ -13,7 +13,7 @@
 <script src="./js/nb.js"></script>
 <script src="./js/tjdb.js"></script>
 <!-- thanks to http://adamwhitcroft.com/batch/ for icon images -->
-  <script>
+<script>
   $(function() {
     $( "#dialog" ).dialog({
       autoOpen: false,
@@ -32,8 +32,16 @@
       $( "#dialog" ).dialog( "option", "width", 800 );
       $( "#dialog" ).dialog( "open" );
     });
+
+    $( "#settingsDialog" ).dialog({ autoOpen: false });
+    $( "#settingsOpener" ).click(function() {
+      $( "#settingsDialog" ).dialog( "option", "width", 800 );
+      $( "#settingsDialog" ).dialog( "open" );
+    });
+   
   });
-  </script>
+</script>
+
 </head>
 
 <!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
@@ -93,9 +101,9 @@
   <div class="drop-menu">
     <!--span class="plus">&#9674;</span-->
         <ul class="sub-menu">
-            <li ><a class="topic" onClick="preferencesScreen(); return false; "href = "prefs.html">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;Preferences</a></li>
+            <li ><a id-"settingsOpener" class="topic">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;Settings</a></li>
             <li ><a id="helpOpen" class="topic">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;About</a></li>
-         </ul>
+        </ul>
   </div>
 </header>
 
@@ -163,6 +171,9 @@
 
 
 </div>  <!-- end container div -->
+
+<!-- This is the preferences dialog content, which shows only when user clicks the tools button:Preferences link -->
+<div id="settingsDialog">User Settings</div>
 
 <!-- This is the about / help dialog content, which shows only when user clicks the tools button:About link -->
 <div id="dialog" class=WordSection1>

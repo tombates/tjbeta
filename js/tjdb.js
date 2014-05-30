@@ -154,6 +154,7 @@ tj.indexedDB.onerror = function (e){
 tj.indexedDB.open = function() {
     "use strict";
 
+    // bind JQuery UI date pickers to the end/start date filter fields
     $("#startdate").datepicker();
     $("#enddate").datepicker();
 
