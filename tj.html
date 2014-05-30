@@ -33,9 +33,21 @@
       $( "#dialog" ).dialog( "open" );
     });
 
-    $( "#settingsDialog" ).dialog({ autoOpen: false });
+    $( "#settingsDialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "fade",
+        duration: 1000
+      },
+      hide: {
+        effect: "fade",
+        duration: 1000
+      }
+    });
+
     $( "#settingsOpener" ).click(function() {
-      $( "#settingsDialog" ).dialog( "option", "width", 800 );
+      console.log("in settingsOpener click handler");
+      $( "#settingsDialog" ).dialog( "option", "width", 600 );
       $( "#settingsDialog" ).dialog( "open" );
     });
    
