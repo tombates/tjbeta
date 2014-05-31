@@ -185,8 +185,12 @@
 </div>  <!-- end container div -->
 
 <!-- This is the preferences dialog content, which shows only when user clicks the tools button:Preferences link -->
-<div id="settingsDialog" title="Settings Dialog">
-<h1 class="usage">Thought Jot Settings</h1>
+<div id="settingsDialog" title="Thought Jot Settings">
+  <h3>Choose a remote storage service</h3>
+  <input type="radio" name="remotestorage" id="remoteDropbox" value="dropbox"/>Use Dropbox<br>
+  <input type="radio" name="remotestorage" id="remoteGoogle" value="google"/>Use Google Drive<br>
+  Dropbox Key:<iput type="text" id="DBKey" placeholder="Key" maxlength="50"><br>
+  Dropbox Secret:<iput type="text" id="DBSecret" placeholder="Secret" maxlength="50"><br>
 </div>
 
 <!-- This is the about / help dialog content, which shows only when user clicks the tools button:About link -->
