@@ -33,7 +33,7 @@
       $( "#dialog" ).dialog( "open" );
     });*/
 
-    $( "#dialog" ).dialog({
+    $( "#settingsDialog" ).dialog({
       autoOpen: false,
       show: {
         effect: "fade",
@@ -45,10 +45,10 @@
       }
     });
 
-    $( "#helpOpen" ).click(function() {
+    $( "#settingsOpener" ).click(function() {
       console.log("in settingsOpener click handler");
-      $( "#dialog" ).dialog( "option", "width", 600 );
-      $( "#dialog" ).dialog( "open" );
+      $( "#settingsDialog" ).dialog( "option", "width", 600 );
+      $( "#settingsDialog" ).dialog( "open" );
     });
    
   });
