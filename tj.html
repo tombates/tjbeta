@@ -15,7 +15,7 @@
 <!-- thanks to http://adamwhitcroft.com/batch/ for icon images -->
 <script>
   $(function() {
-    /*$( "#dialog" ).dialog({
+    $( "#dialog" ).dialog({
       autoOpen: false,
       show: {
         effect: "fade",
@@ -31,7 +31,7 @@
       console.log("in helpOpen click handler");
       $( "#dialog" ).dialog( "option", "width", 800 );
       $( "#dialog" ).dialog( "open" );
-    });*/
+    });
 
     $( "#settingsDialog" ).dialog({
       autoOpen: false,
@@ -185,12 +185,12 @@
 </div>  <!-- end container div -->
 
 <!-- This is the preferences dialog content, which shows only when user clicks the tools button:Preferences link -->
-<div id="settingsDialog" title="Settings Dialog">
+<div id="dialog" title="Settings Dialog">
 <h1 class="usage">Thought Jot Settings</h1>
 </div>
 
 <!-- This is the about / help dialog content, which shows only when user clicks the tools button:About link -->
-<div id="dialog"  title="Getting Started with Thought Jot">
+<div id="settingsDialog"  title="Getting Started with Thought Jot">
 
 <h1 class="usage">About Thought Jot, and how to use it.</h1>
 <p class="usage">Welcome to Thought Jot, an online way to keep notes that 
