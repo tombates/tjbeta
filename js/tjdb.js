@@ -75,6 +75,13 @@ tj.indexedDB.IDB_SCHEMA_VERSION = 10;
 
 tj.filterObject = {};
 
+tj.SERVICE_UNKNOWN = -1;
+tj.SERVICE_DROPBOX = 1;
+tj.SERVICE_GOOGLE = 2;
+tj.service = tj.SERVICE_UNKNOWN;
+tj.key = "";
+tj.secret = "";
+
 tj.status = {};   // holds the status area information
 tj.status.prefix = "Showing ";
 tj.status.which = "";
@@ -1449,6 +1456,32 @@ function settingsSet(value) {
     console.log("settingsSet()");
     if(value === 1) {
         console.log("set them settings");
+
+        // which service? (TODO support more possibilities, starting with local only)
+        if(document.getElementById("remoteDropbox").checked) {
+            //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
+            tj.service = tj.SERVICE_DROPBOX;
+            var keyField = document.getElementById("add_tagsinput");
+            tj.key = keyField.value;
+            tj.secret = document.getElementById("add_tagsinput").value;   
+        }
+        else if(document.getElementById("remoteGoogle").checked) {
+            //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
+            tj.service = tj.SERVICE_GOOGLE;     
+        }
+        else {
+            //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
+            tj.service = tj.SERVICE_UNKNOWN;     
+        }
+
+        // if DB get key and secret
+
+        // if GD get 
+
+        // attempt connection
+
+
+        $("#settingsDialog").dialog( "close" );
     }
     else
         $("#settingsDialog").dialog( "close" );
