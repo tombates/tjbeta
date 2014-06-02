@@ -1461,9 +1461,9 @@ function settingsSet(value) {
         if(document.getElementById("remoteDropbox").checked) {
             //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
             tj.service = tj.SERVICE_DROPBOX;
-            var keyField = document.getElementById("add_tagsinput");
+            var keyField = document.getElementById("DBKey");
             tj.key = keyField.value;
-            tj.secret = document.getElementById("add_tagsinput").value;   
+            tj.secret = document.getElementById("DBSecret").value;   
         }
         else if(document.getElementById("remoteGoogle").checked) {
             //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
