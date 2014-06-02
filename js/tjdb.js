@@ -1447,4 +1447,9 @@ function aboutScreen() {
 
 function settingsSet(value) {
     console.log("settingsSet()");
+    if(value === 1)
+        console.log("set them settings");
+        $( "#settingsDialog" ).dialog( "close" );
+    else
+        $( "#settingsDialog" ).dialog( "close" );
 }
