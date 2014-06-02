@@ -1445,6 +1445,6 @@ function aboutScreen() {
 
 }
 
-function preferencesScreen() {
-    console.log("preferencesScreen");
+function settingsSet(value) {
+    console.log("settingsSet()");
 }
