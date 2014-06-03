@@ -54,6 +54,7 @@ nbx.open = function() {
     var remoteKey = nbx.sync_object.Dropbox.key;
     var remoteSecret = nbx.sync_object.Dropbox.secret;
     if((remoteKey === "") || (remoteSecret === "")) {
+      $( "#settingsDialog" ).dialog({modal: true});
       $( "#settingsDialog" ).dialog( "option", "width", 600 );
       $( "#settingsDialog" ).dialog( "open" );
     }
