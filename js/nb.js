@@ -12,12 +12,14 @@ nbx.auth = false;
 nbx.sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
 nbx.sync_object = { 
 	"Dropbox": { 
-	  "key": "nlszj5xrhlb1k5p", 
-	  "secret": "fo8a244sgdftjbf", 
+	  "key": "", 
+	  "secret": "", 
 	  "app_name": "tjbeta" 
 	}
 	//"synchronous": true
 };
+//      "key": "nlszj5xrhlb1k5p", 
+//      "secret": "fo8a244sgdftjbf", 
 
 nbx.userConnectRequest = function(serviceName) {
     if(Nimbus.Auth.authorized()) {
