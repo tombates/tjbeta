@@ -48,6 +48,14 @@ nbx.open = function() {
 
     nbx.linkDropbox = document.getElementById("cloudButton");
 
+    // see if we need to get authorization data from user or local indexedDB storage
+    var remoteKey = nbx.sync_object.Dropbox.key;
+    var remoteSecret = nbx.sync_object.Dropbox.secret;
+    if((remoteKey === "") || (remoteSecret === "") {
+      $( "#settingsDialog" ).dialog( "option", "width", 600 );
+      $( "#settingsDialog" ).dialog( "open" );
+    }
+    
     Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
 
@@ -75,6 +83,7 @@ nbx.open = function() {
                     indexedDB_init();
                     //tj.indexedDB.showAllJots();  // now gets called via applyFilters call in tj.indexedDB.open
                                                    // so filterObject state is restored before showing any jots
+                    // persist the remote authorization data if necessary
                 });
            }
         });

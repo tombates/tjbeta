@@ -1452,6 +1452,14 @@ function aboutScreen() {
 
 }
 
+/* Called when the user selects a remote service in the Settings dialog. Causes
+   a change to label for the secret/scope text field based on the service chosen.
+*/
+function settingsServiceChoice() {
+
+}
+
+/* Persists the key and secret (Dropbox) or scope (Google Drive) for connecting to the remote storage service. */
 function settingsSet(value) {
     console.log("settingsSet()");
     if(value === 1) {
@@ -1463,7 +1471,7 @@ function settingsSet(value) {
             tj.service = tj.SERVICE_DROPBOX;
             var keyField = document.getElementById("DBKey");
             tj.key = keyField.value;
-            tj.secret = document.getElementById("DBSecret").value;   
+            tj.secret = document.getElementById("DBSecret").value; 
         }
         else if(document.getElementById("remoteGoogle").checked) {
             //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
@@ -1476,7 +1484,7 @@ function settingsSet(value) {
 
         // if DB get key and secret
 
-        // if GD get 
+        // if GD get key and scope
 
         // attempt connection
 
