@@ -51,11 +51,11 @@ nbx.open = function() {
     // see if we need to get authorization data from user or local indexedDB storage
     var remoteKey = nbx.sync_object.Dropbox.key;
     var remoteSecret = nbx.sync_object.Dropbox.secret;
-    if((remoteKey === "") || (remoteSecret === "") {
+    if((remoteKey === "") || (remoteSecret === "")) {
       $( "#settingsDialog" ).dialog( "option", "width", 600 );
       $( "#settingsDialog" ).dialog( "open" );
     }
-    
+
     Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
 
