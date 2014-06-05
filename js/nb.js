@@ -54,9 +54,9 @@ nbx.open = function() {
     var remoteKey = nbx.sync_object.Dropbox.key;
     var remoteSecret = nbx.sync_object.Dropbox.secret;
     if((remoteKey === "") || (remoteSecret === "")) {
-      $( "#settingsDialog" ).dialog({modal: true});
       $( "#settingsDialog" ).dialog( "option", "width", 600 );
       $( "#settingsDialog" ).dialog( "open" );
+      return;  // the Save button handler for the dialog will call this again after setting key/secret into sync_object
     }
 
     Nimbus.Auth.setup(nbx.sync_object);

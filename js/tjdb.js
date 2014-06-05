@@ -1473,6 +1473,7 @@ function settingsSet(value) {
             tj.secret = document.getElementById("DBSecret").value;
             nbx.sync_object.Dropbox.key = tj.key;
             nbx.sync_object.Dropbox.secret = tj.secret;
+            nimbus_init();
         }
         else if(document.getElementById("remoteGoogle").checked) {
             //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
