@@ -12,8 +12,8 @@ nbx.auth = false;
 nbx.sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
 nbx.sync_object = { 
 	"Dropbox": { 
-	  "key": "", 
-	  "secret": "", 
+	  "key": "nlszj5xrhlb1k5p", 
+	  "secret": "fo8a244sgdftjbf", 
 	  "app_name": "tjbeta" 
 	}
 	//"synchronous": true
@@ -53,11 +53,11 @@ nbx.open = function() {
     // see if we need to get authorization data from user or local indexedDB storage
     var remoteKey = nbx.sync_object.Dropbox.key;
     var remoteSecret = nbx.sync_object.Dropbox.secret;
-    if((remoteKey === "") || (remoteSecret === "")) {
-      $( "#settingsDialog" ).dialog( "option", "width", 600 );
-      $( "#settingsDialog" ).dialog( "open" );
-      return;  // the Save button handler for the dialog will call this again after setting key/secret into sync_object
-    }
+    ///if((remoteKey === "") || (remoteSecret === "")) {
+    ///  $( "#settingsDialog" ).dialog( "option", "width", 600 );
+    ///  $( "#settingsDialog" ).dialog( "open" );
+    ///  return;  // the Save button handler for the dialog will call this again after setting key/secret into sync_object
+    ///}
 
     Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
@@ -83,10 +83,14 @@ nbx.open = function() {
                 nbx.Tags.sync_all(function() {
                     console.log("nbx.Tags.sync_all() callback called.");
                     filterManager_init();
-                    indexedDB_init();
+                    resetFilterControlsState(tj.filterObject.filterTags);
+                    applyFilters();    // calls showAllJots()
+
+                    ///indexedDB_init();
                     //tj.indexedDB.showAllJots();  // now gets called via applyFilters call in tj.indexedDB.open
                                                    // so filterObject state is restored before showing any jots
                     // persist the remote authorization data if necessary
+                    ///+persistAuthorization();
                 });
            }
         });
@@ -150,9 +154,54 @@ nbx.open = function() {
 	//console.log("back from destroyAll()");
 };
 
+/* If there is not persisted authorization data or there is persisted authorization data already stored (in ndexedDB)
+*  and the current data is different from current sync_object, we perist the current sync_object information. This implies
+*  this function should be called only when the current sync_object has led to a successful remote connection.
+*/
+function persistAuthorization() {
+    console.log("persistAuthorization");
+    // gather user's currently selected and staged tags, and any filter state
+
+    // persist it for the next session using this browser on this device
+
+        var db = tj.indexedDB.db;
+        var trans = db.transaction(["SessionState"], "readwrite");
+        trans.oncomplete = function(e) {
+            console.log("persistAuthorization trans.oncomplete() called");
+        }
+        trans.onerror = function(e) {
+            console.log("persistAuthorization trans.onerror() called");
+            console.log(trans.error);
+        }
+        // IndexedDB on client side new schema 3-22-2014:
+        // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
+        var store = trans.objectStore("SessionState");
+        var row = {"name":"authorizationState",
+                   "service":"Dropbox",
+                   "primary":nbx.sync_object.Dropbox.key,
+                   "secondary":nbx.sync_object.Dropbox.secret};
+        var request = store.put(row);  // for now at least there is only one persisted filterObject
+                
+        request.onsuccess = function(e) {
+            console.log("persistAuthorization request.onsuccess");
+            //var jotDiv = renderJot(row);
+            //var jotsContainer = document.getElementById("jotItems");
+        };
+        
+        request.onerror = function(e) {
+            console.log(e);
+        };
+}
+
+/* Called at startup to retrieve the user's remote service authorization data from local (indexedDB) storage. */
+function retrieveAuthorization() {
+
+}
+
 function nimbus_init() {
 	console.log("doing NimbusBase nimbus_init()");
-	nbx.open();  // connects to user storage using NimbusBase
+    indexedDB_init();
+	///nbx.open();  // connects to user storage using NimbusBase
 }
 
 window.addEventListener("DOMContentLoaded", nimbus_init, false);

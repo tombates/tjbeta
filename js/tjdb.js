@@ -155,8 +155,8 @@ tj.indexedDB.onerror = function (e){
 };
 
 /*
-* Opens a local indexedDB store for jots. Called only if tj.STORE_MASK has the tj.STORE_IDB flag on and only
-* after opening the the NimbusBase connection to the remote store.
+* Opens a local indexedDB store for persisting authorization and session filter settings.
+  Called after opening the NimbusBase connection to the remote store.
 */
 tj.indexedDB.open = function() {
     "use strict";
@@ -210,7 +210,7 @@ tj.indexedDB.open = function() {
                 
         request.onsuccess = function(e) {
             if(request.result == undefined) {
-                console.log("undefined retrieved filterObject state in: request.onsuccess() called");
+                console.log("undefined retrieved filterState state in: request.onsuccess() called");
                 tj.filterObject.filterMode = tj.FILTERMODE_NONE;
                 tj.filterObject.filterTags = null;
                 tj.filterObject.startDate = "";
@@ -222,7 +222,7 @@ tj.indexedDB.open = function() {
                 tj.filterObject.filterOrder = "newfirst";
             }
             else {
-                console.log("defined retrieved filterObject state in: request.onsuccess() called");
+                console.log("defined retrieved filterState state in: request.onsuccess() called");
                 tj.filterObject.filterMode = request.result.filterMode;
                 tj.filterObject.filterTags = request.result.filterTags;
                 tj.filterObject.startDate = request.result.startDate;
@@ -233,8 +233,9 @@ tj.indexedDB.open = function() {
                 tj.filterObject.filterOnDate = request.result.filterOnDate;
                 tj.filterObject.filterOrder = request.result.filterOrder;
             }
-            resetFilterControlsState(tj.filterObject.filterTags);
-            applyFilters();    // calls showAllJots()
+            nbx.open();
+            ///resetFilterControlsState(tj.filterObject.filterTags);
+            ///applyFilters();    // calls showAllJots()
         };
         
         request.onerror = function(e) {
@@ -1460,6 +1461,8 @@ function settingsServiceChoice() {
 }
 
 /* Persists the key and secret (Dropbox) or scope (Google Drive) for connecting to the remote storage service. */
+//TODO could we give the user a choice here as to a subdirectory in the app to put jots into, in other words
+//implementing the jot jar idea via subdirs in the app dir??? that would be cool
 function settingsSet(value) {
     console.log("settingsSet()");
     if(value === 1) {
@@ -1471,16 +1474,16 @@ function settingsSet(value) {
             tj.service = tj.SERVICE_DROPBOX;
             tj.key = document.getElementById("DBKey").value;
             tj.secret = document.getElementById("DBSecret").value;
-            nbx.sync_object.Dropbox.key = tj.key;
-            nbx.sync_object.Dropbox.secret = tj.secret;
-            nimbus_init();
+            if((tj.key !== nbx.sync_object.Dropbox.key) || (tj.secret !== nbx.sync_object.Dropbox.secret)) {
+                nbx.sync_object.Dropbox.key = tj.key;
+                nbx.sync_object.Dropbox.secret = tj.secret;
+                nimbus_init();   // attempt connection
+            }
         }
         else if(document.getElementById("remoteGoogle").checked) {
-            //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
             tj.service = tj.SERVICE_GOOGLE;     
         }
         else {
-            //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
             tj.service = tj.SERVICE_UNKNOWN;     
         }
 
