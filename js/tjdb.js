@@ -210,7 +210,7 @@ tj.indexedDB.open = function() {
         var filterStateRequest = store.get("filterState");
                 
         filterStateRequest.onsuccess = function(e) {
-            if(request.result == undefined) {
+            if(filterStateRequest.result == undefined) {
                 console.log("undefined retrieved filterState state in: request.onsuccess() called");
                 tj.filterObject.filterMode = tj.FILTERMODE_NONE;
                 tj.filterObject.filterTags = null;
