@@ -155,8 +155,9 @@ tj.indexedDB.onerror = function (e){
 };
 
 /*
-* Opens a local indexedDB store for persisting authorization and session filter settings.
-  Called after opening the NimbusBase connection to the remote store.
+* Opens a local indexedDB store used for persisting authorization and session filter settings.
+* Here we retrieve any previously saved filter settings and the authorization data for the
+* user's remote storage service.
 */
 tj.indexedDB.open = function() {
     "use strict";
@@ -233,6 +234,9 @@ tj.indexedDB.open = function() {
                 tj.filterObject.filterOnDate = request.result.filterOnDate;
                 tj.filterObject.filterOrder = request.result.filterOrder;
             }
+
+            // now we reuse the same transaction for a request to retrieve the authorization data
+            var t = e.transaction;
             nbx.open();
             ///resetFilterControlsState(tj.filterObject.filterTags);
             ///applyFilters();    // calls showAllJots()
