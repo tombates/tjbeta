@@ -237,6 +237,7 @@ tj.indexedDB.open = function() {
 
             // now we reuse the same transaction for a request to retrieve the authorization data
             var t = e.transaction;
+            console.log("t = " + t);
             nbx.open();
             ///resetFilterControlsState(tj.filterObject.filterTags);
             ///applyFilters();    // calls showAllJots()
