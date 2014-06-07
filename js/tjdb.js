@@ -173,9 +173,9 @@ tj.indexedDB.open = function() {
     //TODO Get user's initial preferences for local and remote storage
     //TODO Get user's access info for their prefered remote storage locations - currently hard coded to my keys
 
-    var request = indexedDB.open("ThoughtJot", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
+    var openRequest = indexedDB.open("ThoughtJot", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
 	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
-    request.onupgradeneeded = function(e) {
+    openRequest.onupgradeneeded = function(e) {
 		var db = e.target.result;
 		console.log("tj.indexedDB.open: in request.onupgradeneeded() callback");
 		// A versionchange transaction is started automatically.
@@ -187,7 +187,7 @@ tj.indexedDB.open = function() {
 	};
 	
     // onsuccess populate the filterObject with the saved filter state
-	request.onsuccess = function(e) {
+	openRequest.onsuccess = function(e) {
 		console.log("retrieving filter state: in request.onsuccess() callback");
 		tj.indexedDB.db = e.target.result;
 
@@ -207,9 +207,9 @@ tj.indexedDB.open = function() {
         //var row = {"name":"filterState", "filterMode":tj.filterObject.filterMode,
         //           "filterTags":tj.filterObject.filterTags,
         //           "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate};
-        var request = store.get("filterState");
+        var filterStateRequest = store.get("filterState");
                 
-        request.onsuccess = function(e) {
+        filterStateRequest.onsuccess = function(e) {
             if(request.result == undefined) {
                 console.log("undefined retrieved filterState state in: request.onsuccess() called");
                 tj.filterObject.filterMode = tj.FILTERMODE_NONE;
@@ -243,12 +243,12 @@ tj.indexedDB.open = function() {
             ///showFilteredJots();    // calls showAllJots()
         };
         
-        request.onerror = function(e) {
+        filterStateRequest.onerror = function(e) {
             console.log(e.value);
         };
 	};
 	
-	request.onerror = tj.indexedDB.onerror;
+	openRequest.onerror = tj.indexedDB.onerror;
 };
 
 tj.indexedDB.addJot = function(jotText) {
