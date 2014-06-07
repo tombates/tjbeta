@@ -43,10 +43,7 @@ nbx.userConnectRequest = function(serviceName) {
 */
 nbx.open = function() {
 
-    if(!window.indexedDB) {    
-        window.alert("Your browser doesn't support a stable version of IndexedDB, which Thought Jot uses.\nSome features might not be available or might not work correctly.");
-    }
-    console.log("in nbx.open, calling Nimbus.Auth.setup(nbx.sync_object");
+    console.log("nbx.open(): calling Nimbus.Auth.setup(nbx.sync_object)");
 
     nbx.linkDropbox = document.getElementById("cloudButton");
 
@@ -84,7 +81,7 @@ nbx.open = function() {
                     console.log("nbx.Tags.sync_all() callback called.");
                     filterManager_init();
                     resetFilterControlsState(tj.filterObject.filterTags);
-                    applyFilters();    // calls showAllJots()
+                    showFilteredJots();
 
                     ///indexedDB_init();
                     //tj.indexedDB.showAllJots();  // now gets called via applyFilters call in tj.indexedDB.open

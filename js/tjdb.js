@@ -240,7 +240,7 @@ tj.indexedDB.open = function() {
             console.log("e = " + e);
             nbx.open();
             ///resetFilterControlsState(tj.filterObject.filterTags);
-            ///applyFilters();    // calls showAllJots()
+            ///showFilteredJots();    // calls showAllJots()
         };
         
         request.onerror = function(e) {
@@ -1036,17 +1036,14 @@ function indexedDB_init() {
 function toggleOrdering() {
 	var toggle = document.getElementById('toggleOrder');
 	if(tj.filterObject.filterOrder === "newfirst") {
-		//toggle.value = "Showing oldest first";
 		toggle.title = "Press to show newest jots first.";
 		tj.filterObject.filterOrder = "oldfirst";
 	}
 	else {
-		//toggle.value = "Showing newest first";
 		toggle.title = "Press to show oldest jots first.";
 		tj.filterObject.filterOrder = "newfirst";
 	}
-    //tj.indexedDB.showAllJots(tj.filterObject); 
-    applyFilters();   // calls showAllJots
+    showFilteredJots();
 }
 
 function paginator(direction) {
@@ -1214,8 +1211,9 @@ function resetFilterControlsState() {
     toggleDateFilter();
 }
 
-/* Handler for user clicking on Filter button. Sets the state of tj.filterObject accordingly. */
-function applyFilters() {
+/* Handler for user clicking on Filter button. Sets the state of tj.filterObject accordingly and
+*  and calls showAllJots, using the filterObject if any filtering is to be done. */
+function showFilteredJots() {
     tj.filterObject.filterTags = getSelectedTags();
     // if no filtering show everything
     //if(!(document.getElementById("filter_by_tags_or").checked
