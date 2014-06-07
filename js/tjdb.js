@@ -224,15 +224,15 @@ tj.indexedDB.open = function() {
             }
             else {
                 console.log("defined retrieved filterState state in: request.onsuccess() called");
-                tj.filterObject.filterMode = request.result.filterMode;
-                tj.filterObject.filterTags = request.result.filterTags;
-                tj.filterObject.startDate = request.result.startDate;
-                tj.filterObject.endDate = request.result.endDate;
-                tj.filterObject.filterOnTags = request.result.filterOnTags;
-                tj.filterObject.filterOnTagsOr = request.result.filterOnTagsOr;
-                tj.filterObject.filterOnTagsAnd = request.result.filterOnTagsAnd;
-                tj.filterObject.filterOnDate = request.result.filterOnDate;
-                tj.filterObject.filterOrder = request.result.filterOrder;
+                tj.filterObject.filterMode = filterStateRequest.result.filterMode;
+                tj.filterObject.filterTags = filterStateRequest.result.filterTags;
+                tj.filterObject.startDate = filterStateRequest.result.startDate;
+                tj.filterObject.endDate = filterStateRequest.result.endDate;
+                tj.filterObject.filterOnTags = filterStateRequest.result.filterOnTags;
+                tj.filterObject.filterOnTagsOr = filterStateRequest.result.filterOnTagsOr;
+                tj.filterObject.filterOnTagsAnd = filterStateRequest.result.filterOnTagsAnd;
+                tj.filterObject.filterOnDate = filterStateRequest.result.filterOnDate;
+                tj.filterObject.filterOrder = filterStateRequest.result.filterOrder;
             }
 
             // now we reuse the same transaction for a request to retrieve the authorization data
