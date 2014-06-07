@@ -191,7 +191,7 @@ tj.indexedDB.open = function() {
 		console.log("retrieving filter state: in request.onsuccess() callback");
 		tj.indexedDB.db = e.target.result;
 
-        // restore the saved session filter data, if any
+        // restore the saved session filter state data, if any
 
         var trans = tj.indexedDB.db.transaction(["SessionState"]);
         trans.oncomplete = function(e) {
@@ -207,10 +207,10 @@ tj.indexedDB.open = function() {
         //var row = {"name":"filterState", "filterMode":tj.filterObject.filterMode,
         //           "filterTags":tj.filterObject.filterTags,
         //           "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate};
-        var filterStateRequest = store.get("filterState");
+        var fsRequest = store.get("filterState");
                 
-        filterStateRequest.onsuccess = function(e) {
-            if(filterStateRequest.result == undefined) {
+        fsRequest.onsuccess = function(e) {
+            if(fsRequest.result == undefined) {
                 console.log("undefined retrieved filterState state in: request.onsuccess() called");
                 tj.filterObject.filterMode = tj.FILTERMODE_NONE;
                 tj.filterObject.filterTags = null;
@@ -224,15 +224,15 @@ tj.indexedDB.open = function() {
             }
             else {
                 console.log("defined retrieved filterState state in: request.onsuccess() called");
-                tj.filterObject.filterMode = filterStateRequest.result.filterMode;
-                tj.filterObject.filterTags = filterStateRequest.result.filterTags;
-                tj.filterObject.startDate = filterStateRequest.result.startDate;
-                tj.filterObject.endDate = filterStateRequest.result.endDate;
-                tj.filterObject.filterOnTags = filterStateRequest.result.filterOnTags;
-                tj.filterObject.filterOnTagsOr = filterStateRequest.result.filterOnTagsOr;
-                tj.filterObject.filterOnTagsAnd = filterStateRequest.result.filterOnTagsAnd;
-                tj.filterObject.filterOnDate = filterStateRequest.result.filterOnDate;
-                tj.filterObject.filterOrder = filterStateRequest.result.filterOrder;
+                tj.filterObject.filterMode = fsRequest.result.filterMode;
+                tj.filterObject.filterTags = fsRequest.result.filterTags;
+                tj.filterObject.startDate = fsRequest.result.startDate;
+                tj.filterObject.endDate = fsRequest.result.endDate;
+                tj.filterObject.filterOnTags = fsRequest.result.filterOnTags;
+                tj.filterObject.filterOnTagsOr = fsRequest.result.filterOnTagsOr;
+                tj.filterObject.filterOnTagsAnd = fsRequest.result.filterOnTagsAnd;
+                tj.filterObject.filterOnDate = fsRequest.result.filterOnDate;
+                tj.filterObject.filterOrder = fsRequest.result.filterOrder;
             }
 
             // now we reuse the same transaction for a request to retrieve the authorization data
@@ -243,7 +243,7 @@ tj.indexedDB.open = function() {
             ///showFilteredJots();    // calls showAllJots()
         };
         
-        filterStateRequest.onerror = function(e) {
+        fsRequest.onerror = function(e) {
             console.log(e.value);
         };
 	};
