@@ -240,8 +240,8 @@ tj.indexedDB.open = function() {
             //console.log("e = " + e);
             var authRequest = store.get("authorizationState");
             authRequest.onsuccess = function(e) {
-                if((authRequest.result === undefined) || (nbx.sync_object.Dropbox.key === "")
-                   || (nbx.sync_object.Dropbox.secret === "")) {
+                if((authRequest.result === undefined) || ((authRequest.result !== undefined) &&
+                   ((nbx.sync_object.Dropbox.key === "") || (nbx.sync_object.Dropbox.secret === "")) ) {
                     $( "#settingsDialog" ).dialog( "option", "width", 600 );
                     $( "#settingsDialog" ).dialog( "open" );
                     return;
