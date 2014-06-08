@@ -240,8 +240,8 @@ tj.indexedDB.open = function() {
             //console.log("e = " + e);
             var authRequest = store.get("authorizationState");
             authRequest.onsuccess = function(e) {
-                nbx.sync_object.Dropbox.key = authRequest.result.key;
-                nbx.sync_object.Dropbox.secret = authRequest.result.secret;
+                nbx.sync_object.Dropbox.key = authRequest.result.primary;
+                nbx.sync_object.Dropbox.secret = authRequest.result.secondary;
                 nbx.open();    // will call showFilteredJots() in its success callback
             };
 
