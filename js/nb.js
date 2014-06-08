@@ -18,7 +18,7 @@ nbx.sync_object = {
 	}
 	//"synchronous": true
 };
-//      "key": "nlszj5xrhlb1k5p", 
+//      "key": "nlszj5xrhlb1k5p",
 //      "secret": "fo8a244sgdftjbf", 
 
 nbx.userConnectRequest = function(serviceName) {
@@ -87,7 +87,7 @@ nbx.open = function() {
                     //tj.indexedDB.showAllJots();  // now gets called via applyFilters call in tj.indexedDB.open
                                                    // so filterObject state is restored before showing any jots
                     // persist the remote authorization data if necessary
-                    ///+persistAuthorization();
+                    persistAuthorization();
                 });
            }
         });
