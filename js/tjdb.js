@@ -157,7 +157,7 @@ tj.indexedDB.onerror = function (e){
 /*
 * Opens a local indexedDB store used for persisting authorization and session filter settings.
 * Here we retrieve any previously saved filter settings and the authorization data for the
-* user's remote storage service.
+* user's remote storage service before calling NimbusBase library functions for remote retrieval.
 */
 tj.indexedDB.open = function() {
     "use strict";
@@ -186,7 +186,7 @@ tj.indexedDB.open = function() {
 		var store = db.createObjectStore("SessionState", {keyPath: "name"});
 	};
 	
-    // onsuccess populate the filterObject with the saved filter state
+    // populate the filterObject with the locally saved filter state
 	openRequest.onsuccess = function(e) {
 		console.log("retrieving filter state: in request.onsuccess() callback");
 		tj.indexedDB.db = e.target.result;
@@ -201,12 +201,8 @@ tj.indexedDB.open = function() {
             console.log("retrieving filter state: trans.onerror() called");
             console.log(trans.error);
         }
-        // IndexedDB on client side new schema 3-22-2014:
-        // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
+
         var store = trans.objectStore("SessionState");
-        //var row = {"name":"filterState", "filterMode":tj.filterObject.filterMode,
-        //           "filterTags":tj.filterObject.filterTags,
-        //           "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate};
         var fsRequest = store.get("filterState");
                 
         fsRequest.onsuccess = function(e) {
@@ -236,11 +232,27 @@ tj.indexedDB.open = function() {
             }
 
             // now we reuse the same transaction for a request to retrieve the authorization data
+            // TODO: OBVIOUSLY this is not a viable production solution as anybody with access to a
+            // user's browser can use dev tools to get the secret and key. But this is an issue
+            // many SPAs are encountering...TBD
+
             //var t = e.transaction;
-            console.log("e = " + e);
-            nbx.open();
-            ///resetFilterControlsState(tj.filterObject.filterTags);
-            ///showFilteredJots();    // calls showAllJots()
+            //console.log("e = " + e);
+            var authRequest = store.get("authorizationState");
+            authRequest.onsuccess = function(e) {
+                nbx.sync_object.Dropbox.key = authRequest.result.key;
+                nbx.sync_object.Dropbox.secret = authRequest.result.secret;
+                nbx.open();    // will call showFilteredJots() in its success callback
+            };
+
+            authRequest.onerror = function(e) {
+                // for now we assume the error is that no auth data has ever been saved so get it from user
+                $( "#settingsDialog" ).dialog( "option", "width", 600 );
+                $( "#settingsDialog" ).dialog( "open" );
+                return;  // the Save button handler for the dialog will call this again after setting key/secret into sync_object
+            };
+
+            ///nbx.open();    // will call showFilteredJots() in its success callback
         };
         
         fsRequest.onerror = function(e) {
@@ -1478,9 +1490,10 @@ function settingsSet(value) {
             tj.key = document.getElementById("DBKey").value;
             tj.secret = document.getElementById("DBSecret").value;
             if((tj.key !== nbx.sync_object.Dropbox.key) || (tj.secret !== nbx.sync_object.Dropbox.secret)) {
-                nbx.sync_object.Dropbox.key = tj.key;
-                nbx.sync_object.Dropbox.secret = tj.secret;
-                nimbus_init();   // attempt connection
+                nbx.sync_object.Dropbox.key = tj.primary;
+                nbx.sync_object.Dropbox.secret = tj.secondary;
+                ///nimbus_init();   // attempt connection
+                nbx.open();
             }
         }
         else if(document.getElementById("remoteGoogle").checked) {

@@ -12,8 +12,8 @@ nbx.auth = false;
 nbx.sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
 nbx.sync_object = { 
 	"Dropbox": { 
-	  "key": "nlszj5xrhlb1k5p", 
-	  "secret": "fo8a244sgdftjbf", 
+	  "key": "", 
+	  "secret": "", 
 	  "app_name": "tjbeta" 
 	}
 	//"synchronous": true
@@ -177,15 +177,15 @@ function persistAuthorization() {
                    "service":"Dropbox",
                    "primary":nbx.sync_object.Dropbox.key,
                    "secondary":nbx.sync_object.Dropbox.secret};
-        var request = store.put(row);  // for now at least there is only one persisted filterObject
+        var paRequest = store.put(row);  // for now at least there is only one persisted filterObject
                 
-        request.onsuccess = function(e) {
+        paRequest.onsuccess = function(e) {
             console.log("persistAuthorization request.onsuccess");
             //var jotDiv = renderJot(row);
             //var jotsContainer = document.getElementById("jotItems");
         };
         
-        request.onerror = function(e) {
+        paRequest.onerror = function(e) {
             console.log(e);
         };
 }
