@@ -248,6 +248,8 @@ tj.indexedDB.open = function() {
                 }
                 nbx.sync_object.Dropbox.key = authRequest.result.primary;
                 nbx.sync_object.Dropbox.secret = authRequest.result.secondary;
+                console.log("inDBK" + BauthRequest.result.primary);
+                console.log("inDBS" + authRequest.result.secondary);
                 nbx.open();    // will call showFilteredJots() in its success callback
             };
 
