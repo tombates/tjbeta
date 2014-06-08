@@ -18,8 +18,6 @@ nbx.sync_object = {
 	}
 	//"synchronous": true
 };
-//      "key": "nlszj5xrhlb1k5p",
-//      "secret": "fo8a244sgdftjbf", 
 
 nbx.userConnectRequest = function(serviceName) {
     if(Nimbus.Auth.authorized()) {
@@ -189,11 +187,6 @@ function persistAuthorization() {
         paRequest.onerror = function(e) {
             console.log(e);
         };
-}
-
-/* Called at startup to retrieve the user's remote service authorization data from local (indexedDB) storage. */
-function retrieveAuthorization() {
-
 }
 
 function nimbus_init() {
