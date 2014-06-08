@@ -1495,8 +1495,8 @@ function settingsSet(value) {
             tj.key = document.getElementById("DBKey").value;
             tj.secret = document.getElementById("DBSecret").value;
             if((tj.key !== nbx.sync_object.Dropbox.key) || (tj.secret !== nbx.sync_object.Dropbox.secret)) {
-                nbx.sync_object.Dropbox.key = tj.primary;
-                nbx.sync_object.Dropbox.secret = tj.secondary;
+                nbx.sync_object.Dropbox.key = tj.key;
+                nbx.sync_object.Dropbox.secret = tj.secret;
                 ///nimbus_init();   // attempt connection
                 nbx.open();
             }

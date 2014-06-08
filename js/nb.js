@@ -87,7 +87,8 @@ nbx.open = function() {
                     //tj.indexedDB.showAllJots();  // now gets called via applyFilters call in tj.indexedDB.open
                                                    // so filterObject state is restored before showing any jots
                     // persist the remote authorization data if necessary
-                    persistAuthorization();
+                    if((nbx.sync_object.Dropbox.key !== "") || (nbx.sync_object.Dropbox.secret !== ""))
+                        persistAuthorization();
                 });
            }
         });
