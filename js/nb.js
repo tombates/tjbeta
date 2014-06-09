@@ -20,12 +20,12 @@ nbx.sync_object = {
 };
 
 nbx.userConnectRequest = function(serviceName) {
-    if(Nimbus.Auth.authorized()) {
-    	alert("Nothing to do: you're already connected.")
-    }
-    else {
+    ///if(Nimbus.Auth.authorized()) {
+    ///	alert("Nothing to do: you're already connected.")
+    ///}
+    ///else {
     	Nimbus.Auth.authorize(serviceName);
-    }
+    ///}
 };
 
 /*
