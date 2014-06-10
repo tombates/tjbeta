@@ -242,7 +242,7 @@ tj.indexedDB.open = function() {
                 nbx.userConnectRequest("Dropbox");
             else
                 nbx.open();
-            /*
+            /*  commented out 6-9-2014 as key/secret should not be involved for other users
             var authRequest = store.get("authorizationState");
             authRequest.onsuccess = function(e) {
                 if((authRequest.result === undefined) ||

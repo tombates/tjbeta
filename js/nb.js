@@ -16,7 +16,7 @@ nbx.sync_object = {
 	  "secret": "fo8a244sgdftjbf", 
 	  "app_name": "tjbeta" 
 	}
-	//"synchronous": true
+	"synchronous": true   // changed 6-10-2014 from commented out to see if this is part of prob auth'ing other users
 };
 
 nbx.userConnectRequest = function(serviceName) {
@@ -24,8 +24,27 @@ nbx.userConnectRequest = function(serviceName) {
     ///	alert("Nothing to do: you're already connected.")
     ///}
     ///else {
-    	Nimbus.Auth.authorize(serviceName);
+    ///	Nimbus.Auth.authorize(serviceName);
     ///}
+    //TODO when we get other users going comment that this is called by indexedDB_init if authorized fails
+    //     of if user hits button to connect if it's in not connected state - assumes indexedDB_init has been called
+    //     and calls nbx.open() assuming it has not (?)
+    Nimbus.Auth.authorized_callback = function() {
+        console.log("in authentication callback");
+        //nbx.linkDropbox = document.getElementById("connectDropbox");
+        nbx.auth = Nimbus.Auth.authorized();
+        if(nbx.auth) { // change link text to connected
+            nbx.linkDropbox.innerHTML = "set by callback: Connected to Dropbox!";
+        } else {
+            //nbx.linkDropbox.innerHTML = "set by callback: not connected to Dropbox";
+            nbx.linkDropbox.style.backgroundImage = "url('images/dropboxbtn_notconnected.png')";
+            nbx.linkDropbox.title = "You are NOT connected to cloud storage.";
+
+        }
+    };
+
+    Nimbus.Auth.authorize(serviceName);
+    nbx.open();
 };
 
 /*
@@ -48,13 +67,15 @@ nbx.open = function() {
     // see if we need to get authorization data from user or local indexedDB storage
     var remoteKey = nbx.sync_object.Dropbox.key;
     var remoteSecret = nbx.sync_object.Dropbox.secret;
+    ///commented out 6-9-2014 as we try to get others users working and discover the key/secret should not be necessary for them
     ///if((remoteKey === "") || (remoteSecret === "")) {
     ///  $( "#settingsDialog" ).dialog( "option", "width", 600 );
     ///  $( "#settingsDialog" ).dialog( "open" );
     ///  return;  // the Save button handler for the dialog will call this again after setting key/secret into sync_object
     ///}
 
-    Nimbus.Auth.setup(nbx.sync_object);
+    ///commented out 6-10-2014 for testing other users - should not be necessary except to setup app at app ownership level not for users
+    ///Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
 
     //TODO shouldn't this block really be inside Nimbus.Auth.authorized_callback...
@@ -94,6 +115,9 @@ nbx.open = function() {
         //    console.log("nbx.Tags.sync_all() callback called.");
         //    tagManager_init();
         //});
+    }
+    else {
+        console.log("Nimbus.Auth.authorized() returned FALSE");
     }
 	    //Nimbus.Auth.setup(sync_string);
     //DUDE you need to be calling authorize() first, but before that set a callback funtion authorized_callback = function...
