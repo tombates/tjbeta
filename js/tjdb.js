@@ -238,6 +238,11 @@ tj.indexedDB.open = function() {
 
             //var t = e.transaction;
             //console.log("e = " + e);
+            if(!Nimbus.Auth.authorized())
+                nbx.userConnectRequest("Dropbox");
+            else
+                nbx.open();
+            /*
             var authRequest = store.get("authorizationState");
             authRequest.onsuccess = function(e) {
                 if((authRequest.result === undefined) ||
@@ -259,7 +264,7 @@ tj.indexedDB.open = function() {
                 $( "#settingsDialog" ).dialog( "open" );
                 return;  // the Save button handler for the dialog will call this again after setting key/secret into sync_object
             };
-
+            */
             ///nbx.open();    // will call showFilteredJots() in its success callback
         };
         
