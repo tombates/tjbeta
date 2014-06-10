@@ -239,6 +239,7 @@ tj.indexedDB.open = function() {
             //var t = e.transaction;
             //console.log("e = " + e);
             if(Nimbus.Auth.authorized() === false) {
+                console.log("tj.indexedDB.open Nimbus.Auth.authorized() is FALSE");
                 nbx.userConnectRequest("Dropbox");
             }
             else {
