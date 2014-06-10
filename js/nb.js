@@ -42,7 +42,7 @@ nbx.userConnectRequest = function(serviceName) {
 
         }
     };
-
+    Nimbus.Auth.setup(nbx.sync_object);
     Nimbus.Auth.authorize(serviceName);
     nbx.open();
 };
