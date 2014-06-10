@@ -238,10 +238,12 @@ tj.indexedDB.open = function() {
 
             //var t = e.transaction;
             //console.log("e = " + e);
-            if(!Nimbus.Auth.authorized())
+            if(Nimbus.Auth.authorized() === false) {
                 nbx.userConnectRequest("Dropbox");
-            else
+            }
+            else {
                 nbx.open();
+            }
             /*  commented out 6-9-2014 as key/secret should not be involved for other users
             var authRequest = store.get("authorizationState");
             authRequest.onsuccess = function(e) {
