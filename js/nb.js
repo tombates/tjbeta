@@ -30,7 +30,7 @@ nbx.userConnectRequest = function(serviceName) {
     //     of if user hits button to connect if it's in not connected state - assumes indexedDB_init has been called
     //     and calls nbx.open() assuming it has not (?)
     Nimbus.Auth.authorized_callback = function() {
-        console.log("in authentication callback");
+        console.log("in nbx.userConnectRequest authorized_callback");
         //nbx.linkDropbox = document.getElementById("connectDropbox");
         nbx.auth = Nimbus.Auth.authorized();
         if(nbx.auth) { // change link text to connected
@@ -75,7 +75,7 @@ nbx.open = function() {
     ///}
 
     ///commented out 6-10-2014 for testing other users - should not be necessary except to setup app at app ownership level not for users
-    ///Nimbus.Auth.setup(nbx.sync_object);
+    Nimbus.Auth.setup(nbx.sync_object);
     nbx.auth = Nimbus.Auth.authorized();
 
     //TODO shouldn't this block really be inside Nimbus.Auth.authorized_callback...
