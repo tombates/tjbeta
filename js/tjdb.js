@@ -243,6 +243,7 @@ tj.indexedDB.open = function() {
                 nbx.userConnectRequest("Dropbox");
             }
             else {
+                console.log("tj.indexedDB.open Nimbus.Auth.authorized() is TRUE");
                 nbx.open();
             }
             /*  commented out 6-9-2014 as key/secret should not be involved for other users
