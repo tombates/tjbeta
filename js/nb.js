@@ -29,6 +29,9 @@ nbx.userConnectRequest = function(serviceName) {
     //TODO when we get other users going comment that this is called by indexedDB_init if authorized fails
     //     of if user hits button to connect if it's in not connected state - assumes indexedDB_init has been called
     //     and calls nbx.open() assuming it has not (?)
+    Nimbus.Auth.setup(nbx.sync_object);
+    Nimbus.Auth.authorize(serviceName);
+
     Nimbus.Auth.authorized_callback = function() {
         console.log("in nbx.userConnectRequest authorized_callback");
         nbx.linkDropbox = document.getElementById("cloudButton");
@@ -48,8 +51,6 @@ nbx.userConnectRequest = function(serviceName) {
         }
     };
 
-    Nimbus.Auth.setup(nbx.sync_object);
-    Nimbus.Auth.authorize(serviceName);
     ///6-12-2014 moved above trying to understand problems getting reauthed after unlinking over at Dropbox nbx.open();
 };
 
