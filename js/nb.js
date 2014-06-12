@@ -35,6 +35,7 @@ nbx.userConnectRequest = function(serviceName) {
         nbx.auth = Nimbus.Auth.authorized();
         if(nbx.auth) { // change link text to connected
             nbx.linkDropbox.innerHTML = "set by callback: Connected to Dropbox!";
+            nbx.open();
         } else {
             //nbx.linkDropbox.innerHTML = "set by callback: not connected to Dropbox";
             nbx.linkDropbox.style.backgroundImage = "url('images/dropboxbtn_notconnected.png')";
@@ -44,7 +45,7 @@ nbx.userConnectRequest = function(serviceName) {
     };
     Nimbus.Auth.setup(nbx.sync_object);
     Nimbus.Auth.authorize(serviceName);
-    nbx.open();
+    ///6-12-2014 moved above trying to understand problems getting reauthed after unlinking over at Dropbox nbx.open();
 };
 
 /*
@@ -125,6 +126,7 @@ nbx.open = function() {
     // but i still don't understand why why get the test jots written to DB even when authorized is failing - unless it never
     // is really failing but we don't know that because we aren't using a callback - it's all making more sense now. It's better
     // feeling less sick
+    /*
     Nimbus.Auth.authorized_callback = function() {
     	console.log("in authentication callback");
 	    //nbx.linkDropbox = document.getElementById("connectDropbox");
@@ -138,6 +140,7 @@ nbx.open = function() {
 
 		}
     };
+    */
 
 	//git Nimbus.Auth.authorize("Dropbox");  we can't do this here because doing so takes us away from this page to Dropbox
 	//                                       which means we come back again to nbx.open and now we have an infinite loop
