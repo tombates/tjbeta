@@ -35,17 +35,19 @@ nbx.userConnectRequest = function(serviceName) {
 
         nbx.auth = Nimbus.Auth.authorized();
         if(nbx.auth) { // change link text to connected
+            console.log("authorized_callback says AUTHORIZED")
             nbx.linkDropbox.style.backgroundImage = "url('images/dropboxbtn_connected.png')";
             nbx.linkDropbox.title = "You are connected to cloud storage.";
             nbx.open();
         } else {
             //nbx.linkDropbox.innerHTML = "set by callback: not connected to Dropbox";
+            console.log("authorized_callback says NOT AUTHORIZED")
             nbx.linkDropbox.style.backgroundImage = "url('images/dropboxbtn_notconnected.png')";
             nbx.linkDropbox.title = "You are NOT connected to cloud storage.";
 
         }
     };
-    
+
     Nimbus.Auth.setup(nbx.sync_object);
     Nimbus.Auth.authorize(serviceName);
     ///6-12-2014 moved above trying to understand problems getting reauthed after unlinking over at Dropbox nbx.open();
