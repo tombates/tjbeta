@@ -98,7 +98,7 @@ tj.filterObject.filterTags = null;
   tj.FILTERMODE_TAGS_OR = 1;  // radio button state
   tj.FILTERMODE_TAGS_AND = 2; // radio button state
   tj.FILTERMODE_TAGS = 8;     // the checkbox state
-tj.filterObject.filterMode = tj.FILTERMODE_NONE;
+//tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 tj.filterObject.filterOnTags = false;     // the checkbox state
 tj.filterObject.filterOnTagsOr = false;   // radio btn state
 tj.filterObject.filterOnTagsAnd = false;  // radio btn state
@@ -208,7 +208,7 @@ tj.indexedDB.open = function() {
         fsRequest.onsuccess = function(e) {
             if(fsRequest.result == undefined) {
                 console.log("undefined retrieved filterState state in: request.onsuccess() called");
-                tj.filterObject.filterMode = tj.FILTERMODE_NONE;
+                //tj.filterObject.filterMode = tj.FILTERMODE_NONE;
                 tj.filterObject.filterTags = null;
                 tj.filterObject.startDate = "";
                 tj.filterObject.endDate = "";
@@ -220,7 +220,7 @@ tj.indexedDB.open = function() {
             }
             else {
                 console.log("defined retrieved filterState state in: request.onsuccess() called");
-                tj.filterObject.filterMode = fsRequest.result.filterMode;
+                //tj.filterObject.filterMode = fsRequest.result.filterMode;
                 tj.filterObject.filterTags = fsRequest.result.filterTags;
                 tj.filterObject.startDate = fsRequest.result.startDate;
                 tj.filterObject.endDate = fsRequest.result.endDate;
@@ -511,7 +511,8 @@ function getSortedRemoteJots(filterObject) {
 
     
 
-    if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
+    //if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
+    if(filterObject !== undefined) {
         console.log("getSortedRemoteJots filterObject is DEFINED");
         var filteredJots = [];
         //var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
