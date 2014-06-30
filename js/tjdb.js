@@ -155,7 +155,7 @@ tj.indexedDB.onerror = function (e){
 };
 
 /*
-* Opens a local indexedDB store used for persisting authorization and session filter settings.
+* Opens a local indexedDB store used for persisting authorization (yuck!) and session filter settings.
 * Here we retrieve any previously saved filter settings and the authorization data for the
 * user's remote storage service before calling NimbusBase library functions for remote retrieval.
 */
@@ -170,10 +170,10 @@ tj.indexedDB.open = function() {
                 event.preventDefault();
                 console.log('ctrl-s');
                 // if there is a jot being edited, simulate user clicking check (save) button in the jot
-                if(tj.editing !== null) {
-                    tj.editing.click();  // works in Chrome and IE but not FF
-                }
-                // see if this works in FF
+                //if(tj.editing !== null) {
+                //    tj.editing.click();  // works in Chrome and IE but not FF
+                //}
+                // but this works in IE, FF and Chrome
                 var evt = document.createEvent('MouseEvents');
                 evt.initEvent(
                     'click',
