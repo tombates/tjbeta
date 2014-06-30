@@ -162,6 +162,18 @@ tj.indexedDB.onerror = function (e){
 tj.indexedDB.open = function() {
     "use strict";
 
+    // bind CTL-s for saving edits to a jot
+    $(window).bind('keydown', function(event) {
+        if (event.ctrlKey || event.metaKey) {
+            switch (String.fromCharCode(event.which).toLowerCase()) {
+            case 's':
+                event.preventDefault();
+                alert('ctrl-s');
+                break;
+            }
+        }
+    });
+    
     // bind JQuery UI date pickers to the end/start date filter fields
     $("#startdate").datepicker();
     $("#enddate").datepicker();
