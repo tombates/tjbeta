@@ -169,6 +169,10 @@ tj.indexedDB.open = function() {
             case 's':
                 event.preventDefault();
                 console.log('ctrl-s');
+                // if there is a jot being edited, simulate user clicking check (save) button in the jot
+                if(tj.editing !== null) {
+                    tj.editing.click();
+                }
                 break;
             }
         }
