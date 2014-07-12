@@ -169,16 +169,22 @@ tj.indexedDB.open = function() {
             case 's':
                 event.preventDefault();
                 console.log('ctrl-s');
+                // We don't use jQuery trigger because we don't have a sep id for each edit link so we can't
+                // use a jQuery selector to get at the right link. But we already have the link itself in hand in
+                // tj.editing so we use a more direct method. But this has its own issues as FF does not
+                // support click, and IE apparently does not fully support CustomEvent which is the supposed
+                // replacement for the deprecated createEvent WHICH DOES WORK in IE, FF and Chrome. Ugh.
+
                 // if there is a jot being edited, simulate user clicking check (save) button in the jot
                 //if(tj.editing !== null) {
                 //    tj.editing.click();  // works in Chrome and IE but not FF
                 //}
                 // but this works in IE, FF and Chrome
-                var evt = document.createEvent('MouseEvents');
+                var evt = document.createEvent('MouseEvents');   // ugh createEvent is deprecated, see above
                 evt.initEvent(
-                    'click',
-                    true,
-                    true
+                    'click',   // event type
+                    false,      // can bubble?
+                    true       // cancelable?
                 );
                 tj.editing.dispatchEvent(evt);
                 break;
