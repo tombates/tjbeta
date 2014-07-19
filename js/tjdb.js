@@ -413,13 +413,18 @@ function pageRenderer(filterObject) {
 };
 
 function getStatusReport() {
+    var pieces = [tj.status.prefix + " "];
     var filterText = "";
     var tagText = "";
+    // TODO what about using arrays for the string bits then join to get the final status report - might be less ugly
 
-    if(tj.status.total === tj.status.subset)
+    if(tj.status.total === tj.status.subset) {
         tj.status.which = "all jots (" + tj.status.total.toString() + ")";
+        pieces.push("all jots (" + tj.status.total.toString() + ")");
+    }
     else {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
+        pieces.push(tj.status.subset.toString() + " of " + tj.status.total.toString());
         // create string rep of date and tag filters
         filterText = ", filtered by ";
         if(tj.filterObject.filterOnDate) {
