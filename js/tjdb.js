@@ -36,7 +36,6 @@
 
 // Let's encapsulate our stuff in a namespace as object.
 var tj = {};
-//tj.STORE_IDB = 1;
 tj.STORE_DROPBOX = 2;
 tj.STORE_GDRIVE = 4;
 tj.STORE_BITTORRENT_SYNC = 8;
@@ -49,11 +48,9 @@ tj.STORE_MASK = tj.STORE_DROPBOX;   // TODO make user controlled
 
 tj.jots = [];
 tj.indexedDB = {};
+tj.filterObject = {};
 tj.indexedDB.db = null;
 tj.indexedDB.IDB_SCHEMA_VERSION = 10;
-//tj.indexedDB.order = "newfirst";   // default to showing newest jots at top
-
-tj.filterObject = {};
 
 tj.SERVICE_UNKNOWN = -1;
 tj.SERVICE_DROPBOX = 1;
@@ -337,43 +334,6 @@ tj.indexedDB.addJot = function(jotText) {
             jotsContainer.appendChild(jotDiv);
         }
     }
-
-    //TODO refactor into sep function so can be used by addMissingLocalJots
-	/*if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
-    	var db = tj.indexedDB.db;
-    	var trans = db.transaction(["Jots"], "readwrite");
-    	trans.oncomplete = function(e) {
-    		console.log("addJot trans.oncomplete() called");
-    	}
-    	trans.onerror = function(e) {
-    		console.log("addJot trans.onerror() called");
-    		console.log(trans.error);
-    	}
-	    // IndexedDB on client side new schema 3-22-2014:
-        // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
-    	var store = trans.objectStore("Jots");
-    	var row = {"commonKeyTS":commonKey, "nimbusID":nbID, "nimbusTime":"none", "modTime":commonKey,
-    	           "title":"none", "jot": htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
-    	var request = store.add(row);
-    	    	
-    	request.onsuccess = function(e) {
-    		console.log("addJot in put request.onsuccess");
-		    var jotDiv = renderJot(row);
-		    var jotsContainer = document.getElementById("jotItems");
-
-	        if(tj.filterObject.filterOrder === "newfirst")  {   // newest are currently shown first
-	        	var first = jotsContainer.firstChild;
-	            jotsContainer.insertBefore(jotDiv, jotsContainer.firstChild);
-	        }
-	        else {  // oldest are currently shown first
-                jotsContainer.appendChild(jotDiv);
-            }
-    	};
-    	
-    	request.onerror = function(e) {
-    		console.log(e.value);
-    	};
-    }*/
 };
 
 /*
@@ -400,18 +360,12 @@ tj.indexedDB.addJot = function(jotText) {
 //  push to remote at "we know we are connected" time and not so much here.
 tj.indexedDB.showAllJots = function(filterObject) {
 	console.log("in showAllJots");
-    ///if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
-    ///    syncAllJots(pageRenderer);
-    ///}
-    ///else {
-        pageRenderer(filterObject);
-    ///}
+    pageRenderer(filterObject);
 }
 
 function pageRenderer(filterObject) {
-    //var start_time = new Date().getTime();
-    var r = getSortedRemoteJots(filterObject);
     //var end_time = new Date().getTime();
+    var r = getSortedRemoteJots(filterObject);
     //var duration = end_time - start_time;
     //console.log("pageRender getSortedRemoteJots took:" + duration + "milliseconds")
 
@@ -928,42 +882,6 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tag
         var newTitle = titleinput.value;
         var newTags = tagsinput.value;
 
-        /*if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
-
-    		var db = tj.indexedDB.db;
-    		var trans = db.transaction(["Jots"], "readwrite");
-    		trans.oncomplete = function(e) {
-    			console.log("editJot transaction.oncomplete() called");
-    		};
-    		trans.onerror = function(e) {
-    			console.log("editJot transaction.onerror() called");
-    		}
-    		var store = trans.objectStore("Jots");
-            var request = store.get(commonKey);
-            request.onerror = function(e) {
-                console.log("editJot request.onerror() called");
-            };
-            request.onsuccess = function(e) {
-                console.log("editJot request.onsuccess() called");
-
-                var row = request.result;
-                //row.text = jotElement.innerHTML;
-                row.jot = newContent;
-                row.title = newTitle;
-                row.tagList = newTags;
-                console.log(row.commonKeyTS);
-                // a nested request to update the indexedDB
-                var requestUpdate = store.put(row);
-                requestUpdate.onerror = function(e) {
-                    console.log("editJot requestUpdate.onerror() called");
-                };
-                requestUpdate.onsuccess = function(e) {
-                    console.log("editJot requestUpdate.onsuccess() called");
-                };
-            };
-        }*/
-        //now we need to update the remote storage as well
-
 	    if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
 	        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
 	        console.log("editJot: updating Dropbox, except we aren't really yet!");
@@ -1020,30 +938,6 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
         removeJotDiv(jotDiv);
         return;
     }
-
-	// delete the local indexedDB version of the jot
-	/*if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
-		var db = tj.indexedDB.db;
-		var trans = db.transaction(["Jots"], "readwrite");
-		trans.oncomplete = function(e) {
-			console.log("deleteJot transaction.oncomplete() called");
-		};
-		trans.onerror = function(e) {
-			console.log("deleteJot transaction.onerror() called");
-		}
-		var store = trans.objectStore("Jots");
-		
-		// deletel the indexedDB entry for this jot
-		var request = store['delete'](commonKey);    // can't do store.delete(id) due to delete being a keyword, just like continue issue
-		
-		request.onsuccess = function(e) {
-			removeJotDiv(jotDiv);
-		};
-		
-		request.onerror = function(e) {
-			console.log(e);
-		};
-    }*/
 
     // delete the Dropbox version
 	if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
