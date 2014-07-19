@@ -428,7 +428,7 @@ function getStatusReport() {
         pieces.push(", filtered by");
 
 
-        if(tj.filterObject.filterOnTagsOr || tj.filterObject.filterOnTagsAnd) {
+        if(tj.filterObject.filterOnTags && (tj.filterObject.filterOnTagsOr || tj.filterObject.filterOnTagsAnd)) {
             if(tj.filterObject.filterTags.length > 1) {
                 if(tj.filterObject.filterOnTagsOr)
                     tagparts.push("tags (OR'd): ");
