@@ -311,7 +311,8 @@ tj.indexedDB.addJot = function(jotText) {
         var tags = document.getElementById('add_tagsinput').value;
         if(tags === undefined || tags === "")
             tags = "none";
-        var title = document.getElementById('add_titleinput').value;
+        var titleField = document.getElementById('add_titleinput');
+        var title = titleField.value;
         if(title === undefined || title === "")
             title = "untitled";
 
@@ -333,6 +334,9 @@ tj.indexedDB.addJot = function(jotText) {
         else {  // oldest are currently shown first
             jotsContainer.appendChild(jotDiv);
         }
+
+        // clear the Title field
+        titleField.value = "";
     }
 };
 
@@ -411,7 +415,7 @@ function getStatusReport() {
     var filterText = "";
     var tagText = "";
 
-    if(tj.status.total == tj.status.subset)
+    if(tj.status.total === tj.status.subset)
         tj.status.which = "all jots (" + tj.status.total.toString() + ")";
     else {
         tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
