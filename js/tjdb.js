@@ -381,13 +381,14 @@ function pageRenderer(filterObject) {
     // nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra",
     //                               "isTodo", "done"]);
     var statusReport = getStatusReport();
-    var status = document.getElementById("statusarea");
-    status.innerHTML = statusReport;
-    var jotsContainer = document.getElementById("jotItems");
+    ///var status = document.getElementById("statusarea");
+    ///status.innerHTML = statusReport;
+    document.getElementById("statusarea").innerHTML = statusReport;
 
     // PERFORMANCE change to using Fragment in order to minimize touching the live DOM for each jotdiv
     // let's gather some timing info to see if this noticeably improves things
 
+    var jotsContainer = document.getElementById("jotItems");
     //start_time = new Date().getTime();
     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 
