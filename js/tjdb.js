@@ -36,7 +36,7 @@
 
 // Let's encapsulate our stuff in a namespace as object.
 var tj = {};
-tj.STORE_IDB = 1;
+//tj.STORE_IDB = 1;
 tj.STORE_DROPBOX = 2;
 tj.STORE_GDRIVE = 4;
 tj.STORE_BITTORRENT_SYNC = 8;
@@ -339,7 +339,7 @@ tj.indexedDB.addJot = function(jotText) {
     }
 
     //TODO refactor into sep function so can be used by addMissingLocalJots
-	if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
+	/*if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
     	var db = tj.indexedDB.db;
     	var trans = db.transaction(["Jots"], "readwrite");
     	trans.oncomplete = function(e) {
@@ -373,7 +373,7 @@ tj.indexedDB.addJot = function(jotText) {
     	request.onerror = function(e) {
     		console.log(e.value);
     	};
-    }
+    }*/
 };
 
 /*
@@ -400,12 +400,12 @@ tj.indexedDB.addJot = function(jotText) {
 //  push to remote at "we know we are connected" time and not so much here.
 tj.indexedDB.showAllJots = function(filterObject) {
 	console.log("in showAllJots");
-    if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
-        syncAllJots(pageRenderer);
-    }
-    else {
+    ///if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
+    ///    syncAllJots(pageRenderer);
+    ///}
+    ///else {
         pageRenderer(filterObject);
-    }
+    ///}
 }
 
 function pageRenderer(filterObject) {
@@ -928,7 +928,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tag
         var newTitle = titleinput.value;
         var newTags = tagsinput.value;
 
-        if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
+        /*if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
 
     		var db = tj.indexedDB.db;
     		var trans = db.transaction(["Jots"], "readwrite");
@@ -961,7 +961,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tag
                     console.log("editJot requestUpdate.onsuccess() called");
                 };
             };
-        }
+        }*/
         //now we need to update the remote storage as well
 
 	    if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
@@ -1022,7 +1022,7 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
     }
 
 	// delete the local indexedDB version of the jot
-	if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
+	/*if((tj.STORE_MASK & tj.STORE_IDB) == tj.STORE_IDB) {
 		var db = tj.indexedDB.db;
 		var trans = db.transaction(["Jots"], "readwrite");
 		trans.oncomplete = function(e) {
@@ -1043,7 +1043,7 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
 		request.onerror = function(e) {
 			console.log(e);
 		};
-    }
+    }*/
 
     // delete the Dropbox version
 	if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
