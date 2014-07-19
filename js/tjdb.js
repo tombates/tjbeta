@@ -591,61 +591,6 @@ function containsTags(jot, filterObject) {
     return true;
 }
 
-function syncAllJots(pageRenderer) {
-	var remoteJots = getSortedRemoteJots();
-    var localJots = [];
-    var pushToRemote = [];
-	// get all the local jots and see if they all exist on the remote store(s)
-	
-	var db = tj.indexedDB.db;
-	var trans = db.transaction(["Jots"], "readonly");
-	trans.oncomplete = function(e) {
-		console.log("showAllJots transaction.oncomplete() called");
-		updateRemote(pushToRemote);    // push local jots not on remote: should be rare
-		pageRenderer();
-	};
-	trans.onerror = function(e) {
-		console.log("showAllJots transaction.onerror() called");
-	}
-
-	var store = trans.objectStore("Jots");	
-	var keyRange = IDBKeyRange.lowerBound(0);
-    var direction = (tj.filterObject.filterOrder === "newfirst") ? "prev" : "next";
-	var cursorRequest = store.openCursor(keyRange, direction);
-	
-	cursorRequest.onsuccess = function(e) {
-		console.log("showAllJots in cursorRequest.onsuccess()")
-		var result = e.target.result;
-		if(!!result == false) {  // the !! ensures result becomes true boolean value
-			// there are no more locally stored rows in the cursor
-			// see if there are any remote jots not yet local
-			var missingLocalVersions = remoteJotsNotInLocalStore(localJots, remoteJots);
-			console.log("Number of Jots local but not remote:   " + pushToRemote.length);
-			console.log("Number of Jots remote but not local:   " + missingLocalVersions.length);
-			if(missingLocalVersions.length > 0) {
-				for(i = 0; i < missingLocalVersions.length; i++) {
-				    pullMissingRemoteJot(missingLocalVersions[i]);    // asynchronous!
-				}
-				tj.indexedDB.showAllJots();
-			}
-		    return;
-		}
-
-        // Deal with next row in the cursor and remember it if it is not stored remotely yet.
-        // If the user has remote storage enabled there should typically be no cases of this.
-		///var newJotDiv = renderJot(result.value);    // result.value is a basically a local store table row
-		localJots.push(result.value);
-		var sync = isLocalJotInRemoteStore(result.value, remoteJots);
-		if(!sync) {
-			pushToRemote.push(result.value);
-		}
-
-		//result.continue();    // compiler warning is bogus and due to 'continue' being a javascript keyword
-		result['continue']();    // solution to warning, and for IE8 if we care
-	};
-	
-	cursorRequest.onerror = tj.indexedDB.onerror;
-};
 
 /* Adds a jot that is on the remote store but not in our local indexedDB store to the local store. Most likely
 *  the jot is not local because it was added via another device or browswer. Does not cause page redraw. It is
