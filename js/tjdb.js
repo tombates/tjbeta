@@ -413,39 +413,45 @@ function pageRenderer(filterObject) {
 };
 
 function getStatusReport() {
-    var pieces = [tj.status.prefix + " "];
-    var filterText = "";
-    var tagText = "";
+    var pieces = [tj.status.prefix];
+    var tagparts = [];
     // TODO what about using arrays for the string bits then join to get the final status report - might be less ugly
 
     if(tj.status.total === tj.status.subset) {
-        tj.status.which = "all jots (" + tj.status.total.toString() + ")";
+        //tj.status.which = "all jots (" + tj.status.total.toString() + ")";
         pieces.push("all jots (" + tj.status.total.toString() + ")");
     }
     else {
-        tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
+        //tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
         pieces.push(tj.status.subset.toString() + " of " + tj.status.total.toString());
         // create string rep of date and tag filters
-        filterText = ", filtered by ";
-        if(tj.filterObject.filterOnDate) {
-            filterText += "date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate;
-        }
-        //if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR)
-        if(tj.filterObject.filterOnTagsOr)
-            tagText += "tags (OR'd): ";
-        //else if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND)
-        else if(tj.filterObject.filterOnTagsAnd)
-            tagText += "tags (AND'd): ";
-        
-        if(tagText != "")
-            tagText += tj.filterObject.filterTags.join();
+        pieces.push(", filtered by");
 
-        if(filterText.indexOf("date") == -1)
-            filterText += tagText;
-        else if(tagText != "")
-            filterText += " and by " + tagText;
+
+        if(tj.filterObject.filterOnTagsOr || tj.filterObject.filterOnTagsAnd) {
+            if(tj.filterObject.filterTags.length > 1) {
+                if(tj.filterObject.filterOnTagsOr)
+                    tagparts.push("tags (OR'd): ");
+                else if(tj.filterObject.filterOnTagsAnd)
+                    tagparts.push("tags (AND'd): ");
+            }
+            else if(tj.filterObject.filterTags.length === 1){
+                tagparts.push("tag");
+            }
+            
+            tagparts.push(tj.filterObject.filterTags.join(", "));
+        }
+
+        //TODO validate that we have valid date strings or don't do date part
+        if(tj.filterObject.filterOnDate) {
+            pieces.push["date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate];
+            if(tagparts.length > 0)
+                pieces.push("and by");
+        }
+        pieces.push(tagparts.join(" "))
     }
-    return tj.status.prefix + tj.status.which + filterText;
+    //return tj.status.prefix + tj.status.which + filterText;
+    return pieces.join(" ");
 }
 
 //TODO remove once we are solid on the new scheme of mostly remote only
