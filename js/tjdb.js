@@ -1,52 +1,32 @@
-//MAJOR TODO speed up by getting rid of too much DOM manipulation
-// see http://www.nczonline.net/blog/2009/02/03/speed-up-your-javascript-part-4/
-// this Nicholas Zakas is the guy, another up there with Crockford
 /*
 * Core Thought Jot functionality file. The model and controller code really, mediating between the
-* user actions in the html presentation view and the logic of persiting to local/remote stores.
+* user actions in the html presentation view and the logic of persiting to remote stores.
 *
 * This file contains code for persisting information, conceptually rows of a table where each
 * row represents a "jot" of text. These are displayed with a time stamp and edit and delete controls in the html.
 * Each jot also has a title and a tags field. The jot, title and tags are editable. Only a single jot can be
 * in the editable state at any given time.
 *
-* In this deprecated version, when a jot is created it is persisted both locally via explicit indexedDB code here,
-* and remotely on Dropbox through the use of the NimbusBase API, which is a javascript package.
+* When a jot is created it is persisted remotely on Dropbox or Google Drive through the use of the
+* NimbusBase (www.nimbusbase.com) API, which is a javascript package.
+*
+* Thought Jot itself uses local storage (indexedDB) to store user filter state information so that when the user
+* returns (to the same browser on the same device) they will again see only the jots matching their previous filter
+* criteria.
 * 
-* NimbusBase also uses the indexedDB feature of the browswer separately separately from Thought Jot, but clears that
-* data when the session ends, leaving only the remote version. But the data saved via Thought Jot itself in the
-* browser's indexedDB remains. This means there are two copies of the jot, one local and one remote.
+* NimbusBase also uses the indexedDB feature of the browser separately from Thought Jot, but clears that
+* data when the session ends, leaving only the remote version.
 
 * It must be noted that indexedDB storage is browser specific. For example, Firefox has no access to the indexedDB store
-* of Chrome or IE. This means different jots could be entered via different browswers, and they will initially be stored
-* together only remotely on Dropbox.
+* of Chrome or IE. This means different jots could be entered via different browsers and/or devices, and unless a refresh
+* was done with no filtering jots entered via other browsers/devices might not show up.
 *
-* When a page is refreshed or opened after again after a session has ended, two way syncing occurs in this version. This
-* means that any locally stored jots not found remotely are pushed to the remote and any jots found remotely but not
-* locally are pulled and added to the browswer's indexedDB store.
+* It should be noted that indexedDB is not available in private browsing mode (Incognito in Chrome) and this will disable
+* filter state saving and NimbusBase. In other words the current version cannot work in private browsing mode.
 *
-* For example if Firefox was used to create jotA and Chrome was used to make jotB, before refresh each browswer would show only
-* one jot even though both have been persisted to the remote store. Upon a refresh however, any jots not in the local store
-* would be pulled from the remote store and the browser's indexedDB would now contain both. In addition, if one browser was
-* offline and jotC was created in it, the next time a refresh is done and the remote storage is available jotC would be pushed
-* to the remote storage.
-*
-* The same goes for deletes and this can cause a weird problem of resurrecting deleted jots. Assume both browsers are
-* synced with the remote store so that both have the same set of jots locally and this is the same as the remote set. Now
-* in browser A we delete jotA. This deletes it from the remote store and browser A's indexedDB local store, but it does not
-* delete if from browswer B's local store. So if browser B is now refreshed its local copy of jotA will be pushed to the
-* remote store because it is seen to exist remotely but not locally, resurrecting jotA in browser A where we deleted it.
-* Not pretty.
-*
-* This issue arises because in this version local and remote stores are given equal weight. This is the reason for the
-* subsequent version which makes the remote store the canonical store. A later subsequent version might be made which allows
-* for local store only if the user does not want to store jots remotely for privacy reasons. However it should be noted that
-* that will not work if the user is using private browsing mode (Incognito in Chrome) as then the indexedDB functionality is
-* disabled (and of course this would also disable NimbusBase).
-*
-* The application can be run either from a localhost rather than from a web server. However any jot content that is url
+* IS THIS EVEN TRUE: EXPAND ON THIS ISSUE OR DELETE.The application can be run either from a localhost rather than from a web server. However any jot content that is url
 * based such as an image added to a jot, or a string representing a url (which Though Jot 'htlmizes' to make it a real link)
-* will not be available. EXPAND ON THIS ISSUE.
+* will not be available.
 *
 */
 
@@ -94,10 +74,10 @@ tj.status.filterTagsText = "";
 
 tj.filterObject.filterTags = null;
 //TODO for cleaner code: the filtermode flags stuff should be replaced with booleans directly reflecting the controls state
-  tj.FILTERMODE_NONE = 0;
-  tj.FILTERMODE_TAGS_OR = 1;  // radio button state
-  tj.FILTERMODE_TAGS_AND = 2; // radio button state
-  tj.FILTERMODE_TAGS = 8;     // the checkbox state
+//  tj.FILTERMODE_NONE = 0;
+//  tj.FILTERMODE_TAGS_OR = 1;  // radio button state
+//  tj.FILTERMODE_TAGS_AND = 2; // radio button state
+//  tj.FILTERMODE_TAGS = 8;     // the checkbox state
 //tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 tj.filterObject.filterOnTags = false;     // the checkbox state
 tj.filterObject.filterOnTagsOr = false;   // radio btn state
