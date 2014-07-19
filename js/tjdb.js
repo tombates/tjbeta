@@ -444,7 +444,7 @@ function getStatusReport() {
 
         //TODO validate that we have valid date strings or don't do date part
         if(tj.filterObject.filterOnDate) {
-            pieces.push["date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate];
+            pieces.push("date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate);
             if(tagparts.length > 0)
                 pieces.push("and by");
         }
