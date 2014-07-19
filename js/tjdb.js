@@ -61,7 +61,6 @@ tj.secret = "";
 
 tj.status = {};   // holds the status area information
 tj.status.prefix = "Showing ";
-tj.status.which = "";
 tj.status.total = 0;
 tj.status.subset = 0;
 tj.status.filterDatesPrefix = "";
@@ -418,13 +417,10 @@ function getStatusReport() {
     // TODO what about using arrays for the string bits then join to get the final status report - might be less ugly
 
     if(tj.status.total === tj.status.subset) {
-        //tj.status.which = "all jots (" + tj.status.total.toString() + ")";
         pieces.push("all jots (" + tj.status.total.toString() + ")");
     }
-    else {
-        //tj.status.which = tj.status.subset.toString() + " of " + tj.status.total.toString();
-        pieces.push(tj.status.subset.toString() + " of " + tj.status.total.toString());
-        // create string rep of date and tag filters
+    else {    // create string rep of date and tag filters
+        pieces.push(tj.status.subset.toString() + " of " + tj.status.total.toString());        
         pieces.push(", filtered by");
 
 
@@ -450,7 +446,6 @@ function getStatusReport() {
         }
         pieces.push(tagparts.join(" "))
     }
-    //return tj.status.prefix + tj.status.which + filterText;
     return pieces.join(" ");
 }
 
