@@ -69,12 +69,6 @@ tj.status.filterTagsPrefix = "";
 tj.status.filterTagsText = "";
 
 tj.filterObject.filterTags = null;
-//TODO for cleaner code: the filtermode flags stuff should be replaced with booleans directly reflecting the controls state
-//  tj.FILTERMODE_NONE = 0;
-//  tj.FILTERMODE_TAGS_OR = 1;  // radio button state
-//  tj.FILTERMODE_TAGS_AND = 2; // radio button state
-//  tj.FILTERMODE_TAGS = 8;     // the checkbox state
-//tj.filterObject.filterMode = tj.FILTERMODE_NONE;
 tj.filterObject.filterOnTags = false;     // the checkbox state
 tj.filterObject.filterOnTagsOr = false;   // radio btn state
 tj.filterObject.filterOnTagsAnd = false;  // radio btn state
@@ -138,7 +132,14 @@ tj.indexedDB.onerror = function (e){
 tj.indexedDB.open = function() {
     "use strict";
 
-    // bind CTL-s for saving edits to a jot - should also work to use window.addEventListener( instead w/o jQuery
+    // Warn user that we do not support early versions of indexedDB
+    if(!window.indexedDB) {    
+        window.alert("Your browser doesn't support a stable version of IndexedDB, which Thought Jot uses.\n" +
+                     "You also cannot use Thought Jot in private browsing mode, as this\n" +
+                     "disables a browser's IndexedDB support.");
+    }
+
+    // bind CTL-s for saving edits to a jot - would also work to use window.addEventListener( instead w/o jQuery)
     $(window).bind('keydown', function(event) {
         if (event.ctrlKey || event.metaKey) {
             switch (String.fromCharCode(event.which).toLowerCase()) {
@@ -172,10 +173,6 @@ tj.indexedDB.open = function() {
     $("#startdate").datepicker();
     $("#enddate").datepicker();
 
-    // Warn user that we do not support early versions of indexedDB
-    if(!window.indexedDB) {    
-    	window.alert("Your browser doesn't support a stable version of IndexedDB, which Thought Jot uses.\nSome features might not be available or might not work correctly.");
-    }
     //TODO Get user's initial preferences for local and remote storage
     //TODO Get user's access info for their prefered remote storage locations - currently hard coded to my keys
 
@@ -288,7 +285,18 @@ tj.indexedDB.open = function() {
 	openRequest.onerror = tj.indexedDB.onerror;
 };
 
-tj.indexedDB.addJot = function(jotText) {
+/* Wrapper for innerAddJot. */
+tj.addJot = function() {
+    var jotComposeArea = document.getElementById('jot_composer');
+    tj.innerAddJot(jotComposeArea.value);    
+    jotComposeArea.value = '';    // clear the compose area of the input text
+}
+
+/* Adds a jot to the remote store.
+*
+*  jotText - the contents (value) of the jot composition area.
+*/
+tj.innerAddJot = function(jotText) {
 	//TODO since we are saving to multiple places we need to check for errors back from each store location
 	//     and recover/report
 
@@ -411,6 +419,7 @@ function pageRenderer(filterObject) {
     //console.log("pageRender jots render and append took:" + duration + "milliseconds")
 };
 
+/* Returns a string describing the current list of jots shown and the filtering that led to that list. */
 function getStatusReport() {
     var pieces = [tj.status.prefix];
     var tagparts = [];
@@ -484,9 +493,6 @@ function getSortedRemoteJots(filterObject) {
     tj.status.total = remoteJots.length;
     var flip = (tj.filterObject.filterOrder === "newfirst") ? -1 : 1;
 
-    
-
-    //if(filterObject != undefined && filterObject.filterMode != tj.FILTERMODE_NONE) {
     if(filterObject !== undefined) {
         console.log("getSortedRemoteJots filterObject is DEFINED");
         var filteredJots = [];
@@ -494,9 +500,8 @@ function getSortedRemoteJots(filterObject) {
         var tagChecking = filterObject.filterOnTags;
         var dateChecking = filterObject.filterOnDate;
 
-        // if the user is filtering on both tags and date range we take this as an AND operation: a displayed
-        // jot must be in the date range AND must be tagged with the tags (Which might be AND or OR mode). But
-        // we don't want to go through all the jots twice.
+        // If the user is filtering on both tags and date range we take this as an AND operation: a displayed
+        // jot must be in the date range AND must be tagged with the tags (Which might be AND or OR mode).
         var dateHit;
         for(var i = 0; i < remoteJots.length; i++) {
             var jot = remoteJots[i];
@@ -533,6 +538,7 @@ function getSortedRemoteJots(filterObject) {
     return remoteJots;
 }
 
+/* Returns true if a jot's create date is in the date filter range currently specified, false otherwise. */
 function inDateRange(jot, filterObject) {
     // we need to translate from the timestamp in the jot to the date strings we have from the filter options UI
     var target = jot.commonKeyTS;
@@ -560,6 +566,7 @@ function inDateRange(jot, filterObject) {
         return false;
 }
 
+/* Returns if a jot meets the current tag filter criteria, false otherwise. */
 function containsTags(jot, filterObject) {
     if(jot.tagList == undefined || jot.tagList === null || jot.tagList == "none") {
         return false;
@@ -570,7 +577,6 @@ function containsTags(jot, filterObject) {
     for(var i = 0; i < filterObject.filterTags.length; i++) {
 
         present = tagsInJot.indexOf(filterObject.filterTags[i]);
-        //if((filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
         if(filterObject.filterOnTagsOr) {
             if(present != -1)
                 return true;
@@ -1038,15 +1044,6 @@ function mergeStagedTags() {
     var tagsField = document.getElementById("add_tagsinput");
     var tagString = tagsField.value;
     tagManagerMerge(tagString);
-}
-
-// add contents of text area as a new jot
-function addJot() {
-	var jotComposeArea = document.getElementById('jot_composer');
-	tj.indexedDB.addJot(jotComposeArea.value);
-
-	// clear the compose area of the input text
-	jotComposeArea.value = '';
 }
 
 function removeAll() {
