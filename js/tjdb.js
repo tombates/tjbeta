@@ -591,66 +591,6 @@ function containsTags(jot, filterObject) {
     return true;
 }
 
-
-/* Adds a jot that is on the remote store but not in our local indexedDB store to the local store. Most likely
-*  the jot is not local because it was added via another device or browswer. Does not cause page redraw. It is
-*  assumed that generally there will be several missing jots to add. Rather than try to insert each one in the
-*  correct commonKey timestamp based location, a call to showAllJots should be made after all missing jots have
-*  been added .
-*/
-function pullMissingRemoteJot(missing) {
-    	var db = tj.indexedDB.db;
-    	var trans = db.transaction(["Jots"], "readwrite");
-    	trans.oncomplete = function(e) {
-    		console.log("addMissingLocalJot trans.oncomplete() called");
-    	}
-    	trans.onerror = function(e) {
-    		console.log("addMissingLocalJot trans.onerror() called");
-    		console.log(trans.error);
-    	}
-	        // IndexedDB on client side new schema 3-22-2014:
-            // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
-    	var store = trans.objectStore("Jots");
-    	var row = {"commonKeyTS":missing.commonKeyTS, "nimbusID":missing.id, "nimbusTime":missing.time, "modTime":missing.modTime,
-    	           "title":missing.title, "jot":missing.jot, "tagList":missing.tagList, "extra":missing.extra, "isTodo":missing.isTodo, "done":missing.done};
-    	var request = store.add(row);
-    	    	
-    	request.onsuccess = function(e) {
-    		console.log("addMissingLocalJot in put request.onsuccess");
-    	};
-    	
-    	request.onerror = function(e) {
-    		console.log(e.value);
-    	};
-}
-
-/* Returns whether or not a local jot exists in the remote store */
-function isLocalJotInRemoteStore(localJot, remoteJots) {
-	//TODO need to optimize this totally simplistic and bad performance search
-	//especially since we've already sorted the remoteJots array
-	for(i = 0; i < remoteJots.length; i++) {
-        if(remoteJots[i].commonKeyTS == localJot.commonKeyTS)
-        	return true;
-	}
-	return false;
-}
-
-/* Returns an array of remote jot records not in the local store */
-function remoteJotsNotInLocalStore(localJots, remoteJots) {
-	var missingLocalJots = [];
-	for(i = 0; i < remoteJots.length; i++) {
-		var foundRemoteLocally = false;
-		for(j = 0; j < localJots.length; j++) {
-            if(remoteJots[i].commonKeyTS == localJots[j].commonKeyTS)
-        	    foundRemoteLocally = true;
-		}
-		if(!foundRemoteLocally) {
-			missingLocalJots.push(remoteJots[i]);
-		}
-	}
-	return missingLocalJots;
-}
-
 /*
 * Creates all the HTML elements for a single jot and sets them into a new div ready to be added to the
 * all-jots-div. The caller is reponsible for adding the retuned div to the jotItems div.
