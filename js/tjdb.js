@@ -55,9 +55,9 @@ tj.indexedDB.IDB_SCHEMA_VERSION = 10;
 tj.SERVICE_UNKNOWN = -1;
 tj.SERVICE_DROPBOX = 1;
 tj.SERVICE_GOOGLE = 2;
-tj.service = tj.SERVICE_UNKNOWN;
-tj.key = "";
-tj.secret = "";
+tj.service = tj.SERVICE_DROPBOX;
+///tj.key = "";
+///tj.secret = "";
 
 tj.status = {};   // holds the status area information
 tj.status.prefix = "Showing ";
@@ -1161,7 +1161,7 @@ function tagManagerPopulateSelector(fromList) {
 }
 
 /*
-* Helper function that lets user's carriage returns shine through.
+* A currently minimal helper function that lets user's carriage returns shine through.
 *   Very simple for now: we just replace n returns with with n <br />
 *   elements. We do not yet create actual separate html paragraphs.
 *
@@ -1169,21 +1169,20 @@ function tagManagerPopulateSelector(fromList) {
 *   them into real links within the jot.
 *
 *   That's all for the moment.
+*
+*  text - the contents (value) of the jot compose area
 */
 function htmlizeText(text) {
-	// converts url strings in a jot to actual links - currently assuming no already existing <a> stuff in the jot text
-	
     //var parse_url = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?/$;
 	//var parse_url = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
 	//var parse_url = /((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;  // like all three: only sort of works
 	
 	//OK I've mod'd and munged and this works pretty well, probably has leaks, and doesn't yet handle
-	//things like "file:///C:/WebSites/ThoughtJotBasic/tj.html" but it's definitely a good start
-	//
+	//things like "file:///C:/WebSites/ThoughtJotBasic/tj.html" but it's definitely a decent start
+	//but the long term solution is to use a real full editor widget for the jot composition area.
 	//refs: started with /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
 	//from: http://stackoverflow.com/questions/8188645/javascript-regex-to-match-a-url-in-a-field-of-text
 	//and mod'd, mostly to not require a scheme
-	//TODO: must also find local urls like "file:///C:/WebSites/ThoughtJotBasic/tj.html" - prefilter for that using another regex
 	var parse_url = /((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;
 	var parse_file = /file:(\/){2,3}([A-Za-z]:\/)?[\w-\.\/]+/g;
 	//var parse_file = /file:[\w-\.\/:]+/g;
@@ -1206,16 +1205,6 @@ function htmlizeText(text) {
 		
 		newlinks.push(linktext);
 	}
-	// next any file-ish strings
-	//TODO: this works BUT there can be collision between the two finders so that no matter what order one might find
-	//      something that's really the others pervue. We might need to split the text up around things file finder gets
-	//      and send those pieces to url finder then splice it all back together. A bit ugly but probably better for
-	//      comprehensibility than trying to make an even more complex regex...
-	/*while(result = parse_file.exec(text)) {
-        allurls.push(result[0]);   // the url-ish string, must not change as we need below for the replace operation
-	    linktext = "<a href='" + result[0] + "'> " + result[0] + " </a>";		
-		newlinks.push(linktext);
-	}*/
 		
 	// now replace the "links" we found in the jot - and possibly http-ized - with the real links we just made
 	//TODO: this replace can cause problems if the same url string is in the jot text more than once - whether
@@ -1255,9 +1244,7 @@ function settingsServiceChoice() {
 
 }
 
-/* Persists the key and secret (Dropbox) or scope (Google Drive) for connecting to the remote storage service. */
-//TODO could we give the user a choice here as to a subdirectory in the app to put jots into, in other words
-//implementing the jot jar idea via subdirs in the app dir??? that would be cool
+/* Persists the user's preferred remote storage service. A stub for now as we only support Dropbox. */
 function settingsSet(value) {
     console.log("settingsSet()");
     if(value === 1) {
@@ -1267,14 +1254,14 @@ function settingsSet(value) {
         if(document.getElementById("remoteDropbox").checked) {
             //tj.filterObject.filterMode |= tj.FILTERMODE_TAGS_OR;       
             tj.service = tj.SERVICE_DROPBOX;
-            tj.key = document.getElementById("DBKey").value;
-            tj.secret = document.getElementById("DBSecret").value;
-            if((tj.key !== nbx.sync_object.Dropbox.key) || (tj.secret !== nbx.sync_object.Dropbox.secret)) {
-                nbx.sync_object.Dropbox.key = tj.key;
-                nbx.sync_object.Dropbox.secret = tj.secret;
-                ///nimbus_init();   // attempt connection
-                nbx.open();
-            }
+            ///tj.key = document.getElementById("DBKey").value;
+            ///tj.secret = document.getElementById("DBSecret").value;
+            ///if((tj.key !== nbx.sync_object.Dropbox.key) || (tj.secret !== nbx.sync_object.Dropbox.secret)) {
+            ///    nbx.sync_object.Dropbox.key = tj.key;
+            ///    nbx.sync_object.Dropbox.secret = tj.secret;
+            ///    ///nimbus_init();   // attempt connection
+            ///    nbx.open();
+            ///}
         }
         else if(document.getElementById("remoteGoogle").checked) {
             tj.service = tj.SERVICE_GOOGLE;     
@@ -1283,12 +1270,7 @@ function settingsSet(value) {
             tj.service = tj.SERVICE_UNKNOWN;     
         }
 
-        // if DB get key and secret
-
-        // if GD get key and scope
-
         // attempt connection
-
 
         $("#settingsDialog").dialog( "close" );
     }
