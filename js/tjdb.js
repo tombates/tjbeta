@@ -681,13 +681,12 @@ tj.renderJot = function(row) {
 	dellink.addEventListener("click", function(e) {
 		var yesno = confirm("Are you sure you want to delete this jot?\n\nThis is not undoable.");
 		if(yesno) {
-		    tj.indexedDB.deleteJot(row.commonKeyTS, jdiv);
+		    tj.deleteJot(row.commonKeyTS, jdiv);
         }
 	});    
 	dellink.appendChild(delimage);
 	
 	editlink.addEventListener("click", function(e) {
-		//tj.indexedDB.deleteJot(row.text);
 		tj.editJot(this, row.commonKeyTS, pjot, titleinput, tagsinput);
 	});
 	editlink.appendChild(editimage);
@@ -810,7 +809,7 @@ tj.editJot = function(editLink, commonKey, jotElement, titleinput, tagsinput) {
 *  edit/delete controls.
 *
 */
-tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
+tj.deleteJot = function(commonKey, jotDiv) {
 
     if(commonKey === undefined) {
         tj.removeJotDiv(jotDiv);
