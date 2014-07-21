@@ -79,7 +79,7 @@ tj.filterObject.filterOrder = "newfirst"; // default ordering
 
 tagMgr = {};    // encapsulates tag management functions
 
-window.addEventListener("DOMContentLoaded", tj.indexedDB.open, false);
+//window.addEventListener("DOMContentLoaded", tj.indexedDB.open, false);
 /* Save session state data locally so that tag selection and filtering can be restored to their previous
 *  state. Because this uses indexedDB it is per browser brand and per device, meaning one could have different
 *  filters going on the same Jot remote storage data, which is kind of cool. 
