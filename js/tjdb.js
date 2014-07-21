@@ -171,6 +171,43 @@ tj.indexedDB.open = function() {
     $("#startdate").datepicker();
     $("#enddate").datepicker();
 
+    // create and bind settings/help dialogs
+    $( "#helpDialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "fade",
+        duration: 500
+      },
+      hide: {
+        effect: "fade",
+        duration: 500
+      }
+    });
+ 
+    $( "#helpOpener" ).click(function() {
+      console.log("in helpOpen click handler");
+      $( "#helpDialog" ).dialog( "option", "width", 800 );
+      $( "#helpDialog" ).dialog( "open" );
+    });
+
+    $( "#settingsDialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "fade",
+        duration: 500
+      },
+      hide: {
+        effect: "fade",
+        duration: 500
+      }
+    });
+
+    $( "#settingsOpener" ).click(function() {
+      console.log("in settingsOpener click handler");
+      $( "#settingsDialog" ).dialog( "option", "width", 600 );
+      $( "#settingsDialog" ).dialog( "open" );
+    });
+
     //TODO Get user's initial preferences for local and remote storage
     //TODO Get user's access info for their prefered remote storage locations - currently hard coded to my keys
 
@@ -940,13 +977,11 @@ function filterManager_init() {
     tagManagerPopulateSelector();
 }
 
+/* For some reason Firefox is remembering checkbox and radio states across reloads -- weird.
+*  So we explicitly clear them before getting the saved filter settings, as ugly as that is. */
 function filtersClear() {
-     // for some reason firefox remembers checkbox and radio states across reloads -- weird
-     // so we explicitly clear them before getting the saved filter settings, as ugly as that is
      document.getElementById("filter_by_date").checked = false;
      document.getElementById("filter_by_tags").checked = false;
-     // now load any saved settings or clear all the dates and radios also
-
 }
 
 function toggleDateFilter() {

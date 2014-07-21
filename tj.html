@@ -12,8 +12,8 @@
   <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="./js/nb.js"></script>
 <script src="./js/tjdb.js"></script>
-<!-- thanks to http://adamwhitcroft.com/batch/ for icon images -->
-<script>
+<!-- thanks to http://adamwhitcroft.com/batch/ for some of the icon images -->
+<!--script>
   $(function() {
     $( "#helpDialog" ).dialog({
       autoOpen: false,
@@ -52,59 +52,11 @@
     });
    
   });
-</script>
-
+</script-->
 </head>
 
-<!--body onload="init();" redundant and bad as we set an eventlistener for DOMContentLoaded and call init from it in the js-->
 <body>
-<!--a id="connectDropbox" onClick="Nimbus.Auth.authorize('Dropbox');">Connect to Dropbox - link initial state</a-->
 
-<!--script>
-    var linkDropbox;
-	var Tasks;  // a model (table)
-	var ja, jb;
-    var auth = false;
-    var sync_string = "eyJHRHJpdmUiOnsia2V5IjoiIiwic2NvcGUiOiIiLCJhcHBfbmFtZSI6IiJ9LCJEcm9wYm94Ijp7ImtleSI6Im5sc3pqNXhyaGxiMWs1cCIsInNlY3JldCI6ImZvOGEyNDRzZ2RmdGpiZiIsImFwcF9uYW1lIjoidGpiZXRhIn19"; 
-	var sync_object = { 
-		"Dropbox": { 
-		  "key": "nlszj5xrhlb1k5p", 
-		  "secret": "fo8a244sgdftjbf", 
-		  "app_name": "tjbeta" 
-		} 
-	};
-    Nimbus.Auth.setup(sync_object);
-    //Nimbus.Auth.setup(sync_string);
-	auth = Nimbus.Auth.authorized();
-    linkDropbox = document.getElementById("connectDropbox");
-	if(auth) { // change link text to connected
-		linkDropbox.innerHTML = "Connected to Dropbox";
-	} else {
-		linkDropbox.innerHTML = "Connect to Dropbox";
-	}
-
-    Tasks = Nimbus.Model.setup("Tasks", ["descrip", "done", "id", "jot", "timestamp"]);
-	ja = Tasks.create({"descrip":"New task", "done":false, "jot":"I have a thought."});
-	jb = Tasks.create({"descrip":"A Query", "done":false, "jot":"I have a question.", "time":"now" });
-	//instance = Tasks.findAllByAttribute("done", false);
-	//instance.done = false;
-    //instance.save();
-	
-	// i don't understand: merely creating the tasks instances writes them over to dropbox, the saves are not needed, also meaning
-	// i can't test if i can save a whole model (table?) at once instead of just one instance (row) at a time. if not isn't that crazy
-	// inefficient. i want a way to send the whole table over as a text file in one go - a save whole model
-	// and how to get a timestamp,
-	// some keys seem special, like "id" but is there a list of these in the docs? can't find
-	// once authorized always authorized? seems weird. when i reload i'm still authorized apparently, i would
-	// think when the connection ends you'd need some reauth but maybe this is user convencience but is it a good/secure idea?
-	
-	
-	
-	//ja.save();
-	//jb.save();
-	//Tasks.save();
-	Tasks.destroyAll();
-</script-->
 <div id="container">
 <header>
   <input type="button" id="cloudButton" onClick="nbx.userConnectRequest('Dropbox'); return false;" value=""
@@ -144,14 +96,7 @@
               All Selected Tags<br>
             </div>
         </div>
-        <div id="tagselector_div"><select multiple id="tagselector">
-                                                  <!--option value="tagA">tagA</option>
-                                                  <option value="tagB">tagB</option>
-                                                  <option value="tagC">tagC</option>
-                                                  <option value="tagD">tagD</option>
-                                                  <option value="tagE">tagE</option-->
-                                               </select>
-                        <!--input type="button" onClick="stageTags(); return false;" id="stagetags_btn" value="Stage tags" title="Move selected tags to the new jot Tags: field" /-->
+        <div id="tagselector_div"><select multiple id="tagselector"></select>
         </div>
         <div id="filterbtn_div"><input type="button" id="applyfilters_btn" onClick="tj.showFilteredJots()" value="Filter"/></div>
                                 <input type="button" onClick="stageTags(); return false;" id="stagetags_btn" value="Stage tags" title="Move selected tags to the new jot Tags: field" />
@@ -162,7 +107,6 @@
                          <input type="text" id="add_titleinput" placeholder="untitled" maxlength="200"/>&nbsp;&nbsp;Tags:
                          <input type="text" id="add_tagsinput" placeholder="none" maxlength="200" title="Separate tags with commas"/>
                          <input type="button" onClick="mergeStagedTags(); return false;" class="mergetags_img" value="Merge" title="Add tags to or subtract tags from the selector list above.&#10;Tags preceeded with '-' (minus) will be removed." />
-                         <!--input type="button" onClick="clearStagedTags(); return false;" class="cleartags_img" value="" title="Clear tags to be applied to next jot" /-->
   </div>
 </form>
 
@@ -175,12 +119,9 @@
   <!--input type="submit" onClick = "removeAll(); return false;" value="Delete all jots" title="Be very careful. This will delete all your jots locally and remotely!" /-->
 </div>
 
-<!--ul id="jotItems">
-</ul-->
 <div id="jotItems">
   <!-- Each jot gets its own div inside the jotItems div. -->
 </div>
-
 
 </div>  <!-- end container div -->
 
