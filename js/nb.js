@@ -222,13 +222,13 @@ function persistAuthorization() {
         };
 }
 
-// function nimbus_init() {
-// 	console.log("doing NimbusBase nimbus_init()");
-//     tj.indexedDB.open();
-//     //indexedDB_init();
-//
-// 	///nbx.open();  // connects to user storage using NimbusBase
-// }
+function nimbus_init() {
+	console.log("doing NimbusBase nimbus_init()");
+    tj.indexedDB.open();
+    //indexedDB_init();
+
+	///nbx.open();  // connects to user storage using NimbusBase
+}
 
 window.addEventListener("DOMContentLoaded", tj.indexedDB.open, false);
 
