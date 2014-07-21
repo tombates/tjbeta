@@ -688,7 +688,7 @@ tj.renderJot = function(row) {
 	
 	editlink.addEventListener("click", function(e) {
 		//tj.indexedDB.deleteJot(row.text);
-		tj.indexedDB.editJot(this, row.commonKeyTS, pjot, titleinput, tagsinput);
+		tj.editJot(this, row.commonKeyTS, pjot, titleinput, tagsinput);
 	});
 	editlink.appendChild(editimage);
 	
@@ -728,8 +728,7 @@ tj.renderJot = function(row) {
 //   I don't want to get into is going back and forth - i don't want to un-htmlize. Maybe this means we should only be
 //   persisting plain text and htmlizing it only for display on the page. but then how do we preserve creturns - i think
 //   the available DOM methods strip out the creturns... time to experiment.
-tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tagsinput) {
-    //console.log("tj.indexedDB.editJot()");
+tj.editJot = function(editLink, commonKey, jotElement, titleinput, tagsinput) {
     var editimg = editLink.childNodes[0];
     if(tj.editing != null && editLink != tj.editing) {
     	alert("Only one jot can be edited at a time.");
@@ -763,15 +762,14 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tag
         var newTags = tagsinput.value;
 
 	    if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
-	        //nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
-	        console.log("editJot: updating Dropbox, except we aren't really yet!");
+	        console.log("editJot: updating Dropbox.");
 
 	        var nbJot = nbx.Jots.findByAttribute("commonKeyTS", commonKey);
 	        nbJot.jot = newContent;
 	        nbJot.title = newTitle;
 	        nbJot.tagList = newTags;
 	        nbJot.save();
-	        nbx.Jots.sync_all(function() {console.log("tj.indexedDB.editJot nbx.Jots.sync_all() callback called.")});
+	        nbx.Jots.sync_all(function() {console.log("tj.editJot nbx.Jots.sync_all() callback called.")});
 	    }
  
         //TODO should we move this into the requestUpdate.onsuccess?
@@ -815,7 +813,7 @@ tj.indexedDB.editJot = function(editLink, commonKey, jotElement, titleinput, tag
 tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
 
     if(commonKey === undefined) {
-        removeJotDiv(jotDiv);
+        tj.removeJotDiv(jotDiv);
         return;
     }
 
@@ -823,11 +821,11 @@ tj.indexedDB.deleteJot = function(commonKey, jotDiv) {
 	if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
 	    var nbJot = nbx.Jots.findByAttribute("commonKeyTS", commonKey);
         nbJot.destroy();
-        removeJotDiv(jotDiv);
+        tj.removeJotDiv(jotDiv);
     }
 };
 
-function removeJotDiv(jotDiv) {
+tj.removeJotDiv = function(jotDiv) {
 	// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
     var jotsContainer = document.getElementById("jotItems");
     jotsContainer.removeChild(jotDiv);
@@ -843,7 +841,7 @@ function indexedDB_init() {
 //
 
 /* Toggles the temporal sort order of displayed jots. */
-function toggleOrdering() {
+tj.toggleOrdering = function() {
 	var toggle = document.getElementById('toggleOrder');
 	if(tj.filterObject.filterOrder === "newfirst") {
 		toggle.title = "Press to show newest jots first.";
@@ -856,14 +854,13 @@ function toggleOrdering() {
     tj.showFilteredJots();
 }
 
-function paginator(direction) {
-    console.log("paginator() with direction " + direction);
+//TODO not yet implemented
+tj.paginator = function(direction) {
+    console.log("tj.paginator() with direction " + direction);
 }
 
-function raiseCalendar(elementID) {
-    console.log("raiseCalendar called");
+tj.raiseCalendar = function(elementID) {
     var which = "#" + elementID;
-    //$(which).datepicker( "option", "showOn", "both" );
     $(which).datepicker();
 }
 
