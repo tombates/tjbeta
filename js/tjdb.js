@@ -77,6 +77,8 @@ tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
 tj.filterObject.filterOrder = "newfirst"; // default ordering
 
+tagMgr = {};    // encapsulates tag management functions
+
 /* Save session state data locally so that tag selection and filtering can be restored to their previous
 *  state. Because this uses indexedDB it is per browser brand and per device, meaning one could have different
 *  filters going on the same Jot remote storage data, which is kind of cool. 
@@ -302,7 +304,7 @@ tj.innerAddJot = function(jotText) {
 	//TODO since we are saving to multiple places we need to check for errors back from each store location
 	//     and recover/report
 
-    var htmlizedText = htmlizeText(jotText);
+    var htmlizedText = tj.htmlizeText(jotText);
     if(htmlizedText === "") {
         alert("There is no jot content.");
         return;
@@ -921,7 +923,6 @@ tj.indexedDB.emptyDB = function() {
 
 /* Sets up the initial state of the Tag Selector UI list */
 function filterManager_init() {
-    console.log("filterManager_init()");
     filtersClear();
     tagManagerPopulateSelector();
 }
@@ -1170,7 +1171,7 @@ function tagManagerPopulateSelector(fromList) {
 *
 *  text - the contents (value) of the jot compose area
 */
-function htmlizeText(text) {
+tj.htmlizeText = function(text) {
     //var parse_url = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?/$;
 	//var parse_url = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
 	//var parse_url = /((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;  // like all three: only sort of works

@@ -85,7 +85,7 @@
 <!-- This is the Settings dialog content, which shows only when user clicks the tools button:Settings link -->
 <div id="settingsDialog" title="Thought Jot Settings">
   <h4>Choose a remote storage service</h4>
-  &nbsp;&nbsp;&nbsp;<input type="radio" name="remotestorage" id="remoteDropbox" value="dropbox"/>Use Dropbox<br>
+  &nbsp;&nbsp;&nbsp;<input type="radio" name="remotestorage" id="remoteDropbox" value="dropbox" checked="true"/>Use Dropbox<br>
   &nbsp;&nbsp;&nbsp;<input type="radio" name="remotestorage" id="remoteGoogle" value="google"/>Use Google Drive<br><br>
   <input type="button" value="Save"onClick="tj.settingsSet(1); return false;"/>
   <input type="button" value="Cancel" onClick="tj.settingsSet(0); return false;"/>
