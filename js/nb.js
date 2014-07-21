@@ -230,6 +230,6 @@ function nimbus_init() {
 	///nbx.open();  // connects to user storage using NimbusBase
 }
 
-window.addEventListener("DOMContentLoaded", tj.indexedDB.open, false);
+window.addEventListener("DOMContentLoaded", nimbus_init, false);
 
 
