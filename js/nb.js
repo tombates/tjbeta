@@ -98,15 +98,15 @@ nbx.open = function() {
         nbx.Jots.sync_all(function() {
             console.log("nbx.Jots.sync_all() callback called.");
             console.log("Nimbus instance count is now: " + nbx.Jots.count());
-            if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
-                indexedDB_init();
-            }
-            else {
+            ///if(tj.STORE_MASK & tj.STORE_IDB == tj.STORE_IDB) {
+            ///    indexedDB_init();
+            ///}
+            ///else {
                 nbx.Tags = Nimbus.Model.setup("Tags", ["id", "tagList", "extra"]);
                 nbx.Tags.sync_all(function() {
                     console.log("nbx.Tags.sync_all() callback called.");
-                    filterManager_init();
-                    resetFilterControlsState(tj.filterObject.filterTags);
+                    tj.restoreTagSelectorState();
+                    tj.restoreFilterControlsState(tj.filterObject.filterTags);
                     tj.showFilteredJots();
 
                     ///indexedDB_init();
@@ -116,7 +116,7 @@ nbx.open = function() {
                     if((nbx.sync_object.Dropbox.key !== "") || (nbx.sync_object.Dropbox.secret !== ""))
                         persistAuthorization();
                 });
-           }
+           ///}
         });
         //nbx.Tags.sync_all(function() {
         //    console.log("nbx.Tags.sync_all() callback called.");
@@ -222,10 +222,9 @@ function persistAuthorization() {
         };
 }
 
-function nimbus_init() {
-	console.log("doing NimbusBase nimbus_init()");
-    indexedDB_init();
-	///nbx.open();  // connects to user storage using NimbusBase
-}
+// function nimbus_init() {
+// 	console.log("doing NimbusBase nimbus_init()");
+//     indexedDB_init();
+// 	///nbx.open();  // connects to user storage using NimbusBase
+// }
 
-window.addEventListener("DOMContentLoaded", nimbus_init, false);

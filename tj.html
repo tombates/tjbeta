@@ -38,14 +38,14 @@
         <div id="rightcontrols_header"><span id="rctls_hdr_text">Tag&nbsp;Selector<span id="space">&nbsp;</span>Filter&nbsp;Options</span>
         </div>
         <div id="filterby_div">
-            <input type="checkbox" onClick="toggleDateFilter(); return true;" id="filter_by_date" value="filter"/>By Date Range<br>
+            <input type="checkbox" onClick="tj.toggleDateFilter(); return true;" id="filter_by_date" value="filter"/>By Date Range<br>
             <div id="filter_date_div" class="display_none">
               <!--input type="button" id="startdate_btn" value="" title="Choose start date"-->
               <input type="text" id="startdate" onClick="tj.raiseCalendar(this.id); return false;" placeholder="start date" maxlength="12" title="Click for a calendar, or enter manually as mm/dd/yyyy." /><br>
               <!--input type="button" id="enddate_btn" value="" title="Choose end date"-->
               <input type="text" id="enddate" onClick="tj.raiseCalendar(this.id); return false;" placeholder="end date" maxlength="12" title="Click for a calendar, or enter manually as mm/dd/yyyy" /><br>
             </div>
-            <input type="checkbox" onClick="toggleTagFilter(); return true;" id="filter_by_tags" value="filter"/>By Tags<br>
+            <input type="checkbox" onClick="tj.toggleTagFilter(); return true;" id="filter_by_tags" value="filter"/>By Tags<br>
             <div id="filter_tag_div" class="display_none">
               <input type="radio" name="tagfilter" id="filter_by_tags_or" value="filter" title="Use the Tag Selector to choose the filter tags."/>
               Any Selected Tag<br>

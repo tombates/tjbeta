@@ -79,53 +79,18 @@ tj.filterObject.filterOrder = "newfirst"; // default ordering
 
 tagMgr = {};    // encapsulates tag management functions
 
+window.addEventListener("DOMContentLoaded", tj.indexedDB.open, false);
 /* Save session state data locally so that tag selection and filtering can be restored to their previous
 *  state. Because this uses indexedDB it is per browser brand and per device, meaning one could have different
 *  filters going on the same Jot remote storage data, which is kind of cool. 
 */
-tj.indexedDB.persistFilterObjects = function() {
-    console.log("persistFilterObjects");
-    // gather user's currently selected and staged tags, and any filter state
-
-    // persist it for the next session using this browser on this device
-
-        var db = tj.indexedDB.db;
-        var trans = db.transaction(["SessionState"], "readwrite");
-        trans.oncomplete = function(e) {
-            console.log("storing session state trans.oncomplete() called");
-        }
-        trans.onerror = function(e) {
-            console.log("storing session state trans.onerror() called");
-            console.log(trans.error);
-        }
-        // IndexedDB on client side new schema 3-22-2014:
-        // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
-        var store = trans.objectStore("SessionState");
-        var row = {"name":"filterState", "filterMode":tj.filterObject.filterMode,
-                   "filterOnTags":tj.filterObject.filterOnTags,
-                   "filterOnTagsOr":tj.filterObject.filterOnTagsOr,
-                   "filterOnTagsAnd":tj.filterObject.filterOnTagsAnd,
-                   "filterTags":tj.filterObject.filterTags,
-                   "filterOnDate":tj.filterObject.filterOnDate,
-                   "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate,
-                   "filterOrder":tj.filterObject.filterOrder};
-        var request = store.put(row);  // for now at least there is only one persisted filterObject
-                
-        request.onsuccess = function(e) {
-            console.log("storing session state request.onsuccess");
-        };
-        
-        request.onerror = function(e) {
-            console.log(e);
-        };
-};
 
 tj.indexedDB.onerror = function (e){
     console.log(e);
 };
 
 /*
-* Opens a local indexedDB store used for persisting authorization (yuck!) and session filter settings.
+* Opens a local indexedDB store used for persisting session filter settings.
 * Here we retrieve any previously saved filter settings and the authorization data for the
 * user's remote storage service before calling NimbusBase library functions for remote retrieval.
 */
@@ -139,79 +104,7 @@ tj.indexedDB.open = function() {
                      "disables a browser's IndexedDB support.");
     }
 
-    // bind CTL-s for saving edits to a jot - would also work to use window.addEventListener( instead w/o jQuery)
-    $(window).bind('keydown', function(event) {
-        if (event.ctrlKey || event.metaKey) {
-            switch (String.fromCharCode(event.which).toLowerCase()) {
-            case 's':
-                event.preventDefault();
-                console.log('ctrl-s');
-                // We don't use jQuery trigger because we don't have a sep id for each edit link so we can't
-                // use a jQuery selector to get at the right link. But we already have the link itself in hand in
-                // tj.editing so we use a more direct method. But this has its own issues as FF does not
-                // support click, and IE apparently does not fully support CustomEvent which is the supposed
-                // replacement for the deprecated createEvent WHICH DOES WORK in IE, FF and Chrome. Ugh.
-
-                // if there is a jot being edited, simulate user clicking check (save) button in the jot
-                //if(tj.editing !== null) {
-                //    tj.editing.click();  // works in Chrome and IE but not FF
-                //}
-                // But this works in IE, FF and Chrome:
-                var evt = document.createEvent('MouseEvents');   // ugh createEvent is deprecated, see above
-                evt.initEvent(
-                    'click',   // event type
-                    false,      // can bubble?
-                    true       // cancelable?
-                );
-                tj.editing.dispatchEvent(evt);
-                break;
-            }
-        }
-    });
-
-    // bind JQuery UI date pickers to the end/start date filter fields
-    $("#startdate").datepicker();
-    $("#enddate").datepicker();
-
-    // create and bind settings/help dialogs
-    $( "#helpDialog" ).dialog({
-      autoOpen: false,
-      show: {
-        effect: "fade",
-        duration: 500
-      },
-      hide: {
-        effect: "fade",
-        duration: 500
-      }
-    });
- 
-    $( "#helpOpener" ).click(function() {
-      console.log("in helpOpen click handler");
-      $( "#helpDialog" ).dialog( "option", "width", 800 );
-      $( "#helpDialog" ).dialog( "open" );
-    });
-
-    $( "#settingsDialog" ).dialog({
-      autoOpen: false,
-      show: {
-        effect: "fade",
-        duration: 500
-      },
-      hide: {
-        effect: "fade",
-        duration: 500
-      }
-    });
-
-    $( "#settingsOpener" ).click(function() {
-      console.log("in settingsOpener click handler");
-      $( "#settingsDialog" ).dialog( "option", "width", 600 );
-      $( "#settingsDialog" ).dialog( "open" );
-    });
-
-    //TODO Get user's initial preferences for local and remote storage
-    //TODO Get user's access info for their prefered remote storage locations - currently hard coded to my keys
+    tj.bindControls();
 
     var openRequest = indexedDB.open("ThoughtJot", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
 	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
@@ -288,6 +181,79 @@ tj.indexedDB.open = function() {
 	
 	openRequest.onerror = tj.indexedDB.onerror;
 };
+
+tj.bindControls = function() {
+    // bind CTL-s for saving edits to a jot - would also work to use window.addEventListener( instead w/o jQuery)
+    $(window).bind('keydown', function(event) {
+        if (event.ctrlKey || event.metaKey) {
+            switch (String.fromCharCode(event.which).toLowerCase()) {
+            case 's':
+                event.preventDefault();
+                console.log('ctrl-s');
+                // We don't use jQuery trigger because we don't have a sep id for each edit link so we can't
+                // use a jQuery selector to get at the right link. But we already have the link itself in hand in
+                // tj.editing so we use a more direct method. But this has its own issues as FF does not
+                // support click, and IE apparently does not fully support CustomEvent which is the supposed
+                // replacement for the deprecated createEvent WHICH DOES WORK in IE, FF and Chrome. Ugh.
+
+                // if there is a jot being edited, simulate user clicking check (save) button in the jot
+                //if(tj.editing !== null) {
+                //    tj.editing.click();  // works in Chrome and IE but not FF
+                //}
+                // But this works in IE, FF and Chrome:
+                var evt = document.createEvent('MouseEvents');   // ugh createEvent is deprecated, see above
+                evt.initEvent(
+                    'click',   // event type
+                    false,      // can bubble?
+                    true       // cancelable?
+                );
+                tj.editing.dispatchEvent(evt);
+                break;
+            }
+        }
+    });
+
+    // bind JQuery UI date pickers to the end/start date filter fields
+    $("#startdate").datepicker();
+    $("#enddate").datepicker();
+
+    // create and bind settings/help dialogs
+    $( "#helpDialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "fade",
+        duration: 500
+      },
+      hide: {
+        effect: "fade",
+        duration: 500
+      }
+    });
+ 
+    $( "#helpOpener" ).click(function() {
+      console.log("in helpOpen click handler");
+      $( "#helpDialog" ).dialog( "option", "width", 800 );
+      $( "#helpDialog" ).dialog( "open" );
+    });
+
+    $( "#settingsDialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "fade",
+        duration: 500
+      },
+      hide: {
+        effect: "fade",
+        duration: 500
+      }
+    });
+
+    $( "#settingsOpener" ).click(function() {
+      console.log("in settingsOpener click handler");
+      $( "#settingsDialog" ).dialog( "option", "width", 600 );
+      $( "#settingsDialog" ).dialog( "open" );
+    });
+}
 
 /* Wrapper for innerAddJot. */
 tj.addJot = function() {
@@ -863,36 +829,94 @@ tj.raiseCalendar = function(elementID) {
     $(which).datepicker();
 }
 
-tj.indexedDB.emptyDB = function() {
-	alert("in tj.indexedDB.emptyDB");
-	var request = indexedDB.open("todos", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
-	// see https://developer.mozilla.org/en-US/docs/IndexedDB/Using_IndexedDB
-	request.onupgradeneeded = function(e) {
-		alert("emptyDB in request.onupgradeneeded");
-		var db = e.target.result;
-		// A versionchange transaction is tarted automatically.
-		e.target.transaction.onerror = tj.indexedDB.onerror;
-		console.log("deleting objectstore");
-		
-		var store = db.deleteObjectStore("Jots");
-	};	
-};
-
 /* Sets up the initial state of the Tag Selector UI list */
-function filterManager_init() {
-    filtersClear();
+tj.restoreTagSelectorState = function() {
+    tj.filtersClear();
     tagMgr.populateSelector();
 }
 
 /* For some reason Firefox is remembering checkbox and radio states across reloads -- weird.
 *  So we explicitly clear them before getting the saved filter settings, as ugly as that is. */
-function filtersClear() {
+tj.filtersClear = function() {
      document.getElementById("filter_by_date").checked = false;
      document.getElementById("filter_by_tags").checked = false;
 }
 
-function toggleDateFilter() {
-    console.log("toggleDateFilter");
+/* Sets the state of tj.filterObject into the UI controls, typically at page load time. */
+//TODO all this checking and unchecking should be done in a fragment to minimize reflow
+tj.restoreFilterControlsState = function() {
+    // select the tags that were previously selected in the tag selector list
+    tagMgr.selectTags(tj.filterObject.filterTags);
+
+    // now restore the state of the filter mode controls
+    if(tj.filterObject.filterOnTags) {
+        document.getElementById("filter_by_tags").checked = true;
+    }
+    else {
+        document.getElementById("filter_by_tags").checked = false;
+    }
+    tj.toggleTagFilter();
+
+    if(tj.filterObject.filterOnTagsOr) {
+        document.getElementById("filter_by_tags_or").checked = true;
+    }
+    else {
+        document.getElementById("filter_by_tags_or").checked = false;
+    }
+
+    if(tj.filterObject.filterOnTagsAnd) {
+        document.getElementById("filter_by_tags_and").checked = true;
+    }
+    else {
+        document.getElementById("filter_by_tags_and").checked = false;
+    }
+
+    if(tj.filterObject.filterOnDate)
+        document.getElementById("filter_by_date").checked = true;
+    else
+        document.getElementById("filter_by_date").checked = false;
+    document.getElementById("startdate").value = tj.filterObject.startDate;
+    document.getElementById("enddate").value = tj.filterObject.endDate;
+    tj.toggleDateFilter();
+}
+
+/* Gathers currently selected and staged tags, and any filter state
+*  and persists them for the next session using this browser on this device. */
+tj.indexedDB.persistFilterControlsState = function() {
+
+        var db = tj.indexedDB.db;
+        var trans = db.transaction(["SessionState"], "readwrite");
+        trans.oncomplete = function(e) {
+            console.log("storing session state trans.oncomplete() called");
+        }
+        trans.onerror = function(e) {
+            console.log("storing session state trans.onerror() called");
+            console.log(trans.error);
+        }
+        // IndexedDB on client side new schema 3-22-2014:
+        // {keyPath: "commonKeyTS"}, "nimbusID", nimbusTime, modTime, title, jot", "tagList", "extra", isTodo", "done", 
+        var store = trans.objectStore("SessionState");
+        var row = {"name":"filterState", "filterMode":tj.filterObject.filterMode,
+                   "filterOnTags":tj.filterObject.filterOnTags,
+                   "filterOnTagsOr":tj.filterObject.filterOnTagsOr,
+                   "filterOnTagsAnd":tj.filterObject.filterOnTagsAnd,
+                   "filterTags":tj.filterObject.filterTags,
+                   "filterOnDate":tj.filterObject.filterOnDate,
+                   "startDate":tj.filterObject.startDate, "endDate":tj.filterObject.endDate,
+                   "filterOrder":tj.filterObject.filterOrder};
+        var request = store.put(row);  // for now at least there is only one persisted filterObject
+                
+        request.onsuccess = function(e) {
+            console.log("storing session state request.onsuccess");
+        };
+        
+        request.onerror = function(e) {
+            console.log(e);
+        };
+};
+
+/* Handler for by date checkbox. */
+tj.toggleDateFilter = function() {
     var dateCheckbox = document.getElementById("filter_by_date").checked;
     var filterDateDiv = document.getElementById("filter_date_div");
     if(dateCheckbox) {
@@ -904,8 +928,8 @@ function toggleDateFilter() {
     tj.filterObject.filterOnDate = dateCheckbox;
 }
 
-function toggleTagFilter() {
-    console.log("toggleTagFilter");
+/* Handler for by tags checkbox. */
+tj.toggleTagFilter = function() {
     var tagCheckbox = document.getElementById("filter_by_tags").checked;
     var filterTagDiv = document.getElementById("filter_tag_div");
     if(tagCheckbox) {
@@ -920,49 +944,8 @@ function toggleTagFilter() {
     }
 }
 
-/* Sets the state of tj.filterObject into the UI controls, typically at page load time. */
-//TODO all this checking and unchecking should be done in a fragment to minimize reflow
-function resetFilterControlsState() {
-    // select the tags that were selected in the tag selector list
-    tagMgr.selectTags(tj.filterObject.filterTags);
 
-    // now set the state if any of the by tags mode controls
-    //var tagSelector = document.getElementById('tagselector');
-    //if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS) {
-    if(tj.filterObject.filterOnTags) {
-        document.getElementById("filter_by_tags").checked = true;
-    }
-    else {
-        document.getElementById("filter_by_tags").checked = false;
-    }
-    toggleTagFilter();
-
-    //if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_OR) == tj.FILTERMODE_TAGS_OR) {
-    if(tj.filterObject.filterOnTagsOr) {
-        document.getElementById("filter_by_tags_or").checked = true;
-    }
-    else {
-        document.getElementById("filter_by_tags_or").checked = false;
-    }
-
-    //if((tj.filterObject.filterMode & tj.FILTERMODE_TAGS_AND) == tj.FILTERMODE_TAGS_AND) {
-    if(tj.filterObject.filterOnTagsAnd) {
-        document.getElementById("filter_by_tags_and").checked = true;
-    }
-    else {
-        document.getElementById("filter_by_tags_and").checked = false;
-    }
-
-    if(tj.filterObject.filterOnDate)
-        document.getElementById("filter_by_date").checked = true;
-    else
-        document.getElementById("filter_by_date").checked = false;
-    document.getElementById("startdate").value = tj.filterObject.startDate;
-    document.getElementById("enddate").value = tj.filterObject.endDate;
-    toggleDateFilter();
-}
-
-/* Handler for user clicking on Filter button. Sets the state of tj.filterObject accordingly and
+/* Handler for the Filter button. Sets the state of tj.filterObject accordingly and
 *  and calls showAllJots, using the filterObject if any filtering is to be done. */
 tj.showFilteredJots = function() {
     tj.filterObject.filterTags = tagMgr.getSelectedTags();
@@ -993,7 +976,7 @@ tj.showFilteredJots = function() {
     }
 
     // finally, persist the filter incase the user closes
-    tj.indexedDB.persistFilterObjects();
+    tj.indexedDB.persistFilterControlsState();
 }
 
 /* A wrapper for tagMgr.innerMerge. */
