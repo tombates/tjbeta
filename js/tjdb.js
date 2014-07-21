@@ -154,7 +154,7 @@ tj.indexedDB.open = function() {
                 //if(tj.editing !== null) {
                 //    tj.editing.click();  // works in Chrome and IE but not FF
                 //}
-                // but this works in IE, FF and Chrome
+                // But this works in IE, FF and Chrome:
                 var evt = document.createEvent('MouseEvents');   // ugh createEvent is deprecated, see above
                 evt.initEvent(
                     'click',   // event type
@@ -246,7 +246,6 @@ tj.indexedDB.open = function() {
         fsRequest.onsuccess = function(e) {
             if(fsRequest.result == undefined) {
                 console.log("undefined retrieved filterState state in: request.onsuccess() called");
-                //tj.filterObject.filterMode = tj.FILTERMODE_NONE;
                 tj.filterObject.filterTags = null;
                 tj.filterObject.startDate = "";
                 tj.filterObject.endDate = "";
@@ -258,7 +257,6 @@ tj.indexedDB.open = function() {
             }
             else {
                 console.log("defined retrieved filterState state in: request.onsuccess() called");
-                //tj.filterObject.filterMode = fsRequest.result.filterMode;
                 tj.filterObject.filterTags = fsRequest.result.filterTags;
                 tj.filterObject.startDate = fsRequest.result.startDate;
                 tj.filterObject.endDate = fsRequest.result.endDate;
@@ -269,14 +267,7 @@ tj.indexedDB.open = function() {
                 tj.filterObject.filterOrder = fsRequest.result.filterOrder;
             }
 
-            // now we reuse the same transaction for a request to retrieve the authorization data
-            // TODO: OBVIOUSLY this is not a viable production solution as anybody with access to a
-            // user's browser can use dev tools to get the secret and key. But this is an issue
-            // many SPAs are encountering...TBD
-
-            //var t = e.transaction;
-            //console.log("e = " + e);
-                Nimbus.Auth.setup(nbx.sync_object);
+            Nimbus.Auth.setup(nbx.sync_object);
             nbx.auth = Nimbus.Auth.authorized();
             if(nbx.auth === false) {
                 console.log("tj.indexedDB.open Nimbus.Auth.authorized() is FALSE");
@@ -286,30 +277,6 @@ tj.indexedDB.open = function() {
                 console.log("tj.indexedDB.open Nimbus.Auth.authorized() is TRUE");
                 nbx.open();
             }
-            /*  commented out 6-9-2014 as key/secret should not be involved for other users
-            var authRequest = store.get("authorizationState");
-            authRequest.onsuccess = function(e) {
-                if((authRequest.result === undefined) ||
-                   ((authRequest.result !== undefined) && ((authRequest.result.primary === "") || (authRequest.result.secondary === "")))) {
-                    $( "#settingsDialog" ).dialog( "option", "width", 600 );
-                    $( "#settingsDialog" ).dialog( "open" );
-                    return;
-                }
-                nbx.sync_object.Dropbox.key = authRequest.result.primary;
-                nbx.sync_object.Dropbox.secret = authRequest.result.secondary;
-                console.log("inDBK" + authRequest.result.primary);
-                console.log("inDBS" + authRequest.result.secondary);
-                nbx.open();    // will call showFilteredJots() in its success callback
-            };
-
-            authRequest.onerror = function(e) {
-                // for now we assume the error is that no auth data has ever been saved so get it from user
-                $( "#settingsDialog" ).dialog( "option", "width", 600 );
-                $( "#settingsDialog" ).dialog( "open" );
-                return;  // the Save button handler for the dialog will call this again after setting key/secret into sync_object
-            };
-            */
-            ///nbx.open();    // will call showFilteredJots() in its success callback
         };
         
         fsRequest.onerror = function(e) {
@@ -386,24 +353,6 @@ tj.innerAddJot = function(jotText) {
 *   Clears all jots on the page and re-renders them. Used on open, reload, order toggling or filtering. Generally not
 *   used just when a single jot is added or deleted or edited. In those cases we update the DOM directly.
 */
-//PROBLEM we are showing all jots based on the local store. This is wrong. Consider having tj open in two browswers or
-//two devices. Edit a jot in one and save the edit. The remote store now has the correct contents. BUT this function
-//is calling renderJot with the local store data, which has not been updated with the edits.
-//
-// 1. we must check whether or not local version is out of date with remote version, not just whether it exists locally.
-//    This is afterall why we added a modified time to the schema.
-// 2. we should be calling renderJot with the remote versions if possible (only not possible if the connection to remote
-//    is down). And if the connection is down we should warn the user that jots are being rendered only from the local
-//    browswer specific store and therefore these might not have been synced with the remote store yet. A tricky situation
-//    with no great solution. WHAT DOES NIMBUS DO ABOUT THIS?
-//  OK this function is doing too much. It's supposed to showAllJots, but it's also doing the local/remote sync
-//  thing, which gets very messy since this is asyncrhronous and the syncing will potentially fire off other async
-//  update tasks, thus making it quite tricky to know when it's safe to actually get all the remote jots and use them
-//  for rendering. Need to pull out most of this into a sep function - the first clue is that this function calls itself
-//  and that just a recursion too far
-//  WHAT'S MORE this isn't even sending to remote any jots that are only local, it is only gathering them up but in a
-//  function scope var and then nothing is ever really done with that list (badly named pushToRemote). We should
-//  push to remote at "we know we are connected" time and not so much here.
 tj.indexedDB.showAllJots = function(filterObject) {
 	console.log("in showAllJots");
     pageRenderer(filterObject);
