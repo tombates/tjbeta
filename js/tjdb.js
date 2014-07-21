@@ -1146,9 +1146,7 @@ function tagManagerPopulateSelector(fromList) {
             return null;
         fromList = tagContainer[0].tagList.split(",");
     }
-    //else
-    //    allTags = fromList.split(",");
-    //allTags = tagList.split(",");
+
     // now add however many of these: <option value="tagX">tagX</option>
     selector.innerHTML = "";
     for(var i = 0; i < fromList.length; i++) {
@@ -1232,23 +1230,9 @@ function htmlizeText(text) {
 	return(htmlized);
 }
 
-function aboutScreen() {
-    console.log("aboutScreen()");
-
-}
-
-/* Called when the user selects a remote service in the Settings dialog. Causes
-   a change to label for the secret/scope text field based on the service chosen.
-*/
-function settingsServiceChoice() {
-
-}
-
 /* Persists the user's preferred remote storage service. A stub for now as we only support Dropbox. */
-function settingsSet(value) {
-    console.log("settingsSet()");
+tj.settingsSet = function(value) {
     if(value === 1) {
-        console.log("set them settings");
 
         // which service? (TODO support more possibilities, starting with local only)
         if(document.getElementById("remoteDropbox").checked) {
@@ -1272,8 +1256,7 @@ function settingsSet(value) {
 
         // attempt connection
 
-        $("#settingsDialog").dialog( "close" );
     }
-    else
-        $("#settingsDialog").dialog( "close" );
+
+    $("#settingsDialog").dialog( "close" );
 }
