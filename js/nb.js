@@ -107,7 +107,7 @@ nbx.open = function() {
                     console.log("nbx.Tags.sync_all() callback called.");
                     filterManager_init();
                     resetFilterControlsState(tj.filterObject.filterTags);
-                    showFilteredJots();
+                    tj.showFilteredJots();
 
                     ///indexedDB_init();
                     //tj.indexedDB.showAllJots();  // now gets called via applyFilters call in tj.indexedDB.open

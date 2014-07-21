@@ -111,8 +111,6 @@ tj.indexedDB.persistFilterObjects = function() {
                 
         request.onsuccess = function(e) {
             console.log("storing session state request.onsuccess");
-            //var jotDiv = renderJot(row);
-            //var jotsContainer = document.getElementById("jotItems");
         };
         
         request.onerror = function(e) {
@@ -332,7 +330,7 @@ tj.innerAddJot = function(jotText) {
         console.log("addJot nbx.jotreal.time = " + nbx.jotreal.time);
 
         var idbRow = convertNimbusRowToIDBRow(nrow);
-        var jotDiv = renderJot(idbRow);
+        var jotDiv = tj.renderJot(idbRow);
         var jotsContainer = document.getElementById("jotItems");
         if(tj.filterObject.filterOrder === "newfirst")  {   // newest are currently shown first
             var first = jotsContainer.firstChild;
@@ -409,7 +407,7 @@ function pageRenderer(filterObject) {
         l = convertNimbusRowToIDBRow(r[i]);
     	//l = {"commonKeyTS":r[i].commonKeyTS, "nimbusID":r[i].id, "nimbusTime":r[i].time, "modTime":r[i].modTime,
         //     "title":r[i].title, "jot":r[i].jot, "tagList":r[i].tagList, "extra":r[i].extra, "idTodo":r[i].isTodo, "done":r[i].done};
- 	    nextJotDiv = renderJot(l);    // result.value is a basically a local store table row
+ 	    nextJotDiv = tj.renderJot(l);    // result.value is a basically a local store table row
         //jotsContainer.appendChild(nextJotDiv);      
         fragment.appendChild(nextJotDiv);      
     }
@@ -594,8 +592,10 @@ function containsTags(jot, filterObject) {
 /*
 * Creates all the HTML elements for a single jot and sets them into a new div ready to be added to the
 * all-jots-div. The caller is reponsible for adding the retuned div to the jotItems div.
+*
+* row - An array containing the "column" entries for a particular jot.
 */
-function renderJot(row) {	
+tj.renderJot = function(row) {	
 	
 	// a containing div for each jot
 	var jdiv = document.createElement("div");
@@ -663,11 +663,8 @@ function renderJot(row) {
     // is solved without any arrays or assoc objects -- WOW is that right? Actually, that worked great! No need for lists
     // of associations and all that entails mgmt-wise. 
 
-	//var dt = new Date(row.timeStamp);   // get a Date obj back so we can call some presentation methods
 	var dt = new Date(row.commonKeyTS);   // get a Date obj back so we can call some presentation methods
 	
-	//var t = document.createTextNode(dt.toDateString() + "at " + dt.toTimeString() + ": " + row.text);
-
     // ensure a jot being edited is displayed fully
     title_leftdiv.addEventListener("click", function(e){
         if(pjot.className == "jottext_collapsed")
@@ -691,19 +688,14 @@ function renderJot(row) {
 
 	timespan.textContent = "created " + dt.toDateString() + " at " + dt.toLocaleTimeString();
 	tagsinput.value = row.tagList;
-	//pjot.textContent = row.text;
-	//pjot.innerHTML = row.text;
 	pjot.innerHTML = row.jot;
-	//t.data = row.text;
-	//console.log("in renderJot");
 	// wire up Delete link handler and pass the inner deleteJot the keyPath and jotdiv it will need
 	dellink.addEventListener("click", function(e) {
-		//tj.indexedDB.deleteJot(row.text);
 		var yesno = confirm("Are you sure you want to delete this jot?\n\nThis is not undoable.");
 		if(yesno) {
 		    tj.indexedDB.deleteJot(row.commonKeyTS, jdiv);
         }
-	});
+	});    
 	dellink.appendChild(delimage);
 	
 	editlink.addEventListener("click", function(e) {
@@ -725,8 +717,6 @@ function renderJot(row) {
 	title_rightdiv.appendChild(dellink);
 	titlediv.appendChild(title_rightdiv);
 	jdiv.appendChild(titlediv);
-	//jdiv.appendChild(editlink);
-	//jdiv.appendChild(dellink);
 	jdiv.appendChild(pjot);
 	return jdiv;
 }
@@ -860,17 +850,11 @@ function indexedDB_init() {
 	tj.indexedDB.open();  // shows any data previously stored
 }
 
-// 3-23-2014 removed because we need nimbus to be ready before call to showAllJots so moved init
-// call into nbx.open so that call to nbx.Jots.all() in showAllJots will return nonzero length array
-//TODO that seems to work but raises the issue of what happens if the route through nb.open is different
-// because we weren't connect yet - then we might never call indexedDB_init
-//window.addEventListener("DOMContentLoaded", indexedDB_init, false);
-
 //
-// Our action handlers for sort order, date range, etc.,.
+// Our action handlers for sort order, date range, etc.
 //
 
-// toogle sort order of displayed jots
+/* Toggles the temporal sort order of displayed jots. */
 function toggleOrdering() {
 	var toggle = document.getElementById('toggleOrder');
 	if(tj.filterObject.filterOrder === "newfirst") {
@@ -881,7 +865,7 @@ function toggleOrdering() {
 		toggle.title = "Press to show oldest jots first.";
 		tj.filterObject.filterOrder = "newfirst";
 	}
-    showFilteredJots();
+    tj.showFilteredJots();
 }
 
 function paginator(direction) {
@@ -895,7 +879,7 @@ function raiseCalendar(elementID) {
     $(which).datepicker();
 }
 
-// place selected tags in Tags text field for jot being added
+/* Places selected tags in Tags text field for jot being added. */
 function stageTags() {
     var textfield = document.getElementById('add_tagsinput');
     textfield.value = getSelectedTags().join(",");
@@ -912,30 +896,26 @@ function getSelectedTags() {
     }
     return tags;
 }
-// clear the Tags text field for jot being added
+
+/* Clears the Tags text field for jot being added. */
 function clearStagedTags() {
     var textfield = document.getElementById('add_tagsinput');
     textfield.value = "";
 }
 
-// remove or add tags in Tags text field into the Tag Selector list
-// a tag that does not exist in the list will be added, a tag prefixed
-// with '-' that does exist in the list will be removed. This does not
-// remove such tags from individual jot taglists that might have used
-// the tags being removed. This means that these tags cannot be used
-// as filters even though there might still be jots with the removed tags.
+/*
+*  Removes or adds tags in Tags text field into the Tag Selector list
+*  A tag that does not exist in the list will be added while a tag prefixed
+*  with '-' that does exist in the list will be removed. This does not
+*  remove such tags from individual jot tag lists that might have used
+*  the tags being removed. It does however mean that deleted tags cannot be used
+*  as filters even though there might still be jots with the removed tags.
+*/
 function mergeStagedTags() {
     console.log("mergeStagedTags() called");
     var tagsField = document.getElementById("add_tagsinput");
     var tagString = tagsField.value;
     tagManagerMerge(tagString);
-}
-
-function removeAll() {
-    var yesno = confirm("Whoa! Deleting all jots is not reversible. Are you sure you want to do this?");
-	if(yesno) {
-	    tj.indexedDB.emptyDB();
-	}	
 }
 
 tj.indexedDB.emptyDB = function() {
@@ -1042,7 +1022,7 @@ function resetFilterControlsState() {
 
 /* Handler for user clicking on Filter button. Sets the state of tj.filterObject accordingly and
 *  and calls showAllJots, using the filterObject if any filtering is to be done. */
-function showFilteredJots() {
+tj.showFilteredJots = function() {
     tj.filterObject.filterTags = getSelectedTags();
     // if no filtering show everything
     //if(!(document.getElementById("filter_by_tags_or").checked
