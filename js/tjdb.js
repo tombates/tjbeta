@@ -867,45 +867,6 @@ function raiseCalendar(elementID) {
     $(which).datepicker();
 }
 
-/* Places selected tags in Tags text field for jot being added. */
-function stageTags() {
-    var textfield = document.getElementById('add_tagsinput');
-    textfield.value = getSelectedTags().join(",");
-}
-
-function getSelectedTags() {
-    var tagSelector = document.getElementById('tagselector');
-    var tags = [];
-    var n = tagSelector.options.length;
-    for(var i = 0; i < n; i++) {
-        if(tagSelector.options[i].selected) {
-            tags.push(tagSelector.options[i].value)
-        }
-    }
-    return tags;
-}
-
-/* Clears the Tags text field for jot being added. */
-function clearStagedTags() {
-    var textfield = document.getElementById('add_tagsinput');
-    textfield.value = "";
-}
-
-/*
-*  Removes or adds tags in Tags text field into the Tag Selector list
-*  A tag that does not exist in the list will be added while a tag prefixed
-*  with '-' that does exist in the list will be removed. This does not
-*  remove such tags from individual jot tag lists that might have used
-*  the tags being removed. It does however mean that deleted tags cannot be used
-*  as filters even though there might still be jots with the removed tags.
-*/
-function mergeStagedTags() {
-    console.log("mergeStagedTags() called");
-    var tagsField = document.getElementById("add_tagsinput");
-    var tagString = tagsField.value;
-    tagManagerMerge(tagString);
-}
-
 tj.indexedDB.emptyDB = function() {
 	alert("in tj.indexedDB.emptyDB");
 	var request = indexedDB.open("todos", tj.indexedDB.IDB_SCHEMA_VERSION);  // returns an IDBOpenDBRequest object
@@ -924,7 +885,7 @@ tj.indexedDB.emptyDB = function() {
 /* Sets up the initial state of the Tag Selector UI list */
 function filterManager_init() {
     filtersClear();
-    tagManagerPopulateSelector();
+    tagMgr.populateSelector();
 }
 
 /* For some reason Firefox is remembering checkbox and radio states across reloads -- weird.
@@ -967,7 +928,7 @@ function toggleTagFilter() {
 //TODO all this checking and unchecking should be done in a fragment to minimize reflow
 function resetFilterControlsState() {
     // select the tags that were selected in the tag selector list
-    tagManagerSelectTags(tj.filterObject.filterTags);
+    tagMgr.selectTags(tj.filterObject.filterTags);
 
     // now set the state if any of the by tags mode controls
     //var tagSelector = document.getElementById('tagselector');
@@ -1008,7 +969,7 @@ function resetFilterControlsState() {
 /* Handler for user clicking on Filter button. Sets the state of tj.filterObject accordingly and
 *  and calls showAllJots, using the filterObject if any filtering is to be done. */
 tj.showFilteredJots = function() {
-    tj.filterObject.filterTags = getSelectedTags();
+    tj.filterObject.filterTags = tagMgr.getSelectedTags();
     // if no filtering show everything
     //if(!(document.getElementById("filter_by_tags_or").checked
     //    || document.getElementById("filter_by_tags_and").checked || document.getElementById("filter_by_date").checked)) {
@@ -1039,12 +1000,21 @@ tj.showFilteredJots = function() {
     tj.indexedDB.persistFilterObjects();
 }
 
+/* A wrapper for tagMgr.innerMerge. */
+tagMgr.mergeStagedTags = function() {
+    console.log("mergeStagedTags() called");
+    var tagsField = document.getElementById("add_tagsinput");
+    var tagString = tagsField.value;
+    tagMgr.innerMerge(tagString);
+}
+
 /*
 * Adds or removes tags from the master tag list maintained remotely via NimbusBase, and updates the UI
 * select element on the page.
 *
 * mergeList - a list of tags to add or remove. This is a string of comma separated 'tag phrases' which
-*             can contain white space (runs of spaces and tabs are collapsed to single spaces though).
+*             can contain white space.
+
 *             Tags in the mergeList beginning with '-' indicate tags to be removed from the master
 *             list. This means actual tags cannot begin with '-'. For tags not beginning with '-' the
 *             tag is added to the master list if it is not already in it.
@@ -1056,7 +1026,7 @@ tj.showFilteredJots = function() {
 *       tags, and content editing). Alternatively the removed tag could be re-added to the master list and would
 *       thus be an available filter target once again.
 */           
-function tagManagerMerge(mergeList) {
+tagMgr.innerMerge = function(mergeList) {
     if(mergeList === undefined || mergeList == null || mergeList === "")
         return;
     var tagContainer = nbx.Tags.all();    // should be one or zero items, we need the inner list
@@ -1117,11 +1087,36 @@ function tagManagerMerge(mergeList) {
         nbx.Tags.sync_all(function() {console.log("tagManagerMerge() nbx.Tags.sync_all() callback called.")});
     }
     // update the page's Tag Selector select element
-    tagManagerPopulateSelector(existingMinusRemoved);
+    tagMgr.populateSelector(existingMinusRemoved);
+}
+
+/* Places selected tags in Tags text field for jot being added. */
+tagMgr.stageTags = function() {
+    var textfield = document.getElementById('add_tagsinput');
+    textfield.value = tagMgr.getSelectedTags().join(",");
+}
+
+/* Returns an array containing the tags currently selected in the tag selector list. */
+tagMgr.getSelectedTags = function() {
+    var tagSelector = document.getElementById('tagselector');
+    var tags = [];
+    var n = tagSelector.options.length;
+    for(var i = 0; i < n; i++) {
+        if(tagSelector.options[i].selected) {
+            tags.push(tagSelector.options[i].value)
+        }
+    }
+    return tags;
+}
+
+/* Clears the Tags text field for jot being added. */
+tagMgr.clearStagedTags = function() {
+    var textfield = document.getElementById('add_tagsinput');
+    textfield.value = "";
 }
 
 /* Selects tags in the tag selector list. Used primarily at page load for restoring session filter state. */
-function tagManagerSelectTags(fromList) {
+tagMgr.selectTags = function(fromList) {
     if((fromList != undefined) && (fromList != null)) {
         var selector = document.getElementById('tagselector');
         var opts = selector.options;
@@ -1137,7 +1132,7 @@ function tagManagerSelectTags(fromList) {
 * fromList - optional argument. If present fromList should be the definitive tags list as an
 *            array of strings. If fromList is undefined we will populate using the remote list.
 */
-function tagManagerPopulateSelector(fromList) {
+tagMgr.populateSelector = function(fromList) {
     //var allTags = [];
     //var tagList = fromList;
     var selector = document.getElementById('tagselector');
