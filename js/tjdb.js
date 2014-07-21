@@ -79,18 +79,12 @@ tj.filterObject.filterOrder = "newfirst"; // default ordering
 
 tagMgr = {};    // encapsulates tag management functions
 
-//window.addEventListener("DOMContentLoaded", tj.indexedDB.open, false);
-/* Save session state data locally so that tag selection and filtering can be restored to their previous
-*  state. Because this uses indexedDB it is per browser brand and per device, meaning one could have different
-*  filters going on the same Jot remote storage data, which is kind of cool. 
-*/
-
 tj.indexedDB.onerror = function (e){
     console.log(e);
 };
 
 /*
-* Opens a local indexedDB store used for persisting session filter settings.
+* Binds controls and opens a local indexedDB store used for persisting session filter settings.
 * Here we retrieve any previously saved filter settings and the authorization data for the
 * user's remote storage service before calling NimbusBase library functions for remote retrieval.
 */
@@ -794,11 +788,6 @@ tj.removeJotDiv = function(jotDiv) {
 	// delete the view of the jot by removing it's jotDiv - no more rerendering all the jot view's html!
     var jotsContainer = document.getElementById("jotItems");
     jotsContainer.removeChild(jotDiv);
-}
-
-function indexedDB_init() {
-	console.log("doing indexedDB init()");
-	tj.indexedDB.open();  // shows any data previously stored
 }
 
 //
