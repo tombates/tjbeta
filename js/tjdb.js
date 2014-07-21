@@ -1240,7 +1240,6 @@ function htmlizeText(text) {
 		else
 		    htmlized = htmlized + pieces[i] + "<br />";
 	}
-	//alert(htmlized);
 	return(htmlized);
 }
 
