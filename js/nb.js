@@ -113,8 +113,8 @@ nbx.open = function() {
                     //tj.indexedDB.showAllJots();  // now gets called via applyFilters call in tj.indexedDB.open
                                                    // so filterObject state is restored before showing any jots
                     // persist the remote authorization data if necessary
-                    if((nbx.sync_object.Dropbox.key !== "") || (nbx.sync_object.Dropbox.secret !== ""))
-                        persistAuthorization();
+                    //removed 7-21if((nbx.sync_object.Dropbox.key !== "") || (nbx.sync_object.Dropbox.secret !== ""))
+                    //removed    persistAuthorization();
                 });
            ///}
         });
@@ -187,6 +187,7 @@ nbx.open = function() {
 *  and the current data is different from current sync_object, we perist the current sync_object information. This implies
 *  this function should be called only when the current sync_object has led to a successful remote connection.
 */
+/*removed 7-21
 function persistAuthorization() {
     console.log("persistAuthorization");
     // gather user's currently selected and staged tags, and any filter state
@@ -221,13 +222,10 @@ function persistAuthorization() {
             console.log(e);
         };
 }
+*/
 
 function nimbus_init() {
-	console.log("doing NimbusBase nimbus_init()");
     tj.indexedDB.open();
-    //indexedDB_init();
-
-	///nbx.open();  // connects to user storage using NimbusBase
 }
 
 window.addEventListener("DOMContentLoaded", nimbus_init, false);
