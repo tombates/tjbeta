@@ -4,100 +4,13 @@
 <meta charset="utf-8">
 <title>ThoughtJot</title>
 <link href="css/tj.css" rel="stylesheet" type="text/css" />
-<link href="css/dropmenu.css" rel="stylesheet" type="text/css" />
-<script src="http://nimbusbase.com/static/nimbus.min.js"></script>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<script src="./js/jquery-1.11.0.min.js"></script>
-  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
-<script src="./js/nb.js"></script>
 <script src="./js/tjdb.js"></script>
 <!-- thanks to http://adamwhitcroft.com/batch/ for some of the icon images -->
 </head>
 
 <body>
 
-<div id="container">
-<header>
-  <input type="button" id="cloudButton" onClick="nbx.userConnectRequest('Dropbox'); return false;" value=""
-         title="You are not connected to cloud storage.&#10;Click to connect."/>
-  <h1 class="thetitle">Thought Jot</h1>
-  <div class="drop-menu">
-    <!--span class="plus">&#9674;</span-->
-        <ul class="sub-menu">
-            <li ><a id="settingsOpener" class="topic">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;Settings</a></li>
-            <li ><a id="helpOpener" class="topic">&nbsp;&nbsp;&#9674;&nbsp;&nbsp;Help</a></li>
-        </ul>
-  </div>
-</header>
-
-<!--img src="images/me-photo-cropped.png" width="100px" height="100px"-->
-
-<form type="post" onSubmit="tj.addJot(); return false;">
-  <!--input type"text" id="todo" placeholder="What'cha got to do?" style="width:200px;" /-->
-  <div class="jottextarea">
-      <textarea class="jot" id="jot_composer" placeholder="Type a New Jot"></textarea>
-      <div id="rightcontrols">
-        <div id="rightcontrols_header"><span id="rctls_hdr_text">Tag&nbsp;Selector<span id="space">&nbsp;</span>Filter&nbsp;Options</span>
-        </div>
-        <div id="filterby_div">
-            <input type="checkbox" onClick="toggleDateFilter(); return true;" id="filter_by_date" value="filter"/>By Date Range<br>
-            <div id="filter_date_div" class="display_none">
-              <!--input type="button" id="startdate_btn" value="" title="Choose start date"-->
-              <input type="text" id="startdate" onClick="raiseCalendar(this.id); return false;" placeholder="start date" maxlength="12" title="Click for a calendar, or enter manually as mm/dd/yyyy." /><br>
-              <!--input type="button" id="enddate_btn" value="" title="Choose end date"-->
-              <input type="text" id="enddate" onClick="raiseCalendar(this.id); return false;" placeholder="end date" maxlength="12" title="Click for a calendar, or enter manually as mm/dd/yyyy" /><br>
-            </div>
-            <input type="checkbox" onClick="toggleTagFilter(); return true;" id="filter_by_tags" value="filter"/>By Tags<br>
-            <div id="filter_tag_div" class="display_none">
-              <input type="radio" name="tagfilter" id="filter_by_tags_or" value="filter" title="Use the Tag Selector to choose the filter tags."/>
-              Any Selected Tag<br>
-              <input type="radio" name="tagfilter" id="filter_by_tags_and" value="filter" title="Use the Tag Selector to choose the filter tags."/>
-              All Selected Tags<br>
-            </div>
-        </div>
-        <div id="tagselector_div"><select multiple id="tagselector"></select>
-        </div>
-        <div id="filterbtn_div"><input type="button" id="applyfilters_btn" onClick="tj.showFilteredJots()" value="Filter"/></div>
-                                <input type="button" onClick="stageTags(); return false;" id="stagetags_btn" value="Stage tags" title="Move selected tags to the new jot Tags: field" />
-
-      </div>
-  </div>
-  <div class="jotaddbtn"><input type="submit" class="addjot_img" value="" title="Add this jot" />&nbsp;&nbsp;Title:
-                         <input type="text" id="add_titleinput" placeholder="untitled" maxlength="200"/>&nbsp;&nbsp;Tags:
-                         <input type="text" id="add_tagsinput" placeholder="none" maxlength="200" title="Separate tags with commas"/>
-                         <input type="button" onClick="mergeStagedTags(); return false;" class="mergetags_img" value="Merge" title="Add tags to or subtract tags from the selector list above.&#10;Tags preceeded with '-' (minus) will be removed." />
-  </div>
-</form>
-
-<div id="jotcontrols">
-  <input type="button" id="toggleOrder" onClick="toggleOrdering(); return false;" title="Press to show oldest jots first."/>
-  <input type="button" id="paginate_prev" onClick="paginator(0); return false;" title="Press to see previous ten jots."/>
-  <input type="button" id="paginate_next" onClick="paginator(1); return false;" title="Press to see next ten jots."/>
-  <p id="statusarea">Status</p>
-  <!--input type="submit" value="New Jot Jar" title="Your jots can be organized by Jars, as well as tags."/-->
-  <!--input type="submit" onClick = "removeAll(); return false;" value="Delete all jots" title="Be very careful. This will delete all your jots locally and remotely!" /-->
-</div>
-
-<div id="jotItems">
-  <!-- Each jot gets its own div inside the jotItems div. -->
-</div>
-
-</div>  <!-- end container div -->
-
-<!-- This is the Settings dialog content, which shows only when user clicks the tools button:Settings link -->
-<div id="settingsDialog" title="Thought Jot Settings">
-  <h4>Choose a remote storage service</h4>
-  &nbsp;&nbsp;&nbsp;<input type="radio" name="remotestorage" id="remoteDropbox" value="dropbox"/>Use Dropbox<br>
-  &nbsp;&nbsp;&nbsp;<input type="radio" name="remotestorage" id="remoteGoogle" value="google"/>Use Google Drive<br><br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Dropbox Key:&nbsp;<input type="password" id="DBKey" placeholder="Key" maxlength="50"><br>
-  &nbsp;&nbsp;&nbsp;&nbsp;Dropbox Secret:&nbsp;<input type="password" id="DBSecret" placeholder="Secret" maxlength="50"><br><br>
-  <input type="button" value="Save"onClick="settingsSet(1); return false;"/>
-  <input type="button" value="Cancel" onClick="settingsSet(0); return false;"/>
-</div>
-
-<!-- This is the about / help dialog content, which shows only when user clicks the tools button:Help link -->
-<!--div id="helpDialog"  title="Getting Started with Thought Jot">
+<div id="helpDialog"  title="Getting Started with Thought Jot">
 
 <h1 class="usage">About Thought Jot, and how to use it.</h1>
 <p class="usage">Welcome to Thought Jot, an online way to keep notes that 
@@ -174,7 +87,7 @@ based on title (OK, Actually that's not there yet), tags, or date ranges.</p>
 <p class="usageindented">Thought Jot uses HTML5 IndexedDB for its local storage and the NimbusBase library to facilitate storage
 and retrieval of jots and tags from your remote storage provider.</p>
 
-</div-->
-<!-- end of about / help content -->
+</div>
+
 </body>
 </html>
