@@ -295,8 +295,6 @@ tj.innerAddJot = function(jotText) {
         console.log("addJot nbx.jotreal.id = " + nbID);
         console.log("addJot nbx.jotreal.time = " + nbx.jotreal.time);
 
-        ///var idbRow = convertNimbusRowToIDBRow(nrow);
-        ///var jotDiv = tj.renderJot(idbRow);
         var jotDiv = tj.renderJot(nrow);
         var jotsContainer = document.getElementById("jotItems");
         if(tj.filterObject.filterOrder === "newfirst")  {   // newest are currently shown first
@@ -324,15 +322,11 @@ tj.indexedDB.showAllJots = function(filterObject) {
 function pageRenderer(filterObject) {
     // retieve the jots that meet the filter criteria
     var jots = getSortedRemoteJots(filterObject);
-    ///var l = {};
     var nextJotDiv;
-    var statusReport = getStatusReport();
-    ///var status = document.getElementById("statusarea");
-    ///status.innerHTML = statusReport;
-    document.getElementById("statusarea").innerHTML = statusReport;
+    //var statusReport = getStatusReport();
+    document.getElementById("statusarea").innerHTML = getStatusReport();
 
     var jotsContainer = document.getElementById("jotItems");
-    //start_time = new Date().getTime();
     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 
     //TODO Finish pagination despite the limitations of NimbusBase...
@@ -340,7 +334,6 @@ function pageRenderer(filterObject) {
     //var stopat = r.length > startat + 10 ? startat + 10 : r.length;
     var fragment = document.createDocumentFragment();
     for(i = 0; i < jots.length; i++) {
-        //l = jots[i];
  	    nextJotDiv = tj.renderJot(jots[i]);
         fragment.appendChild(nextJotDiv);      
     }
@@ -387,28 +380,28 @@ function getStatusReport() {
 }
 
 //TODO remove once we are solid on the new scheme of mostly remote only
-function convertNimbusRowToIDBRow(nrow) {
-    var idb = {};
-    idb = {"commonKeyTS":nrow.commonKeyTS, "nimbusID":nrow.id, "nimbusTime":nrow.time, "modTime":nrow.modTime,
-           "title":nrow.title, "jot":nrow.jot, "tagList":nrow.tagList, "extra":nrow.extra, "idTodo":nrow.isTodo, "done":nrow.done};
-    return idb;
-}
+// function convertNimbusRowToIDBRow(nrow) {
+//     var idb = {};
+//     idb = {"commonKeyTS":nrow.commonKeyTS, "nimbusID":nrow.id, "nimbusTime":nrow.time, "modTime":nrow.modTime,
+//            "title":nrow.title, "jot":nrow.jot, "tagList":nrow.tagList, "extra":nrow.extra, "idTodo":nrow.isTodo, "done":nrow.done};
+//     return idb;
+// }
 
-function updateRemote(localNotOnRemote) {
-	var l = localNotOnRemote;
-    for(i = 0; i < localNotOnRemote.length; i++) {
-    	// our input is in local format, we need to pull the values out
-   	//var row = {"commonKeyTS":commonKey, "nimbusID":nbID, "nimbusTime":"none", "modTime":commonKey,
-    //"title":"none", "jot": htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
+// function updateRemote(localNotOnRemote) {
+// 	var l = localNotOnRemote;
+//     for(i = 0; i < localNotOnRemote.length; i++) {
+//     	// our input is in local format, we need to pull the values out
+//    	//var row = {"commonKeyTS":commonKey, "nimbusID":nbID, "nimbusTime":"none", "modTime":commonKey,
+//     //"title":"none", "jot": htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
 
-    // nbx.jotreal = nbx.Jots.create({"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
-    //                                "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false});
+//     // nbx.jotreal = nbx.Jots.create({"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
+//     //                                "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false});
  
-        var tostore = {"commonKeyTS":l[i].commonKeyTS, "time":l[i].commonKeyTS, "modTime":l[i].commonKeyTS,
-            "title":l[i].title, "jot":l[i].jot, "tagList":l[i].tagList, "extra":l[i].extra, "isTodo":l[i].isTodo, "done":l[i].done};
-        nbx.jotreal = nbx.Jots.create(tostore);
-    }
-}
+//         var tostore = {"commonKeyTS":l[i].commonKeyTS, "time":l[i].commonKeyTS, "modTime":l[i].commonKeyTS,
+//             "title":l[i].title, "jot":l[i].jot, "tagList":l[i].tagList, "extra":l[i].extra, "isTodo":l[i].isTodo, "done":l[i].done};
+//         nbx.jotreal = nbx.Jots.create(tostore);
+//     }
+// }
 
 /*
 * Returns an array of jots in the correct newest/oldest order, and possibly restricted to a certain set of tags.
@@ -528,13 +521,14 @@ function containsTags(jot, filterObject) {
 * row - An array containing the "column" entries for a particular jot.
 */
 tj.renderJot = function(row) {	
-	
-	// a containing div for each jot
+	// a div for each jot
 	var jdiv = document.createElement("div");
 	jdiv.className = "jotdiv";
+
 	// another div for the title, etc., which will remain when a jot is collapsed
 	var titlediv = document.createElement("div");
 	titlediv.className = "titlediv";
+
 	// three divs for the left, center, and right columsn within the titlediv
 	// these contain the edit link, the title/timestamp/tags editables, and the delete link
     var title_leftdiv = document.createElement("div");
@@ -554,6 +548,7 @@ tj.renderJot = function(row) {
     titleinput.className = "titleinput";
 	var timespan = document.createElement("span");
 	timespan.className = "timestamp";
+
     // a paragraph for the tags, within the titlediv central column div
     var tagsspan = document.createElement("span");
     tagsspan.className = "tagsspan";
@@ -570,32 +565,15 @@ tj.renderJot = function(row) {
 	var dellink = document.createElement("a");
 	dellink.className = "delete";
 	dellink.title = "Delete this jot"
-	//dellink.textContent = " [Delete]";
 	var delimage = document.createElement("img");
 	delimage.src = ".\/images\/delete-20h.png"
 
 	var editlink = document.createElement("a");
 	editlink.className = "edit";
 	editlink.title = "Edit this jot"
-	//editlink.textContent = " [Edit]";
 	var editimage = document.createElement("img");
 	editimage.src = ".\/images\/pen-20h.png"
-	//var ts = toString(row.timeStamp);
 
-    // THIS is the place to save the edit/save link <-> jot text containing element relationship for toggling editability
-    // the thing is array or object. array would be nice because it lets us know the order of things as displayed but do
-    // we need that really? an object allows us to have an associative list like a hash where the edit link can be the key
-    // and the value is the text containing p (or div if we go that way). Also, when we move to not rerendering all the jots
-    // upon deletion or addition we will need to know which jotdiv node to remove (this does not arise in the rerender all
-    // way because we just remove from the indexedDB and then rerender all that are left in order) so we need an
-    // delete link <-> jotdiv association AND we also need a connection between the indexedDB record and the jotdiv - or
-    // do we need that last one? Let's see we get the keyPath from the delete link and that gives us the indDB record but
-    // that alone doesn't give us the jotdiv --- so like the edit link we need a more direct assoc to in this case the jotdiv
-    // and the delete link --- WAIT why not put what we are going to need into the del and edit event listeners then the issue
-    // is solved without any arrays or assoc objects -- WOW is that right? Actually, that worked great! No need for lists
-    // of associations and all that entails mgmt-wise. 
-
-	var dt = new Date(row.commonKeyTS);   // get a Date obj back so we can call some presentation methods
 	
     // ensure a jot being edited is displayed fully
     title_leftdiv.addEventListener("click", function(e){
@@ -618,10 +596,11 @@ tj.renderJot = function(row) {
 	else
 	    titleinput.value = row.title;
 
+    var dt = new Date(row.commonKeyTS);
 	timespan.textContent = "created " + dt.toDateString() + " at " + dt.toLocaleTimeString();
 	tagsinput.value = row.tagList;
 	pjot.innerHTML = row.jot;
-	// wire up Delete link handler and pass the inner deleteJot the keyPath and jotdiv it will need
+	// wire up Delete link handler and pass the inner deleteJot the key and jotdiv it will need
 	dellink.addEventListener("click", function(e) {
 		var yesno = confirm("Are you sure you want to delete this jot?\n\nThis is not undoable.");
 		if(yesno) {
