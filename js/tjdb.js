@@ -295,8 +295,9 @@ tj.innerAddJot = function(jotText) {
         console.log("addJot nbx.jotreal.id = " + nbID);
         console.log("addJot nbx.jotreal.time = " + nbx.jotreal.time);
 
-        var idbRow = convertNimbusRowToIDBRow(nrow);
-        var jotDiv = tj.renderJot(idbRow);
+        ///var idbRow = convertNimbusRowToIDBRow(nrow);
+        ///var jotDiv = tj.renderJot(idbRow);
+        var jotDiv = tj.renderJot(nrow);
         var jotsContainer = document.getElementById("jotItems");
         if(tj.filterObject.filterOrder === "newfirst")  {   // newest are currently shown first
             var first = jotsContainer.firstChild;
@@ -352,7 +353,8 @@ function pageRenderer(filterObject) {
     //var stopat = r.length > startat + 10 ? startat + 10 : r.length;
     var fragment = document.createDocumentFragment();
     for(i = 0; i < r.length; i++) {
-        l = convertNimbusRowToIDBRow(r[i]);
+        ///l = convertNimbusRowToIDBRow(r[i]);
+        l = r[i];
     	//l = {"commonKeyTS":r[i].commonKeyTS, "nimbusID":r[i].id, "nimbusTime":r[i].time, "modTime":r[i].modTime,
         //     "title":r[i].title, "jot":r[i].jot, "tagList":r[i].tagList, "extra":r[i].extra, "idTodo":r[i].isTodo, "done":r[i].done};
  	    nextJotDiv = tj.renderJot(l);    // result.value is a basically a local store table row
@@ -486,6 +488,12 @@ function getSortedRemoteJots(filterObject) {
 
 /* Returns true if a jot's create date is in the date filter range currently specified, false otherwise. */
 function inDateRange(jot, filterObject) {
+     // deal with bogus or missing dates
+    if(isNaN(start) && isNaN(end)) {
+        alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
+        return undefined;
+    }
+
     // we need to translate from the timestamp in the jot to the date strings we have from the filter options UI
     var target = jot.commonKeyTS;
     var start = document.getElementById("startdate").value;
@@ -495,11 +503,7 @@ function inDateRange(jot, filterObject) {
     start = (new Date(start).getTime());
     end = (new Date(end).getTime()) + (tj.MS_ONE_DAY - 1);  // adjust to get the whole day for the end date
 
-    // deal with bogus or missing dates
-    if(isNaN(start) && isNaN(end)) {
-        alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
-        return undefined;
-    }
+    // deal with having only one date
     if(isNaN(start))
         start = end - (tj.MS_ONE_DAY - 1);
     else if(isNaN(end))
