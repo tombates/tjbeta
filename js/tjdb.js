@@ -320,14 +320,12 @@ tj.indexedDB.showAllJots = function(filterObject) {
 }
 
 function pageRenderer(filterObject) {
-    // retieve the jots that meet the filter criteria
-    var jots = getSortedRemoteJots(filterObject);
+    var jots = getSortedRemoteJots(filterObject);    // retieve the jots that meet the filter criteria
     var nextJotDiv;
-    //var statusReport = getStatusReport();
-    document.getElementById("statusarea").innerHTML = getStatusReport();
-
     var jotsContainer = document.getElementById("jotItems");
+
     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
+    document.getElementById("statusarea").innerHTML = getStatusReport();
 
     //TODO Finish pagination despite the limitations of NimbusBase...
     //var startat = 0;
@@ -344,7 +342,6 @@ function pageRenderer(filterObject) {
 function getStatusReport() {
     var pieces = [tj.status.prefix];
     var tagparts = [];
-    // TODO what about using arrays for the string bits then join to get the final status report - might be less ugly
 
     if(tj.status.total === tj.status.subset) {
         pieces.push("all jots (" + tj.status.total.toString() + ")");
