@@ -322,49 +322,29 @@ tj.indexedDB.showAllJots = function(filterObject) {
 }
 
 function pageRenderer(filterObject) {
-    //var end_time = new Date().getTime();
-    var r = getSortedRemoteJots(filterObject);
-    //var duration = end_time - start_time;
-    //console.log("pageRender getSortedRemoteJots took:" + duration + "milliseconds")
-
-    var l = {};
+    // retieve the jots that meet the filter criteria
+    var jots = getSortedRemoteJots(filterObject);
+    ///var l = {};
     var nextJotDiv;
-    //MUST convert from result.value to remote object -> local style
-
-    // Currenly renderJot expects a local (indexedDB) style 'row' so we have to convert from the remote names
-    // nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra",
-    //                               "isTodo", "done"]);
     var statusReport = getStatusReport();
     ///var status = document.getElementById("statusarea");
     ///status.innerHTML = statusReport;
     document.getElementById("statusarea").innerHTML = statusReport;
 
-    // PERFORMANCE change to using Fragment in order to minimize touching the live DOM for each jotdiv
-    // let's gather some timing info to see if this noticeably improves things
-
     var jotsContainer = document.getElementById("jotItems");
     //start_time = new Date().getTime();
     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
 
-    // just started pagination, which is complicated by not begin able to much useful with the remote store
-    // except all(). weird this is first and last but no range or finer getbyattribute methods in NimbusBase
-    // makes it hard to make anything very scalable...
+    //TODO Finish pagination despite the limitations of NimbusBase...
     //var startat = 0;
     //var stopat = r.length > startat + 10 ? startat + 10 : r.length;
     var fragment = document.createDocumentFragment();
-    for(i = 0; i < r.length; i++) {
-        ///l = convertNimbusRowToIDBRow(r[i]);
-        l = r[i];
-    	//l = {"commonKeyTS":r[i].commonKeyTS, "nimbusID":r[i].id, "nimbusTime":r[i].time, "modTime":r[i].modTime,
-        //     "title":r[i].title, "jot":r[i].jot, "tagList":r[i].tagList, "extra":r[i].extra, "idTodo":r[i].isTodo, "done":r[i].done};
- 	    nextJotDiv = tj.renderJot(l);    // result.value is a basically a local store table row
-        //jotsContainer.appendChild(nextJotDiv);      
+    for(i = 0; i < jots.length; i++) {
+        //l = jots[i];
+ 	    nextJotDiv = tj.renderJot(jots[i]);
         fragment.appendChild(nextJotDiv);      
     }
     jotsContainer.appendChild(fragment);      
-    //end_time = new Date().getTime();
-    //duration = end_time - start_time;
-    //console.log("pageRender jots render and append took:" + duration + "milliseconds")
 };
 
 /* Returns a string describing the current list of jots shown and the filtering that led to that list. */
