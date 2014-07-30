@@ -410,8 +410,9 @@ function getSortedRemoteJots(filterObject) {
                 ///    return remoteJots;
                 ///}
                 if(dateHit) {
-                    if(tagChecking && containsTags(jot, filterObject)) {
-                        filteredJots.push(jot);   // date and tag filtering
+                    if(tagChecking) {
+                        if(containsTags(jot, filterObject))
+                            filteredJots.push(jot);   // date and tag filtering
                     }
                     else    // only date filtering
                         filteredJots.push(jot);
