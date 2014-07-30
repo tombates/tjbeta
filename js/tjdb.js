@@ -395,7 +395,7 @@ function getSortedRemoteJots(filterObject) {
         //var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
         var tagChecking = filterObject.filterOnTags;
         var dateChecking = false;    // in event that validateDateRange fails
-        if(filterObject.filterOnDate && validateDateRange(tj.filterObject))
+        if(filterObject.filterOnDate && tj.validateDateRange(tj.filterObject))
             dateChecking = true;
 
         // If the user is filtering on both tags and date range we take this as an AND operation: a displayed
