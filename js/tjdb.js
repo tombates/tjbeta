@@ -458,11 +458,6 @@ function getSortedRemoteJots(filterObject) {
 
 /* Returns true if a jot's create date is in the date filter range currently specified, false otherwise. */
 function inDateRange(jot, filterObject) {
-     // deal with bogus or missing dates
-    if(isNaN(start) && isNaN(end)) {
-        alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
-        return undefined;
-    }
 
     // we need to translate from the timestamp in the jot to the date strings we have from the filter options UI
     var target = jot.commonKeyTS;
@@ -472,6 +467,12 @@ function inDateRange(jot, filterObject) {
     tj.filterObject.endDate = end;
     start = (new Date(start).getTime());
     end = (new Date(end).getTime()) + (tj.MS_ONE_DAY - 1);  // adjust to get the whole day for the end date
+
+     // deal with bogus or missing dates
+    if(isNaN(start) && isNaN(end)) {
+        alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
+        return undefined;
+    }
 
     // deal with having only one date
     if(isNaN(start))
