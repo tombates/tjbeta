@@ -75,6 +75,8 @@ tj.filterObject.filterOnTagsAnd = false;  // radio btn state
 tj.filterObject.filterOnDate = false;     // the checkbox state
 tj.filterObject.startDate = "";
 tj.filterObject.endDate = "";
+tj.filterObject.startMS = NaN;
+tj.filterObject.endMS = NaN;
 tj.filterObject.filterOrder = "newfirst"; // default ordering
 
 tagMgr = {};    // encapsulates tag management functions
@@ -376,30 +378,6 @@ function getStatusReport() {
     return pieces.join(" ");
 }
 
-//TODO remove once we are solid on the new scheme of mostly remote only
-// function convertNimbusRowToIDBRow(nrow) {
-//     var idb = {};
-//     idb = {"commonKeyTS":nrow.commonKeyTS, "nimbusID":nrow.id, "nimbusTime":nrow.time, "modTime":nrow.modTime,
-//            "title":nrow.title, "jot":nrow.jot, "tagList":nrow.tagList, "extra":nrow.extra, "idTodo":nrow.isTodo, "done":nrow.done};
-//     return idb;
-// }
-
-// function updateRemote(localNotOnRemote) {
-// 	var l = localNotOnRemote;
-//     for(i = 0; i < localNotOnRemote.length; i++) {
-//     	// our input is in local format, we need to pull the values out
-//    	//var row = {"commonKeyTS":commonKey, "nimbusID":nbID, "nimbusTime":"none", "modTime":commonKey,
-//     //"title":"none", "jot": htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false};
-
-//     // nbx.jotreal = nbx.Jots.create({"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
-//     //                                "title":"none", "jot":htmlizedText, "tagList":"none", "extra":"none", "isTodo":false, "done":false});
- 
-//         var tostore = {"commonKeyTS":l[i].commonKeyTS, "time":l[i].commonKeyTS, "modTime":l[i].commonKeyTS,
-//             "title":l[i].title, "jot":l[i].jot, "tagList":l[i].tagList, "extra":l[i].extra, "isTodo":l[i].isTodo, "done":l[i].done};
-//         nbx.jotreal = nbx.Jots.create(tostore);
-//     }
-// }
-
 /*
 * Returns an array of jots in the correct newest/oldest order, and possibly restricted to a certain set of tags.
 *
@@ -416,22 +394,24 @@ function getSortedRemoteJots(filterObject) {
         var filteredJots = [];
         //var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
         var tagChecking = filterObject.filterOnTags;
-        var dateChecking = filterObject.filterOnDate;
+        var dateChecking = false;    // in event that validateDateRange fails
+        if(filterObject.filterOnDate && validateDateRange(tj.filterObject))
+            dateChecking = true;
 
         // If the user is filtering on both tags and date range we take this as an AND operation: a displayed
         // jot must be in the date range AND must be tagged with the tags (Which might be AND or OR mode).
         var dateHit;
+
         for(var i = 0; i < remoteJots.length; i++) {
             var jot = remoteJots[i];
             if(dateChecking) {
-                dateHit = inDateRange(jot, filterObject);
-                if(dateHit === undefined)   // bogus date string(s) so default to showing all
-                    return remoteJots;
+                dateHit = tj.inDateRange(jot, filterObject);
+                ///if(dateHit === undefined) {   // bogus date string(s) so default to showing all
+                ///    return remoteJots;
+                ///}
                 if(dateHit) {
-                    if(tagChecking) {
-                        if(containsTags(jot, filterObject)) {
-                            filteredJots.push(jot);   // date and tag filtering
-                        }
+                    if(tagChecking && containsTags(jot, filterObject)) {
+                        filteredJots.push(jot);   // date and tag filtering
                     }
                     else    // only date filtering
                         filteredJots.push(jot);
@@ -456,23 +436,27 @@ function getSortedRemoteJots(filterObject) {
     return remoteJots;
 }
 
-/* Returns true if a jot's create date is in the date filter range currently specified, false otherwise. */
-function inDateRange(jot, filterObject) {
+/*
+*  Returns true if a jot's create date is in the date filter range currently specified. This should not be called
+*  until validDateRange() returns true.
+*/
+tj.inDateRange = function(jot, filterObject) {
 
     // we need to translate from the timestamp in the jot to the date strings we have from the filter options UI
     var target = jot.commonKeyTS;
-    var start = document.getElementById("startdate").value;
-    tj.filterObject.startDate = start;
-    var end = document.getElementById("enddate").value;
-    tj.filterObject.endDate = end;
-    start = (new Date(start).getTime());
-    end = (new Date(end).getTime()) + (tj.MS_ONE_DAY - 1);  // adjust to get the whole day for the end date
 
-     // deal with bogus or missing dates
-    if(isNaN(start) && isNaN(end)) {
-        alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
-        return undefined;
-    }
+    var start = tj.filterObject.startMS;
+    //tj.filterObject.startDate = start;
+    var end = tj.filterObject.endMS;
+    //tj.filterObject.endDate = end;
+    //start = (new Date(start).getTime());    // getTime() returns NaN if date is invalid
+    //end = (new Date(end).getTime()) + (tj.MS_ONE_DAY - 1);  // adjust to get the whole day for the end date
+
+    // deal with bogus datage
+    //if(isNaN(start) && isNaN(end)) {
+    //    alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
+    //    return undefined;
+    //}
 
     // deal with having only one date
     if(isNaN(start))
@@ -480,11 +464,31 @@ function inDateRange(jot, filterObject) {
     else if(isNaN(end))
         end = start + (tj.MS_ONE_DAY - 1);
 
-    // finally, the real test
+    // the real test
     if((target >= start) && (target <= end))
         return true;
     else
         return false;
+}
+
+/*
+*  Converts the date field strings to times in milleseconds and checks each for validity. At least one date must be valid.
+*  Returns false if neither date string is valid, true otherwise. Raises an alert if neither date is valid.
+*
+*  This should be called and return true before beginning a loop of calling inDateRange() on a set of jots.
+*/
+tj.validateDateRange = function(filterObject) {
+    tj.filterObject.startDate = document.getElementById("startdate").value;
+    tj.filterObject.endDate = document.getElementById("enddate").value;
+    tj.filterObject.startMS = (new Date(tj.filterObject.startDate).getTime());    // getTime() returns NaN if date is invalid
+    tj.filterObject.endMS = (new Date(tj.filterObject.endDate).getTime()) + (tj.MS_ONE_DAY - 1);  // adjust to get the whole day for the end date
+
+    if(isNaN(tj.filterObject.startMS) && isNaN(tj.filterObject.endMS)) {
+        alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
+        return false;
+    }
+
+    return true;
 }
 
 /* Returns if a jot meets the current tag filter criteria, false otherwise. */
