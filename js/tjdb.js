@@ -465,15 +465,18 @@ tj.inDateRange = function(jot, filterObject) {
     else if(isNaN(end))
         end = start + (tj.MS_ONE_DAY - 1);
 
-    // the real test
+    // the real test but we allow reversed order of dates just to be friendly
     if((target >= start) && (target <= end))
+        return true;
+    else if((target >= end) && (target <= start))
         return true;
     else
         return false;
 }
 
 /*
-*  Converts the date field strings to times in milleseconds and checks each for validity. At least one date must be valid.
+*  Converts the date field strings to times in milleseconds, stores the values in the filterObject, and checks each
+*  for validity. At least one date must be valid. The order of the dates is not checked as we don't enforce it.
 *  Returns false if neither date string is valid, true otherwise. Raises an alert if neither date is valid.
 *
 *  This should be called and return true before beginning a loop of calling inDateRange() on a set of jots.
