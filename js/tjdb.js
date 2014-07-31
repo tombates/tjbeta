@@ -275,7 +275,7 @@ tj.addJot = function() {
 tj.getDefaultTitle = function(jotText) {
     var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
     //var testregex = prefix.match(/^[.?!]/)[0];
-    var regexp = /^.*[.?!]{1}?/;
+    var regexp = /^.*[.?!]+?/;
     var testregex = prefix.match(regexp);
     prefix = prefix.split(".")[0];
     return prefix
