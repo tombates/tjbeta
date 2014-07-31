@@ -41,7 +41,7 @@ tj.STORE_GDRIVE = 4;
 tj.STORE_BITTORRENT_SYNC = 8;
 tj.STORE_MASK = tj.STORE_DROPBOX;    // only storage mode currently supported
 tj.MS_ONE_DAY = 86400000;            // milliseconds in one day = 24 * 60 * 60 * 1000
-tj.DEFAULT_TITLE_LIMIT = 40;
+tj.DEFAULT_TITLE_LIMIT = 50;
 
 tj.jots = [];
 tj.indexedDB = {};
@@ -276,7 +276,6 @@ tj.addJot = function() {
 */
 tj.getDefaultTitle = function(jotText) {
     var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
-    //var regexp = /^[^!?.]*(. | ? | !){1}/;
     var regexp = /^[^!?.]*[.!?]{1}/;
     var matching = prefix.match(regexp);
     if(matching === null)
