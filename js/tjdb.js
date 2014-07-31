@@ -280,9 +280,9 @@ tj.getDefaultTitle = function(jotText) {
     var regexp = /^[^!?.]*[.!?]{1}/;
     var matching = prefix.match(regexp);
     if(matching === null)
-        prefix = prefix.split(".")[0];
-
-    return prefix
+        return prefix
+    else
+        return matching;
 }
 
 /* Adds a jot to the remote store.
