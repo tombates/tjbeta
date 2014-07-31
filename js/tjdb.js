@@ -272,7 +272,7 @@ tj.addJot = function() {
 /* Creates a title from a substring of the jot text. The title is either the jotText up to the first period
 *  or the first 80 characters (or the jot length if the length of the jot is < 80), whichever is less. */
 tj.getDefaultTitle = function(jotText) {
-    var prefix = jotText.substring(0, 80);
+    var prefix = jotText.substring(0, 40);
     prefix = prefix.split(".")[0];
     return prefix
 }
