@@ -260,7 +260,7 @@ tj.addJot = function() {
     }
 
     if(title === undefined || title === "") {}
-        title = tj.defaultTitle(jotComposeArea.value);
+        title = tj.getDefaultTitle(jotComposeArea.value);
     }
     tj.innerAddJot(jotComposeArea.value, title);
 
