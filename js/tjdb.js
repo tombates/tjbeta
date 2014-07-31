@@ -41,6 +41,7 @@ tj.STORE_GDRIVE = 4;
 tj.STORE_BITTORRENT_SYNC = 8;
 tj.STORE_MASK = tj.STORE_DROPBOX;    // only storage mode currently supported
 tj.MS_ONE_DAY = 86400000;            // milliseconds in one day = 24 * 60 * 60 * 1000
+tj.DEFAULT_TITLE_LIMIT = 40;
 
 tj.jots = [];
 tj.indexedDB = {};
@@ -270,9 +271,10 @@ tj.addJot = function() {
 }
 
 /* Creates a title from a substring of the jot text. The title is either the jotText up to the first period
-*  or the first 80 characters (or the jot length if the length of the jot is < 80), whichever is less. */
+*  or the first 40 characters (or the jot length if the length of the jot is < 80), whichever is less. */
 tj.getDefaultTitle = function(jotText) {
-    var prefix = jotText.substring(0, 40);
+    var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
+    var testregex = prefix.match(/^[.?!]/)[0];
     prefix = prefix.split(".")[0];
     return prefix
 }
