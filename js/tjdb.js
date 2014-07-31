@@ -76,7 +76,7 @@ tj.filterObject.filterOrder = "newfirst"; // default ordering
 
 tagMgr = {};    // encapsulates tag management functions
 
-tj.indexedDB.onerror = function (e){
+tj.indexedDB.onerror = function(e){
     console.log(e);
 };
 
@@ -276,7 +276,7 @@ tj.addJot = function() {
 */
 tj.getDefaultTitle = function(jotText) {
     var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
-    var regexp = /^[^!?.]*[.!?]{1}/;
+    var regexp = /^[^!?.]*[.!?\n]{1}/;
     var matching = prefix.match(regexp);
     if(matching === null)
         return prefix
@@ -334,16 +334,16 @@ tj.innerAddJot = function(jotText, title) {
 */
 tj.indexedDB.showAllJots = function(filterObject) {
 	console.log("in showAllJots");
-    pageRenderer(filterObject);
+    tj.pageRenderer(filterObject);
 }
 
-function pageRenderer(filterObject) {
-    var jots = getSortedRemoteJots(filterObject);    // retieve the jots that meet the filter criteria
+tj.pageRenderer = function(filterObject) {
+    var jots = tj.getSortedRemoteJots(filterObject);    // retieve the jots that meet the filter criteria
     var nextJotDiv;
     var jotsContainer = document.getElementById("jotItems");
 
     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
-    document.getElementById("statusarea").innerHTML = getStatusReport();
+    document.getElementById("statusarea").innerHTML = tj.getStatusReport();
 
     //TODO Finish pagination despite the limitations of NimbusBase...
     //var startat = 0;
@@ -357,7 +357,7 @@ function pageRenderer(filterObject) {
 };
 
 /* Returns a string describing the current list of jots shown and the filtering that led to that list. */
-function getStatusReport() {
+tj.getStatusReport = function() {
     var pieces = [tj.status.prefix];
     var tagparts = [];
 
@@ -399,7 +399,7 @@ function getStatusReport() {
 *
 * filterObject - An optional object containing an array of tags, filterMode, and date range information.
 */
-function getSortedRemoteJots(filterObject) {
+tj.getSortedRemoteJots = function(filterObject) {
     var remoteJots = nbx.Jots.all();
     tj.status.total = remoteJots.length;
     var flip = (tj.filterObject.filterOrder === "newfirst") ? -1 : 1;
