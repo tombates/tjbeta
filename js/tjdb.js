@@ -34,17 +34,13 @@
 //      seen by NimbusBase or ever pushed to a remote store.
 //TODO: option for storing stuff on either (not both) GDrive and Dropbox
 
-// Let's encapsulate our stuff in a namespace as object.
+// Let's encapsulate our stuff in an object to reduce global namespace pollution.
 var tj = {};
 tj.STORE_DROPBOX = 2;
 tj.STORE_GDRIVE = 4;
 tj.STORE_BITTORRENT_SYNC = 8;
-
-//The value returned by the getTime method is the number of milliseconds since 1 January 1970 00:00:00 UTC.
-tj.MS_ONE_DAY = 86400000;    // milliseconds in one day = 24 * 60 * 60 * 1000
-
-//tj.STORE_MASK = tj.STORE_IDB | tj.STORE_DROPBOX;   // Original but problematic mode
-tj.STORE_MASK = tj.STORE_DROPBOX;   // TODO make user controlled
+tj.STORE_MASK = tj.STORE_DROPBOX;    // only storage mode currently supported
+tj.MS_ONE_DAY = 86400000;            // milliseconds in one day = 24 * 60 * 60 * 1000
 
 tj.jots = [];
 tj.indexedDB = {};
@@ -56,10 +52,8 @@ tj.SERVICE_UNKNOWN = -1;
 tj.SERVICE_DROPBOX = 1;
 tj.SERVICE_GOOGLE = 2;
 tj.service = tj.SERVICE_DROPBOX;
-///tj.key = "";
-///tj.secret = "";
 
-tj.status = {};   // holds the status area information
+tj.status = {};   // holds the status area information for status string building
 tj.status.prefix = "Showing ";
 tj.status.total = 0;
 tj.status.subset = 0;
@@ -254,8 +248,11 @@ tj.bindControls = function() {
 /* Wrapper for innerAddJot. */
 tj.addJot = function() {
     var jotComposeArea = document.getElementById('jot_composer');
-    tj.innerAddJot(jotComposeArea.value);    
-    jotComposeArea.value = '';    // clear the compose area of the input text
+    tj.innerAddJot(jotComposeArea.value);
+
+    // clear the compose area and the Title field for the next jot    
+    jotComposeArea.value = "";
+    titleField.value = "";
 }
 
 /* Adds a jot to the remote store.
@@ -263,8 +260,6 @@ tj.addJot = function() {
 *  jotText - the contents (value) of the jot composition area.
 */
 tj.innerAddJot = function(jotText) {
-	//TODO since we are saving to multiple places we need to check for errors back from each store location
-	//     and recover/report
 
     var htmlizedText = tj.htmlizeText(jotText);
     if(htmlizedText === "") {
@@ -276,11 +271,6 @@ tj.innerAddJot = function(jotText) {
 
 	// add the jot to cloud storage location(s)
 	if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
-        //nbx.Jots = Nimbus.Model.setup("Jots", ["commonKeyTS", "id", "time", "modTime", "title", "jot", "tagList", "extra", "isTodo", "done"]);
-        //OLD nbx.Jots = Nimbus.Model.setup("Jots", ["descrip", "done", "id", "jot", "time"]);
-        console.log("addJot: storing jot on Dropbox");
-        //var now = Date().toString();
-        //NimbusBase populates the id field (specified in nb.js) automatically, then we get it and put it in the iDB record
         var tags = document.getElementById('add_tagsinput').value;
         if(tags === undefined || tags === "")
             tags = "none";
@@ -306,9 +296,6 @@ tj.innerAddJot = function(jotText) {
         else {  // oldest are currently shown first
             jotsContainer.appendChild(jotDiv);
         }
-
-        // clear the Title field
-        titleField.value = "";
     }
 };
 
@@ -384,7 +371,6 @@ function getStatusReport() {
 * filterObject - An optional object containing an array of tags, filterMode, and date range information.
 */
 function getSortedRemoteJots(filterObject) {
-    // get all the remote jots and sort them
     var remoteJots = nbx.Jots.all();
     tj.status.total = remoteJots.length;
     var flip = (tj.filterObject.filterOrder === "newfirst") ? -1 : 1;
@@ -392,7 +378,6 @@ function getSortedRemoteJots(filterObject) {
     if(filterObject !== undefined) {
         console.log("getSortedRemoteJots filterObject is DEFINED");
         var filteredJots = [];
-        //var tagChecking = ((filterObject.filterMode & tj.FILTERMODE_TAGS) == tj.FILTERMODE_TAGS);
         var tagChecking = filterObject.filterOnTags;
         var dateChecking = false;    // in event that validateDateRange fails
         if(filterObject.filterOnDate && tj.validateDateRange(tj.filterObject))
@@ -406,19 +391,16 @@ function getSortedRemoteJots(filterObject) {
             var jot = remoteJots[i];
             if(dateChecking) {
                 dateHit = tj.inDateRange(jot, filterObject);
-                ///if(dateHit === undefined) {   // bogus date string(s) so default to showing all
-                ///    return remoteJots;
-                ///}
                 if(dateHit) {
                     if(tagChecking) {
-                        if(containsTags(jot, filterObject))
+                        if(tagMgr.containsTags(jot, filterObject))
                             filteredJots.push(jot);   // date and tag filtering
                     }
                     else    // only date filtering
                         filteredJots.push(jot);
                 }
             }
-            else if(tagChecking && containsTags(jot, filterObject)) {
+            else if(tagChecking && tagMgr.containsTags(jot, filterObject)) {
                 filteredJots.push(jot);    // only tag filtering
             }
         }
@@ -440,24 +422,15 @@ function getSortedRemoteJots(filterObject) {
 /*
 *  Returns true if a jot's create date is in the date filter range currently specified. This should not be called
 *  until validDateRange() returns true.
+*
+*  Will treat end date < start date in a friendly way - i.e., as if they were in correct order. This is done directly
+*  here and not by altering the filterObject fields.
 */
 tj.inDateRange = function(jot, filterObject) {
 
-    // we need to translate from the timestamp in the jot to the date strings we have from the filter options UI
     var target = jot.commonKeyTS;
-
     var start = tj.filterObject.startMS;
-    //tj.filterObject.startDate = start;
     var end = tj.filterObject.endMS;
-    //tj.filterObject.endDate = end;
-    //start = (new Date(start).getTime());    // getTime() returns NaN if date is invalid
-    //end = (new Date(end).getTime()) + (tj.MS_ONE_DAY - 1);  // adjust to get the whole day for the end date
-
-    // deal with bogus datage
-    //if(isNaN(start) && isNaN(end)) {
-    //    alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
-    //    return undefined;
-    //}
 
     // deal with having only one date
     if(isNaN(start))
@@ -465,10 +438,17 @@ tj.inDateRange = function(jot, filterObject) {
     else if(isNaN(end))
         end = start + (tj.MS_ONE_DAY - 1);
 
+    // Correct locally for reversed start and end without altering the filterObject fields.
+    if(start > end) {
+        end = end - (tj.MS_ONE_DAY - 1);
+        start = start + (tj.MS_ONE_DAY - 1);
+        var t = start;
+        start = end;
+        end = t;
+    }
+
     // the real test but we allow reversed order of dates just to be friendly
     if((target >= start) && (target <= end))
-        return true;
-    else if((target >= end) && (target <= start))
         return true;
     else
         return false;
@@ -491,32 +471,7 @@ tj.validateDateRange = function(filterObject) {
         alert("Please specify at least one valid date.\n\n If only one date is given it will be\n used for both end and start.")
         return false;
     }
-
-    return true;
-}
-
-/* Returns if a jot meets the current tag filter criteria, false otherwise. */
-function containsTags(jot, filterObject) {
-    if(jot.tagList == undefined || jot.tagList === null || jot.tagList == "none") {
-        return false;
-    }
-
-    var tagsInJot = jot.tagList.split(/,\s*/);
-    var present = -1;
-    for(var i = 0; i < filterObject.filterTags.length; i++) {
-
-        present = tagsInJot.indexOf(filterObject.filterTags[i]);
-        if(filterObject.filterOnTagsOr) {
-            if(present != -1)
-                return true;
-            if(i == filterObject.filterTags.length - 1)
-                return false;
-        }
-        else if(filterObject.filterOnTagsAnd) {
-            if(present == -1)
-                return false;
-        }
-    }
+    
     return true;
 }
 
@@ -935,6 +890,31 @@ tj.showFilteredJots = function() {
 
     // finally, persist the filter incase the user closes
     tj.indexedDB.persistFilterControlsState();
+}
+
+/* Returns if a jot meets the current tag filter criteria, false otherwise. */
+tagMgr.containsTags = function(jot, filterObject) {
+    if(jot.tagList == undefined || jot.tagList === null || jot.tagList == "none") {
+        return false;
+    }
+
+    var tagsInJot = jot.tagList.split(/,\s*/);
+    var present = -1;
+    for(var i = 0; i < filterObject.filterTags.length; i++) {
+
+        present = tagsInJot.indexOf(filterObject.filterTags[i]);
+        if(filterObject.filterOnTagsOr) {
+            if(present != -1)
+                return true;
+            if(i == filterObject.filterTags.length - 1)
+                return false;
+        }
+        else if(filterObject.filterOnTagsAnd) {
+            if(present == -1)
+                return false;
+        }
+    }
+    return true;
 }
 
 /* A wrapper for tagMgr.innerMerge. */
