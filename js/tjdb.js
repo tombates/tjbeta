@@ -245,39 +245,61 @@ tj.bindControls = function() {
     });
 }
 
-/* Wrapper for innerAddJot. */
+/*
+*  Wrapper for innerAddJot. Validates that there is something to add and generates a
+*  default title from the jot content if no title was provided.
+*/
 tj.addJot = function() {
     var jotComposeArea = document.getElementById('jot_composer');
-    tj.innerAddJot(jotComposeArea.value);
+    var titleField = document.getElementById('add_titleinput');
+    var title = titleField.value;
+
+    if(jotComposeArea.value === undefined || jotComposeArea.value === "") {
+        alert("There is no jot content.");
+        return;
+    }
+
+    if(title === undefined || title === "") {}
+        title = tj.defaultTitle(jotComposeArea.value);
+    }
+    tj.innerAddJot(jotComposeArea.value, title);
 
     // clear the compose area and the Title field for the next jot    
     jotComposeArea.value = "";
     titleField.value = "";
 }
 
+/* Creates a title from a substring of the jot text. The title is either the jotText up to the first period
+*  or the first 80 characters (or the jot length if the length of the jot is < 80), whichever is less. */
+tj.getDefaultTitle = function(jotText) {
+    var prefix = jotText.substring(0, 80);
+    prefix = prefix.split(".")[0];
+    return prefix
+}
+
 /* Adds a jot to the remote store.
 *
 *  jotText - the contents (value) of the jot composition area.
 */
-tj.innerAddJot = function(jotText) {
+tj.innerAddJot = function(jotText, title) {
 
     var htmlizedText = tj.htmlizeText(jotText);
-    if(htmlizedText === "") {
-        alert("There is no jot content.");
-        return;
-    }
+    // if(htmlizedText === "") {
+    //     alert("There is no jot content.");
+    //     return;
+    // }
     var commonKey = new Date().getTime();
     var nbID = null;
 
-	// add the jot to cloud storage location(s)
+	// add the jot to cloud storage location(s) - still wrapped in if in anticipation of GDrive support.
 	if((tj.STORE_MASK & tj.STORE_DROPBOX) == tj.STORE_DROPBOX) {
         var tags = document.getElementById('add_tagsinput').value;
         if(tags === undefined || tags === "")
             tags = "none";
         var titleField = document.getElementById('add_titleinput');
-        var title = titleField.value;
-        if(title === undefined || title === "")
-            title = "untitled";
+        // var title = titleField.value;
+        // if(title === undefined || title === "")
+        //     title = "untitled";
 
         var nrow = {"commonKeyTS":commonKey, "time":commonKey, "modTime":commonKey,
                     "title":title, "jot":htmlizedText, "tagList":tags, "extra":"none", "isTodo":false, "done":false};
