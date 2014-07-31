@@ -278,8 +278,10 @@ tj.getDefaultTitle = function(jotText) {
     var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
     //var regexp = /^[^!?.]*(. | ? | !){1}/;
     var regexp = /^[^!?.]*[.!?]{1}/;
-    var testregex = prefix.match(regexp);
-    prefix = prefix.split(".")[0];
+    var matching = prefix.match(regexp);
+    if(matching === null)
+        prefix = prefix.split(".")[0];
+
     return prefix
 }
 
