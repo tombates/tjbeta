@@ -274,7 +274,7 @@ tj.addJot = function() {
 *  or the first 40 characters (or the jot length if the length of the jot is < 80), whichever is less. */
 tj.getDefaultTitle = function(jotText) {
     var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
-    var testregex = prefix.match(/^[.?!]/)[0];
+    //var testregex = prefix.match(/^[.?!]/)[0];
     prefix = prefix.split(".")[0];
     return prefix
 }
