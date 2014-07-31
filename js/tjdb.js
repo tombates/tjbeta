@@ -270,14 +270,14 @@ tj.addJot = function() {
     titleField.value = "";
 }
 
-/* Creates a title from a substring of the jot text. The title is either the jotText up to the first period
-*  or the first 40 characters (or the jot length if the length of the jot is < 80), whichever is less. */
+/* Creates a title from a substring of the jot text. The title is either the jotText up to the first
+*  period, question mark or exclamation point, or the first 40 characters (or the jot length if the
+*  length of the jot is < tj.DEFAULT_TITLE_LIMIT), whichever is less.
+*/
 tj.getDefaultTitle = function(jotText) {
     var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
-    //var testregex = prefix.match(/^[.?!]/)[0];
-    //var regexp = /^.*[.?!]?/;
-    //var regexp = /^.*(. | ? | !){1,1}/;
-    var regexp = /^[^!?.]*(. | ? | !){1}/;
+    //var regexp = /^[^!?.]*(. | ? | !){1}/;
+    var regexp = /^[^!?.]*[.!?]{1}/;
     var testregex = prefix.match(regexp);
     prefix = prefix.split(".")[0];
     return prefix
