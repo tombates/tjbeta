@@ -341,12 +341,12 @@ tj.innerAddJot = function(jotText, title) {
 *   Clears all jots on the page and re-renders them. Used on open, reload, order toggling or filtering. Generally not
 *   used just when a single jot is added or deleted or edited. In those cases we update the DOM directly.
 */
-tj.indexedDB.showAllJots = function(filterObject) {
-	console.log("in showAllJots");
-    tj.pageRenderer(filterObject);
-}
+tj.showAllJots = function(filterObject) {
+///	console.log("in showAllJots");
+///    tj.pageRenderer(filterObject);
+///}
 
-tj.pageRenderer = function(filterObject) {
+///tj.pageRenderer = function(filterObject) {
     var jots = tj.getSortedRemoteJots(filterObject);    // retieve the jots that meet the filter criteria
     var nextJotDiv;
     var jotsContainer = document.getElementById("jotItems");
@@ -939,7 +939,7 @@ tj.showFilteredJots = function() {
     //if(!(document.getElementById("filter_by_tags_or").checked
     //    || document.getElementById("filter_by_tags_and").checked || document.getElementById("filter_by_date").checked)) {
     if(!(document.getElementById("filter_by_date").checked || document.getElementById("filter_by_tags").checked)) {
-        tj.indexedDB.showAllJots();
+        tj.showAllJots();
     }
     else {  // record radio buttons state separately so user can turn tag filter on/off while keeping or/and state
         if(document.getElementById("filter_by_tags_or").checked) {
@@ -958,7 +958,7 @@ tj.showFilteredJots = function() {
             //tj.filterObject.filterMode &= ~(tj.FILTERMODE_TAGS_AND);       
             tj.filterObject.filterOnTagsAnd = false;       
         }
-        tj.indexedDB.showAllJots(tj.filterObject);
+        tj.showAllJots(tj.filterObject);
     }
 
     // finally, persist the filter incase the user closes
