@@ -268,6 +268,7 @@ tj.addJot = function() {
     // clear the compose area and the Title field for the next jot    
     jotComposeArea.value = "";
     titleField.value = "";
+    tj.updateStatus(1);
 }
 
 /* Creates a title from a substring of the jot text. The title is either the jotText up to the first
@@ -351,11 +352,10 @@ tj.pageRenderer = function(filterObject) {
     var jotsContainer = document.getElementById("jotItems");
 
     jotsContainer.innerHTML = "";    // delete all the jotdivs as we are about to rereneder them all
-    document.getElementById("statusarea").innerHTML = tj.getStatusReport();
+    //document.getElementById("statusarea").innerHTML = tj.getStatusReport();
+    tj.updateStatus(0);
 
     //TODO Finish pagination despite the limitations of NimbusBase...
-    //var startat = 0;
-    //var stopat = r.length > startat + 10 ? startat + 10 : r.length;
     var fragment = document.createDocumentFragment();
     for(i = 0; i < jots.length; i++) {
  	    nextJotDiv = tj.renderJot(jots[i]);
@@ -363,6 +363,19 @@ tj.pageRenderer = function(filterObject) {
     }
     jotsContainer.appendChild(fragment);      
 };
+
+/* Updates the status string on the page by count. */
+//TODO an argument could be made to do a full rerender here as the new or removed jot might or might
+//     not be included or excluded by the current filter state. However, that would also mean the user
+//     might not see the jot appear (even though it would be saved). So for now we just update the status
+//     line as if the jot matches the current filter criteria and let the user redo the filter if they care.
+tj.updateStatus = function(count) {
+    if(count !== 0) {
+        tj.status.total = tj.status.total + count;
+        tj.status.subset = tj.status.subset + count;
+    }
+    document.getElementById("statusarea").innerHTML = tj.getStatusReport();    
+}
 
 /* Returns a string describing the current list of jots shown and the filtering that led to that list. */
 tj.getStatusReport = function() {
@@ -764,6 +777,8 @@ tj.deleteJot = function(commonKey, jotDiv) {
         nbJot.destroy();
         tj.removeJotDiv(jotDiv);
     }
+
+    tj.updateStatus(-1);
 };
 
 tj.removeJotDiv = function(jotDiv) {
