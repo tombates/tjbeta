@@ -386,8 +386,8 @@ tj.getStatusReport = function() {
         pieces.push("all jots (" + tj.status.total.toString() + ")");
     }
     else {    // create string rep of date and tag filters
-        pieces.push(tj.status.subset.toString() + " of " + tj.status.total.toString());        
-        pieces.push(", filtered by");
+        pieces.push(tj.status.subset.toString() + " of " + tj.status.total.toString() + ", filtered by");        
+        ///pieces.push(", filtered by");
 
 
         if(tj.filterObject.filterOnTags && (tj.filterObject.filterOnTagsOr || tj.filterObject.filterOnTagsAnd)) {
