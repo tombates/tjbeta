@@ -276,13 +276,18 @@ tj.addJot = function() {
 */
 tj.getDefaultTitle = function(jotText) {
     var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
-    var firstline = prefix.split(/\r?\n/g);
-    var regexp = /^[^!?.]*[.!?]{1}/;
-    var matching = prefix.match(regexp);
-    if(matching === null)
-        return prefix
+    var firstline = prefix.split(/\r?\n/g)[0];
+    if(firstline === prefix) {
+        // there were no newlines
+        var regexp = /^[^!?.]*[.!?]{1}/;
+        var matching = prefix.match(regexp);
+        if(matching === null)
+            return prefix
+        else
+            return matching;
+    }
     else
-        return matching;
+        return firstline;
 }
 
 /* Adds a jot to the remote store.
