@@ -277,10 +277,10 @@ tj.addJot = function() {
 tj.getDefaultTitle = function(jotText) {
     var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
     // first check for newline within the limit and if there use the first line as the title
+    // - we separate out the newline piece for clarity
     var firstline = prefix.split(/\r?\n/g)[0];
     if(firstline === prefix) {
         // there were no newlines within the limit so look for one of ?.!
-        // - we separate out the newline piece for clarity
         var regexp = /^[^!?.]*[.!?]{1}/;
         var matching = prefix.match(regexp);
         if(matching === null)
@@ -391,11 +391,30 @@ tj.getStatusReport = function() {
             tagparts.push(tj.filterObject.filterTags.join(", "));
         }
 
-        //TODO validate that we have valid date strings or don't do date part
         if(tj.filterObject.filterOnDate) {
-            pieces.push("date range: " + tj.filterObject.startDate + " - " + tj.filterObject.endDate);
-            if(tagparts.length > 0)
-                pieces.push("and by");
+            var startMS = tj.filterObject.startMS
+            var endMS = tj.filterObject.endMS;
+            if(!(isNaN(startMS)) || !(isNaN(endMS))) {    // do we have at least one valid date?
+
+                pieces.push("date range: ")
+
+                // if we have both make sure we have the right order
+                if(!(isNaN(startMS)) && !(isNaN(endMS))) {
+                    if(endMS >= startMS)
+                        pieces.push(tj.filterObject.startDate + " - " + tj.filterObject.endDate);
+                    else
+                        pieces.push(tj.filterObject.endDate + " - " + tj.filterObject.startDate);
+                }
+                else {   // we have only one valid date
+                    if(!(isNaN(startMS)))
+                        pieces.push(tj.filterObject.startDate);
+                    else
+                        pieces.push(tj.filterObject.endDate);
+                }
+
+                if(tagparts.length > 0)
+                    pieces.push("and by");
+            }
         }
         pieces.push(tagparts.join(" "))
     }
