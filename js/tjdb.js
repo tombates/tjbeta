@@ -271,14 +271,16 @@ tj.addJot = function() {
 }
 
 /* Creates a title from a substring of the jot text. The title is either the jotText up to the first
-*  period, question mark or exclamation point, or the first 40 characters (or the jot length if the
+*  period, question mark, exclamation point, newline, or the first 40 characters (or the jot length if the
 *  length of the jot is < tj.DEFAULT_TITLE_LIMIT), whichever is less.
 */
 tj.getDefaultTitle = function(jotText) {
     var prefix = jotText.substring(0, tj.DEFAULT_TITLE_LIMIT);
+    // first check for newline within the limit and if there use the first line as the title
     var firstline = prefix.split(/\r?\n/g)[0];
     if(firstline === prefix) {
-        // there were no newlines
+        // there were no newlines within the limit so look for one of ?.!
+        // - we separate out the newline piece for clarity
         var regexp = /^[^!?.]*[.!?]{1}/;
         var matching = prefix.match(regexp);
         if(matching === null)
