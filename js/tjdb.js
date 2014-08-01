@@ -441,30 +441,32 @@ tj.getSortedRemoteJots = function(filterObject) {
 
         // If the user is filtering on both tags and date range we take this as an AND operation: a displayed
         // jot must be in the date range AND must be tagged with the tags (Which might be AND or OR mode).
-        var dateHit;
+        if(dateChecking || tagChecking) {
+            var dateHit;
 
-        for(var i = 0; i < remoteJots.length; i++) {
-            var jot = remoteJots[i];
-            if(dateChecking) {
-                dateHit = tj.inDateRange(jot, filterObject);
-                if(dateHit) {
-                    if(tagChecking) {
-                        if(tagMgr.containsTags(jot, filterObject))
-                            filteredJots.push(jot);   // date and tag filtering
+            for(var i = 0; i < remoteJots.length; i++) {
+                var jot = remoteJots[i];
+                if(dateChecking) {
+                    dateHit = tj.inDateRange(jot, filterObject);
+                    if(dateHit) {
+                        if(tagChecking) {
+                            if(tagMgr.containsTags(jot, filterObject))
+                                filteredJots.push(jot);   // date and tag filtering
+                        }
+                        else    // only date filtering
+                            filteredJots.push(jot);
                     }
-                    else    // only date filtering
-                        filteredJots.push(jot);
+                }
+                else if(tagChecking && tagMgr.containsTags(jot, filterObject)) {
+                    filteredJots.push(jot);    // only tag filtering
                 }
             }
-            else if(tagChecking && tagMgr.containsTags(jot, filterObject)) {
-                filteredJots.push(jot);    // only tag filtering
-            }
+            remoteJots = filteredJots;
         }
-        remoteJots = filteredJots;
     }
-    else {
-        console.log("getSortedRemoteJots filterObject is UNDefined");        
-    }
+    ///else {
+    ///    console.log("getSortedRemoteJots filterObject is UNDefined");        
+    ///}
 
     if(remoteJots.length > 0) {
     	remoteJots.sort(function(a,b) {
