@@ -57,7 +57,7 @@ h1.usage {
   padding-top:10px;
   color:#000;
   border-bottom: 1px dotted #000;
-  font-weight: 700;
+  font-weight: bold;
   font: 16px "Trebuchet MS", Helvetica, sans-serif;
 }p.usage {
   margin-left: 15px;
@@ -70,7 +70,7 @@ h1.usageindented {
   padding-top:5px;
   color:#000;
   border-bottom: 1px dotted #000;
-  font-weight: 700;
+  font-weight: bold;
   font: 16px "Trebuchet MS", Helvetica, sans-serif;
 }p.usageindented {
   margin-left: 30px;
