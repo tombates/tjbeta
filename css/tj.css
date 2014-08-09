@@ -55,7 +55,6 @@ h1.thetitle {
 h1.usage {
   margin-left: 15px;
   padding-top:10px;
-  padding-bottom:10px;
   color:#000;
   border-bottom: 1px dotted #000;
   font-weight: 900;
@@ -69,7 +68,6 @@ h1.usage {
 h1.usageindented {
   margin-left: 30px;
   padding-top:5px;
-  padding-bottom:5px;
   color:#000;
   border-bottom: 1px dotted #000;
   font-weight: 900;
