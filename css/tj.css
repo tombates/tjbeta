@@ -61,7 +61,7 @@ h1.usage {
   font-weight: 700;
 }p.usage {
   margin-left: 15px;
-  padding-bottom:10px;
+  /*padding-bottom:10px;*/
   color:#000;
   font: 14px Verdana, Geneva, sans-serif
 }

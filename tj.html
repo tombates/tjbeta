@@ -118,7 +118,7 @@ some book keeping data for the NimbusBase based transport layer that stores jots
 
 <h1 class="usage">Jotting</h1>
 <p class="usage">New jots are composed in the text area at the top of the page. For the simplest jots just type in
-your content. When you click the plus-in-a-circle button to the lower left of the entry area, the jot will be
+your content. When you click the plus button to the lower left of the entry area, the jot will be
 added to the jots visible below the entry area.</p>
 <p class="usage">You can also enter a title for your jot. If you don't enter a title Thought Jot will create a title
 from either the first 40 characters or the contents preceeding the first period, question mark or excalmation point or a
@@ -127,7 +127,7 @@ return, whichever is shortest. You can always edit the default title later. </p>
 commas. Tags can contain spaces. The merge button will add new tags to the tag selector list, making them available to use
 in filtering. See the Tagging and Filtering sections for more information.</p>
 <p class="usage">The displayed jots can be ordered with the newest or oldest jots at the top. Below the add button is
-the re-order button. If you hover your mouse pointer over it it will tell you the new order you will get if you click it.
+the re-order button. If you hover your pointer over it you will see the order you will get if you click it.
 If you entered a new jot and didn't see it appear, you probably have oldest jots showing first and so the new one went to
 the bottom.</p>
 
@@ -142,9 +142,7 @@ to confirm the deletion. Currently, deleting a jot is not undoable.</p>
 
 
 <h1 class="usage">Tagging</h1>
-<p class="usageindented">You can attach tags to jots, either when you first make a new jot or later. Tagging jots makes it
-very easy to restrict your view of jots to just the ones that have certain tags. There are two ways to attach one or more
-tags to a jot. You can select them in the Tag Selector list (click for one tag, then ctrl-click to select more) and then
+<p class="usageindented">You can attach tags to jots, either when you first make a new jot or later. Tags allow youto see only a subset of all your jots. You can select tags in the Tag Selector list (click for one tag, then ctrl-click to select more) and then
 click the Stage Tags button. The selected tags will be added to the Tags: text field below the Stage Tags button.
 Alternatively you can just type tags into the Tags: text field. Tags can contain spaces but not commas and cannot start
 with a dash or minus character (-). Multiple tags must be separated by commas.</p>
@@ -155,11 +153,13 @@ storage, not just locally. It will not affect jots previously tagged with the de
 add it back by typing it in again and clicking the Merge button.</p>
 
 <h1 class="usage">Filtering</h1>
-<p class="usageindented">You can filter or restrict the jots that are displayed to subsets of all your jots. You can filter
-based on title (OK, Actually that's not there yet), tags, or date ranges.</p>
-<p class="usageindented">To filter by tags...</p>
-<p class="usageindented">To filter by date ranges...</p>
-<p class="usageindented">To filter by title...</p>
+<p class="usageindented">You can filter or restrict the jots that are displayed to subsets of all your jots. Currently ou can
+filter based on tags, or date ranges.</p>
+<p class="usageindented">To filter by tags, select the tags in the tag selector. Then check the "By Tags" checkbox. Then
+select one of the options.</p>
+<p class="usageindented">To filter check the "By Date Range" checkbox. Then click in either or both of the date fields to 
+get a calendar. If you only provide one date you will only see jots made on that date. If you provide both dates the order
+is not important.</p>
 
 <h1 class="usage">Understanding where jots, tags and filters are stored.</h1>
   <p class="usageindented">Jots are stored remotely, using either a Dropbox or Google Drive account. They might also be stored locally
