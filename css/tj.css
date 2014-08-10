@@ -52,6 +52,10 @@ h1.thetitle {
   font: 16px Verdana, Geneva, sans-serif
 }
 
+#helpDialog {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
 h1.usage {
   margin-left: 15px;
   padding-top:10px;
