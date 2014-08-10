@@ -75,7 +75,7 @@ h1.usageindented {
 }p.usageindented {
   margin-left: 30px;
   margin-right: 30px;
-  padding-bottom:10px;
+  /*padding-bottom:10px;*/
   color:#000;
   font: 14px Verdana, Geneva, sans-serif
 }
