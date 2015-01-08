@@ -1,4 +1,4 @@
 tjbeta
 ======
 
-Thought Jot super beta
+Thought Jot NimbusBase version - pre node version
